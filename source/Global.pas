@@ -65,7 +65,9 @@ function GetLinkFileName(Source, TargetDir: string; Directory: boolean;
   PrefixTemplate: string = LINK_PREFIX_TEMPLATE_DEFAULT): string;
 
 // Internal function used to create hardlinks
-function InternalCreateHardlink(Source, Destination: string): boolean;
+procedure InternalCreateHardlink(Source, Destination: string);
+// Calls the one above, but catches all exceptions and returns a boolean
+function InternalCreateHardlinkSafe(Source, Destination: string): boolean;
 
 // Interal functions used to create junctions; The Base-function actually creates
 // the junctions using a final directory name, the other one first generates
@@ -155,18 +157,25 @@ end;
 
 // ************************************************************************** //
 
-function InternalCreateHardlink(Source, Destination: string): boolean;
+procedure InternalCreateHardlink(Source, Destination: string);
 var
   NewFileName: string;
 begin
-  try
-    NewFileName := GetLinkFileName(Source, Destination, False);
-    Result := NtfsCreateHardLink(NewFileName, PAnsiChar(Source));
+  NewFileName := GetLinkFileName(Source, Destination, False);
+  if not NtfsCreateHardLink(NewFileName, PAnsiChar(Source)) then
+    raise Exception.Create('NtfsCreateHardLink() failed.');
 
-    // TODO [future] Would be great, if position of the links is automatically
-    // set to where the user dropped the source file.
-    SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PAnsiChar(NewFileName), nil);
-    SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, PAnsiChar(Source), nil);
+  // TODO [future] Would be great, if position of the links is automatically
+  // set to where the user dropped the source file.
+  SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PAnsiChar(NewFileName), nil);
+  SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, PAnsiChar(Source), nil);
+end;
+
+function InternalCreateHardlinkSafe(Source, Destination: string): boolean;
+begin
+  try
+    InternalCreateHardlink(Source, Destination);
+    Result := True;
   except
     Result := False;
   end;
