@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-07-31 19:20\n"
-"PO-Revision-Date: 2004-07-31 19:23+0100\n"
+"POT-Creation-Date: 2004-08-28 14:40\n"
+"PO-Revision-Date: 2004-08-28 14:41+0100\n"
 "Last-Translator: Michael Elsdörfer <michael@elsdoerfer.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -122,6 +122,16 @@ msgstr "Fügt dem Kontextmenü von Junctions und leeren Ordnern einen Menüeintr
 msgid "Integrate into Explorer Right-Click menu"
 msgstr "Ins Rechts-Klick Menü des Explorers integrieren"
 
+#. fConfig..CreateLinksSuppressPrefix....Height
+#: ConfigUtil/uConfig.dfm:202
+msgid "By default, a \"Link to\" prefix will be added to every link, like the Explorer does with copies"
+msgstr "In der Standardeinstellung wird zu jedem neu erzeugtem Link ein \"Link zu\" Prefix hinzugefügt, so ähnlich wie der Explorer das mit Kopien macht."
+
+#. fConfig..CreateLinksSuppressPrefix..Caption
+#: ConfigUtil/uConfig.dfm:204
+msgid "Do not add \"Link to\" prefix when creating links"
+msgstr "Kein \"Link zu\" Prefix zu neuen Links hinzufügen"
+
 #. Template used to name the created links; can be overridden by lang file
 #. Programmer's name for it: LINK_PREFIX_TEMPLATE_DEFAULT
 #: Constants.pas:40
@@ -146,35 +156,34 @@ msgid "Open the target of this junction in Windows Explorer"
 msgstr "Das Zielverzeichnis dieser Junction im Windows Explorer öffnen"
 
 #. Add items to the submenu, depending on mode
-#: ContextMenuHook.pas:190
+#: ContextMenuHook.pas:208
 msgid "Link Folder..."
 msgstr "Ordner verlinken..."
 
-#: ContextMenuHook.pas:192
+#: ContextMenuHook.pas:210
 msgid "Unlink From \"%s\""
 msgstr "Link auf \"%s\" entfernen"
 
-#. a target in Volume{GUID} format. Until then, just disable the item.
-#: ContextMenuHook.pas:197
+#: ContextMenuHook.pas:212
 msgid "Open \"%s\""
 msgstr "\"%s\" öffnen"
 
 #. If the thing went not smoothly, then show a message
-#: CopyHook.pas:223
+#: CopyHook.pas:224
 msgid "\"%s\" could not be moved, because there is already a directory \"%s\"."
 msgstr "\"%s\" konnte nicht verschoben werden, weil ein Verzeichnis \"%s\" bereits existiert."
 
-#: CopyHook.pas:228
+#: CopyHook.pas:229
 msgid "\"%s\" could not be moved to \"%s\" because of unkown reasons."
 msgstr "\"%s\" konnte nicht nach \"%s\" verschoben werden (Grund unbekannt)."
 
 #. Moving the junction point is not possible
-#: CopyHook.pas:235
+#: CopyHook.pas:236
 msgid "\"%s\" is a junction point, but the target file system does not support junctions."
 msgstr "\"%s\"  ist ein Junction Point, aber das Ziel-Dateisystem unterstützt keine Junctions."
 
 #. Ask user what he wants to do
-#: CopyHook.pas:257
+#: CopyHook.pas:262
 msgid "\"%s\" is a junction point. If you want to copy the junction only, click \"Yes\", if you want to copy the target directory including all it's content, click \"No\". If you choose \"Cancel\", nothing will happen."
 msgstr "\"%s\" ist ein Junction Point. Wenn Sie nur die Junction kopieren wollen, klicken sie \"Ja\", wenn Sie das Zielverzeichnis inclusive des kompletten Inhalts kopieren wollen, \"Nein\". Wenn Sie \"Abbrechen\" wählen, wird nichts geschehen."
 
@@ -189,28 +198,28 @@ msgstr "Ja, und Links korregieren"
 
 #. Tell the user if an error occurred
 #. If positive result, then try to create hardlink
-#: DragDropHook.pas:161
+#: DragDropHook.pas:150
 msgid "Failed to create link. Most likely the target file system does not support this feature, or you tried to create a hard link across different partitions."
 msgstr "Link konnte nicht erzeugt werden. Wahrscheinlich unterstützt das Dateisystem des Ziels dieses Feature nicht, oder Sie haben versucht einen Hardlink über verschiedene Partitionen zu erstellen"
 
 #. an appropriate menu caption
-#: DragDropHook.pas:190
+#: DragDropHook.pas:178
 msgid "Create Hardlink Here"
 msgstr "Hardlink hier erstellen"
 
-#: DragDropHook.pas:191
+#: DragDropHook.pas:179
 msgid "Create Hardlinks Here"
 msgstr "Hardlinks hier erstellen"
 
-#: DragDropHook.pas:194
+#: DragDropHook.pas:182
 msgid "Create Junction Here"
 msgstr "Junction hier erstellen"
 
-#: DragDropHook.pas:195
+#: DragDropHook.pas:183
 msgid "Create Junctions Here"
 msgstr "Junctions hier erstellen"
 
-#: DragDropHook.pas:198
+#: DragDropHook.pas:186
 msgid "Create Links Here"
 msgstr "Links hier erstellen"
 

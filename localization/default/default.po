@@ -5,8 +5,8 @@
 #
 msgid ""
 msgstr "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-07-31 19:20\n"
-"PO-Revision-Date: 2004-07-31 19:20\n"
+"POT-Creation-Date: 2004-08-28 14:40\n"
+"PO-Revision-Date: 2004-08-28 14:40\n"
 "Last-Translator: Somebody <your.email@address.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -136,6 +136,18 @@ msgid "Integrate into Explorer Right-Click "
 "menu"
 msgstr ""
 
+#. fConfig..CreateLinksSuppressPrefix....Height
+#: ConfigUtil/uConfig.dfm:202
+msgid "By default, a \"Link to\" prefix will be added to every link, like the "
+"Explorer does with copies"
+msgstr ""
+
+#. fConfig..CreateLinksSuppressPrefix..Caption
+#: ConfigUtil/uConfig.dfm:204
+msgid "Do not add \"Link to\" prefix when creating "
+"links"
+msgstr ""
+
 #. Template used to name the created links; can be overridden by lang file
 #. Programmer's name for it: LINK_PREFIX_TEMPLATE_DEFAULT
 #: Constants.pas:40
@@ -162,38 +174,37 @@ msgid "Open the target of this junction in Windows "
 msgstr ""
 
 #. Add items to the submenu, depending on mode
-#: ContextMenuHook.pas:190
+#: ContextMenuHook.pas:208
 msgid "Link Folder..."
 msgstr ""
 
-#: ContextMenuHook.pas:192
+#: ContextMenuHook.pas:210
 msgid "Unlink From \"%s\""
 msgstr ""
 
-#. a target in Volume{GUID} format. Until then, just disable the item.
-#: ContextMenuHook.pas:197
+#: ContextMenuHook.pas:212
 msgid "Open \"%s\""
 msgstr ""
 
 #. If the thing went not smoothly, then show a message
-#: CopyHook.pas:223
+#: CopyHook.pas:224
 msgid "\"%s\" could not be moved, because there is already a directory "
 "\"%s\"."
 msgstr ""
 
-#: CopyHook.pas:228
+#: CopyHook.pas:229
 msgid "\"%s\" could not be moved to \"%s\" because of unkown "
 "reasons."
 msgstr ""
 
 #. Moving the junction point is not possible
-#: CopyHook.pas:235
+#: CopyHook.pas:236
 msgid "\"%s\" is a junction point, but the target file system does not support "
 "junctions."
 msgstr ""
 
 #. Ask user what he wants to do
-#: CopyHook.pas:257
+#: CopyHook.pas:262
 msgid "\"%s\" is a junction point. If you want to copy the junction only, "
 "click \"Yes\", if you want to copy the target directory including all "
 "it's content, click \"No\". If you choose \"Cancel\", nothing will "
@@ -210,7 +221,7 @@ msgid "Yes, and correct links"
 msgstr ""
 
 #. Tell the user if an error occurred
-#: DragDropHook.pas:161
+#: DragDropHook.pas:150
 #. If positive result, then try to create hardlink
 #: ShellNewExports.pas:85
 msgid "Failed to create link. Most likely the target file system does not "
@@ -219,23 +230,23 @@ msgid "Failed to create link. Most likely the target file system does not "
 msgstr ""
 
 #. an appropriate menu caption
-#: DragDropHook.pas:190
+#: DragDropHook.pas:178
 msgid "Create Hardlink Here"
 msgstr ""
 
-#: DragDropHook.pas:191
+#: DragDropHook.pas:179
 msgid "Create Hardlinks Here"
 msgstr ""
 
-#: DragDropHook.pas:194
+#: DragDropHook.pas:182
 msgid "Create Junction Here"
 msgstr ""
 
-#: DragDropHook.pas:195
+#: DragDropHook.pas:183
 msgid "Create Junctions Here"
 msgstr ""
 
-#: DragDropHook.pas:198
+#: DragDropHook.pas:186
 msgid "Create Links Here"
 msgstr ""
 
