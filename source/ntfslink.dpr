@@ -25,18 +25,19 @@ library ntfslink;
 // TODO [future] Implement a logging mechanism
 // TODO [future] Enable WinXP styles 
 
-uses      
+uses
   ComServ,
   Windows,
   JclRegistry,
   Global in 'Global.pas',
   GNUGetText in 'GNUGetText.pas',
-  BaseExtensionFactory in 'BaseExtensionFactory.pas',  
+  BaseExtensionFactory in 'BaseExtensionFactory.pas',
   DragDropHook in 'DragDropHook.pas',
   IconOverlayHook in 'IconOverlayHook.pas',
   CopyHook in 'CopyHook.pas',
   ContextMenuHook in 'ContextMenuHook.pas',
-  PropertySheetHook in 'PropertySheetHook.pas',  
+  PropertySheetHook in 'PropertySheetHook.pas',
+  ShellNewDummyHook in 'ShellNewDummyHook.pas',
   ShellNewExports in 'ShellNewExports.pas',
   ShellObjExtended in 'ShellObjExtended.pas',
   JunctionMonitor in 'JunctionMonitor.pas',
