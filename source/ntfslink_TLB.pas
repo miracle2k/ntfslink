@@ -27,10 +27,7 @@ unit ntfslink_TLB;
 {$WARN SYMBOL_PLATFORM OFF}
 {$WRITEABLECONST ON}
 {$VARPROPSETTER ON}
-interface
-
-uses Windows, ActiveX, Classes, Graphics, StdVCL, Variants;
-  
+interface  
 
 // *********************************************************************//
 // In dieser Typbibliothek deklarierte GUIDS . Es werden folgende         
@@ -49,7 +46,5 @@ const
 
 
 implementation
-
-uses ComObj;
 
 end.

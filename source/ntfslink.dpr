@@ -20,27 +20,27 @@ Known Issues:
 library ntfslink;
 
 {$R 'ntfslink.res' 'ntfslink.rc'}
+{$R 'DialogLinksExisting.res' 'DialogLinksExisting.rc'}
 
-// TODO link count is not decremented on deletion?
-// TODO update explorer on new links
-// TODO correct english
+// TODO [future] Implement a logging mechanism
+// TODO [future] Enable WinXP styles 
 
-uses
+uses      
   ComServ,
   Windows,
   JclRegistry,
   Global in 'Global.pas',
   GNUGetText in 'GNUGetText.pas',
+  BaseExtensionFactory in 'BaseExtensionFactory.pas',  
   DragDropHook in 'DragDropHook.pas',
   IconOverlayHook in 'IconOverlayHook.pas',
   CopyHook in 'CopyHook.pas',
   ContextMenuHook in 'ContextMenuHook.pas',
+  PropertySheetHook in 'PropertySheetHook.pas',  
   ShellNewExports in 'ShellNewExports.pas',
-  PropertySheetHook in 'PropertySheetHook.pas',
-  BaseExtensionFactory in 'BaseExtensionFactory.pas',
   ShellObjExtended in 'ShellObjExtended.pas',
-  ntfslink_TLB in 'ntfslink_TLB.pas',
-  JunctionMonitor in 'JunctionMonitor.pas';
+  JunctionMonitor in 'JunctionMonitor.pas',
+  DialogLinksExisting in 'DialogLinksExisting.pas';
 
 exports
   DllGetClassObject,
@@ -50,11 +50,17 @@ exports
   
   // Used to integrate into the Shell New menu: Explorer later will use
   // rundll32.exe to call these function
-  NewHardlink,
-  NewJunction;
+  NewHardlinkDlg,
+  NewJunctionDlg;
 
 begin
   // Try to load the language setting from the registry
   UseLanguage(RegReadStringDef(
                  HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION, 'Language', ''));
+
+  // Initialize some handles
+  GLYPH_HANDLE_STD := LoadBitmap(HInstance, 'MENU_GLYPH_STD');
+  GLYPH_HANDLE_JUNCTION := LoadBitmap(HInstance, 'MENU_GLYPH_JUNCTION');
+  GLYPH_HANDLE_LINKDEL := LoadBitmap(HInstance, 'MENU_GLYPH_LINKDEL');
+  GLYPH_HANDLE_EXPLORER := LoadBitmap(HInstance, 'MENU_GLYPH_EXPLORER');
 end.
