@@ -19,10 +19,109 @@ Known Issues:
 
 unit PropertySheetHook;
 
-// TODO needs to be implemented
-
 interface
+
+uses
+  Windows, Classes, ActiveX, ComObj, CommCtrl, ShlObj, BaseExtensionFactory;
+
+type
+  // The type of the object we operate on; note that we only handle hardlinks
+  // and junctions; of the source objects is anything else, we do not display
+  // our sheet.
+  TSourceFileMode = (sfmStandard, sfmHardlink, sfmJunction);
+
+  TPropertySheetHook = class(TComObject, IShellExtInit, IShellPropSheetExt)
+  private
+    FSourceObject: string;
+    FMode: TSourceFileMode;
+  public
+    { IShellExtInit }
+    function IShellExtInit.Initialize = SEIInitialize; // Avoid compiler warning
+    function SEIInitialize(pidlFolder: PItemIDList; lpdobj: IDataObject;
+      hKeyProgID: HKEY): HResult; stdcall;
+    { IShellPropSheetExt }
+    function AddPages(lpfnAddPage: TFNAddPropSheetPage;
+      lParam: LPARAM): HResult; stdcall;
+    function ReplacePage(uPageID: UINT; lpfnReplaceWith: TFNAddPropSheetPage;
+      lParam: LPARAM): HResult; stdcall;    
+  end;
+
+  TPropertySheetHookFactory = class(TBaseExtensionFactory)
+  protected
+    function GetInstallationData: TExtensionRegistryData; override;
+  end;
+
+const
+  Class_PropertySheetHook: TGUID = '{AFF02BB9-D826-4566-974F-F9EE60BE13AD}';
 
 implementation
 
+uses
+  ComServ, ShellAPI, SysUtils, JclNTFS, Global, GNUGetText;
+
+{ TPropertySheetHook }
+
+function TPropertySheetHook.AddPages(lpfnAddPage: TFNAddPropSheetPage;
+  lParam: LPARAM): HResult;
+begin
+
+end;
+
+function TPropertySheetHook.ReplacePage(uPageID: UINT;
+  lpfnReplaceWith: TFNAddPropSheetPage; lParam: LPARAM): HResult;
+begin
+
+end;
+
+function TPropertySheetHook.SEIInitialize(pidlFolder: PItemIDList;
+  lpdobj: IDataObject; hKeyProgID: HKEY): HResult;
+var
+  StgMedium: TStgMedium;
+  FormatEtc: TFormatEtc;
+  tempFile: array[0..MAX_PATH] of Char;
+  SrcCount: Integer;
+begin
+  // Initialize FormatEtc
+  with FormatEtc do begin
+    cfFormat := CF_HDROP;
+    ptd      := nil;
+    dwAspect := DVASPECT_CONTENT;
+    lindex   := -1;
+    tymed    := TYMED_HGLOBAL;
+  end;
+
+  // Render the data referenced by the IDataObject pointer to an HGLOBAL
+  // storage medium in CF_HDROP format.
+  Result := lpdobj.GetData(FormatEtc, StgMedium);
+  if Failed(Result) then exit;
+  
+  // Get the selected object; note that only *1* is supported;
+  SrcCount := DragQueryFile(StgMedium.hGlobal, $FFFFFFFF, nil, 0);
+  if SrcCount = 1 then begin
+    DragQueryFile(StgMedium.hGlobal, 0, tempFile, SizeOf(tempFile));
+    FSourceObject := tempFile;
+  end
+  else begin
+    Result := E_INVALIDARG;
+    exit;
+  end;
+
+  // Free resources
+  ReleaseStgMedium(StgMedium);
+end;
+
+{ TPropertySheetHookFactory }
+
+function TPropertySheetHookFactory.GetInstallationData: TExtensionRegistryData;
+begin
+  Result.RootKey := HKEY_CLASSES_ROOT;
+  Result.BaseKey := '*\shellex\PropertySheetHandlers\NTFSLink';
+  Result.UseGUIDAsKeyName := False;
+end;
+
+initialization
+//  TODO [future] Implement the Property Sheet Extensions
+//  TPropertySheetHookFactory.Create(ComServer, TPropertySheetHook,
+//      Class_PropertySheetHook, '', 'NTFSLink Property Sheet Shell Extension',
+//      ciMultiInstance, tmApartment);
 end.
