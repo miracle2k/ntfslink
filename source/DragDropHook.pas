@@ -86,18 +86,7 @@ end;
 function TDragDropHook.GetCommandString(idCmd, uType: UINT;
   pwReserved: PUINT; pszName: LPSTR; cchMax: UINT): HResult;
 begin
-  if (idCmd = 0) then begin
-    if (uType = GCS_HELPTEXT) then
-    begin
-      // Return nothing, as this is shown nowhere
-      StrCopy(pszName, '');
-      Result := NOERROR;
-    end
-    else
-      Result := E_INVALIDARG;
-  end
-  else
-    Result := E_INVALIDARG;
+  Result := E_NOTIMPL;
 end;
 
 procedure TDragDropHook.InitSourceFileMode;
@@ -163,8 +152,7 @@ begin
           ErrorMsg := ErrorMsg + ': ' + SysErrorMessage(GetLastError);
         MessageBox(lpici.hwnd, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'),
                    MB_OK + MB_ICONERROR)
-      end else
-        Result := NOERROR;
+      end
     end;
   except
     Result := E_FAIL;
@@ -254,10 +242,11 @@ begin
   if (lpdobj = nil) then begin
     Result := E_INVALIDARG;
     exit;
-  end else begin
-    SHGetPathFromIDList(pidlFolder, pszPath);
-    FTargetPath := pszPath;
   end;
+
+  // Convert pidl to real path
+  SHGetPathFromIDList(pidlFolder, pszPath);
+  FTargetPath := pszPath;
 
   // Make sure the taget file system is NTFS: To keep it as easy as possible,
   // we just check if reparse points are supported. This is only the case on

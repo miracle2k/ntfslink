@@ -54,7 +54,7 @@ function DialogCallback(hDlg: HWND; uMsg: dword; wParam: wParam;
 
   procedure TranslateDialogItemText(DlgItem: Integer);
   var
-    ItemText: array[0..150] of Char;
+    ItemText: array[0..180] of Char;
   begin
     GetDlgItemText(hDlg, DlgItem, ItemText, High(ItemText));
     SetDlgItemText(hDlg, DlgItem, PAnsiChar(string(_(ItemText))));

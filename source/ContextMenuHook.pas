@@ -62,7 +62,7 @@ implementation
 
 uses
   JclNTFS, JclRegistry, ShellAPI, ComServ, GNUGetText, Global, ShellNewExports,
-  Constants;
+  Constants, ShellObjExtended;
 
 { TContextMenuHook }
 
@@ -93,9 +93,10 @@ end;
 function TContextMenuHook.InvokeCommand(
   var lpici: TCMInvokeCommandInfo): HResult;
 var
-  VolumeName: array[0..MAX_PATH] of Char;
+  VolumeUniqueName, VolumeName, DriveBuf: array[0..MAX_PATH] of Char;
   i: integer;
-  flags: cardinal;
+  temp: Cardinal;
+  FindRec: Cardinal;
 begin
   // Make sure we aren't being passed an invalid command id
   case (LoWord(lpici.lpVerb))of
@@ -121,12 +122,29 @@ begin
         // so, we have to find out what
         if Pos('Volume{', FJunctionTarget) = 1 then
         begin
-          for i := ord('a') to ord('z') do begin
-            GetVolumeInformation(PAnsiChar(string(Chr(i) + ':')), VolumeName, MAX_PATH, nil, flags, flags,nil, 0);
-            MessageBox(0, VolumeName, '', 0);
+//          FindRec := FindFirstVolume(VolumeUniqueName, MAX_PATH);
+//          if (FindRec <> INVALID_HANDLE_VALUE) then
+//          begin
+//            if VolumeUniqueName = ('\\?\' + FJunctionTarget) then begin
+//              GetVolumeInformation(VolumeUniqueName, VolumeName, MAX_PATH, nil,
+//                                   temp, temp, nil, 0);
+//              GetVolumePathNamesForVolumeName(PAnsiChar(FJunctionTarget), DriveBuf , MAX_PATH, temp);
+//              FJunctionTarget := DriveBuf;
+//              break;
+//            end;
+//            if not (FindNextVolume(FindRec, VolumeUniqueName, MAX_PATH)) then
+//              break;
+//          end;
+//          FindVolumeClose(FindRec);
+
+          for i := Ord('c') to Ord('z') do begin
+            GetVolumeNameForVolumeMountPoint(PAnsiChar(Chr(i) + ':\'), VolumeName, MAX_PATH);
+            if VolumeName = ('\\?\' + FJunctionTarget) then
+               FJunctionTarget := Chr(i) + ':\';
           end;
-        end else
-          ShellExecute(0, 'explore', PAnsiChar(FJunctionTarget), nil, nil, SW_NORMAL);
+        end;
+        // Execute explorer
+        ShellExecute(0, 'explore', PAnsiChar(FJunctionTarget), nil, nil, SW_NORMAL);
       end;
       
     else
@@ -191,11 +209,8 @@ begin
       else begin
         CreateMenuItem(SubMenu, Format(_('Unlink From "%s"'), [FJunctionTarget]),
                        GLYPH_HANDLE_LINKDEL, idCmdFirst + 1);
-        // TODO [v2.1] Currently we are not able to handle mount points using
-        // a target in Volume{GUID} format. Until then, just disable the item. 
-        if Pos('Volume{', FJunctionTarget) <> 1 then
-          CreateMenuItem(SubMenu, Format(_('Open "%s"'), [FJunctionTarget]),
-                         GLYPH_HANDLE_EXPLORER, idCmdFirst + 2);
+        CreateMenuItem(SubMenu, Format(_('Open "%s"'), [FJunctionTarget]),
+                       GLYPH_HANDLE_EXPLORER, idCmdFirst + 2);
       end;
 
     // The required return value is (according to lastest MSDN) the largest

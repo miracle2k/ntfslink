@@ -124,7 +124,8 @@ begin
       try
         tempList.Text := Dialog_JunctionListAsString;
         for i := 0 to tempList.Count - 1 do
-          if (wFunc = FO_DELETE) then begin
+          if (wFunc = FO_DELETE) then
+          begin
             // First delete the junction, then the folder itself
             if NtfsDeleteJunctionPoint(tempList[i]) then
               RemoveDir(tempList[i]);
@@ -235,6 +236,10 @@ begin
            'support junctions.'), [pszSrcFile]))),
            PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR);
     end
+
+    // If a junction is renamed, make sure the tracking information is updated
+    else if (wFunc = FO_RENAME) then
+      TrackJunctionCreate(pszDestFile, GetJPDestination(pszSrcFile))
 
     // Finally, if it's a copy operation, ask the user what he wants: Either
     // copy the junction, or copy the contents of the directory.

@@ -23,7 +23,7 @@ unit ShellObjExtended;
 interface
 
 uses
-  Windows, ShlObj;
+  Windows, Messages, ShlObj;
 
 const
   IID_IColumnProvider: TGUID = (
@@ -38,6 +38,8 @@ const
   MAX_COLUMN_DESC_LEN = 128;
 
 type
+  HANDLE = Windows.THandle;
+
   SHCOLUMNINFO = packed record
     scid: SHCOLUMNID;
     vt: integer;
@@ -85,7 +87,113 @@ type
     function GetItemData(pscid: PSHCOLUMNID; pscd: PSHCOLUMNDATA; pvarData: Variant): HResult; stdcall;
   end;
 
+// From Winbase.h
+function GetVolumePathNameA(lpszFileName: LPCSTR; lpszVolumePathName: LPSTR;
+  cchBufferLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetVolumePathNameA}
+function GetVolumePathNameW(lpszFileName: LPCWSTR; lpszVolumePathName: LPWSTR;
+  cchBufferLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetVolumePathNameW}
+function GetVolumePathName(lpszFileName: LPCSTR; lpszVolumePathName: LPSTR;
+  cchBufferLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetVolumePathName}
+
+function GetVolumePathNamesForVolumeNameA(lpszVolumeName, lpszVolumePathNames: LPCSTR;
+  cchBufferLength: DWORD; var lpcchReturnLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetVolumePathNamesForVolumeNameA}
+function GetVolumePathNamesForVolumeNameW(lpszVolumeName, lpszVolumePathNames: LPCWSTR;
+  cchBufferLength: DWORD; var lpcchReturnLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetVolumePathNamesForVolumeNameW}
+function GetVolumePathNamesForVolumeName(lpszVolumeName, lpszVolumePathNames: LPCSTR;
+  cchBufferLength: DWORD; var lpcchReturnLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetVolumePathNamesForVolumeName}
+
+function GetVolumeNameForVolumeMountPointA(lpszVolumeMountPoint: LPCSTR;
+  lpszVolumeName: LPSTR; cchBufferLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetVolumeNameForVolumeMountPointA}
+function GetVolumeNameForVolumeMountPointW(lpszVolumeMountPoint: LPCWSTR;
+  lpszVolumeName: LPWSTR; cchBufferLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetVolumeNameForVolumeMountPointW}
+function GetVolumeNameForVolumeMountPoint(lpszVolumeMountPoint: LPCSTR;
+  lpszVolumeName: LPSTR; cchBufferLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetVolumeNameForVolumeMountPoint}
+
+function FindFirstVolumeA(lpszVolumeName: LPSTR; cchBufferLength: DWORD): HANDLE; stdcall;
+{$EXTERNALSYM FindFirstVolumeA}
+function FindFirstVolumeW(lpszVolumeName: LPWSTR; cchBufferLength: DWORD): HANDLE; stdcall;
+{$EXTERNALSYM FindFirstVolumeW}
+function FindFirstVolume(lpszVolumeName: LPSTR; cchBufferLength: DWORD): HANDLE; stdcall;
+{$EXTERNALSYM FindFirstVolume}
+
+function FindNextVolumeA(hFindVolume: HANDLE; lpszVolumeName: LPSTR;
+  cchBufferLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM FindNextVolumeA}
+function FindNextVolumeW(hFindVolume: HANDLE; lpszVolumeName: LPWSTR;
+  cchBufferLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM FindNextVolumeW}
+function FindNextVolume(hFindVolume: HANDLE; lpszVolumeName: LPSTR;
+  cchBufferLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM FindNextVolume}
+
+function FindVolumeClose(hFindVolume: HANDLE): BOOL; stdcall;
+{$EXTERNALSYM FindVolumeClose}
+
+function FindFirstVolumeMountPointA(lpszRootPathName: LPCSTR;
+  lpszVolumeMountPoint: LPSTR; cchBufferLength: DWORD): HANDLE; stdcall;
+{$EXTERNALSYM FindFirstVolumeMountPointA}
+function FindFirstVolumeMountPointW(lpszRootPathName: LPCWSTR;
+  lpszVolumeMountPoint: LPWSTR; cchBufferLength: DWORD): HANDLE; stdcall;
+{$EXTERNALSYM FindFirstVolumeMountPointW}
+function FindFirstVolumeMountPoint(lpszRootPathName: LPCSTR;
+  lpszVolumeMountPoint: LPSTR; cchBufferLength: DWORD): HANDLE; stdcall;
+{$EXTERNALSYM FindFirstVolumeMountPoint}
+
+function FindNextVolumeMountPointA(hFindVolumeMountPoint: HANDLE;
+  lpszVolumeMountPoint: LPSTR; cchBufferLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM FindNextVolumeMountPointA}
+function FindNextVolumeMountPointW(hFindVolumeMountPoint: HANDLE;
+  lpszVolumeMountPoint: LPWSTR; cchBufferLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM FindNextVolumeMountPointW}
+function FindNextVolumeMountPoint(hFindVolumeMountPoint: HANDLE;
+  lpszVolumeMountPoint: LPSTR; cchBufferLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM FindNextVolumeMountPoint}
+
+function FindVolumeMountPointClose(hFindVolumeMountPoint: HANDLE): BOOL; stdcall;
+{$EXTERNALSYM FindVolumeMountPointClose}
+
 implementation
+
+function GetVolumePathNameA; external kernel32 name 'GetVolumePathNameA';
+function GetVolumePathNameW; external kernel32 name 'GetVolumePathNameW';
+function GetVolumePathName; external kernel32 name 'GetVolumePathNameA';
+
+function GetVolumePathNamesForVolumeNameA; external kernel32 name 'GetVolumePathNamesForVolumeNameA';
+function GetVolumePathNamesForVolumeNameW; external kernel32 name 'GetVolumePathNamesForVolumeNameW';
+function GetVolumePathNamesForVolumeName; external kernel32 name 'GetVolumePathNamesForVolumeNameA';
+
+function GetVolumeNameForVolumeMountPointA; external kernel32 name 'GetVolumeNameForVolumeMountPointA';
+function GetVolumeNameForVolumeMountPointW; external kernel32 name 'GetVolumeNameForVolumeMountPointW';
+function GetVolumeNameForVolumeMountPoint; external kernel32 name 'GetVolumeNameForVolumeMountPointA';
+
+function FindFirstVolumeA; external kernel32 name 'FindFirstVolumeA';
+function FindFirstVolumeW; external kernel32 name 'FindFirstVolumeW';
+function FindFirstVolume; external kernel32 name 'FindFirstVolumeA';
+
+function FindNextVolumeA; external kernel32 name 'FindNextVolumeA';
+function FindNextVolumeW; external kernel32 name 'FindNextVolumeW';
+function FindNextVolume; external kernel32 name 'FindNextVolumeA';
+
+function FindVolumeClose; external kernel32 name 'FindVolumeClose';
+
+function FindFirstVolumeMountPointA; external kernel32 name 'FindFirstVolumeMountPointA';
+function FindFirstVolumeMountPointW; external kernel32 name 'FindFirstVolumeMountPointW';
+function FindFirstVolumeMountPoint; external kernel32 name 'FindFirstVolumeMountPointA';
+
+function FindNextVolumeMountPointA; external kernel32 name 'FindNextVolumeMountPointA';
+function FindNextVolumeMountPointW; external kernel32 name 'FindNextVolumeMountPointW';
+function FindNextVolumeMountPoint; external kernel32 name 'FindNextVolumeMountPointA';
+
+function FindVolumeMountPointClose; external kernel32 name 'FindVolumeMountPointClose';
 
 end.
 
