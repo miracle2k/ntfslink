@@ -4,57 +4,277 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-07-03 19:24\n"
-"PO-Revision-Date: 2004-07-03 19:24\n"
+msgstr "Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2004-07-26 21:23\n"
+"PO-Revision-Date: 2004-07-26 21:23\n"
 "Last-Translator: Somebody <your.email@address.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Dxgettext 1.1.1\n"
+"X-Generator: dxgettext 1.1.1\n"
 
-#. Form1..Caption
-#: uConfig.dfm:6
-#. Form1..Caption
+#. fConfig..Caption
 #: ConfigUtil/uConfig.dfm:6
-msgid "Form1"
+msgid "NTFS Link Configuration"
 msgstr ""
 
-#. Form1..Font.Name
-#: uConfig.dfm:11
-#. Form1..Font.Name
-#: ConfigUtil/uConfig.dfm:11
+#. fConfig..Font.Name
+#: ConfigUtil/uConfig.dfm:13
+#. Programmer's name: FONT 8
+#: DialogLinksExisting.rc:13
 msgid "MS Shell Dlg 2"
 msgstr ""
 
-#: ContextMenuHook.pas:87
-msgid "Unlink Junction"
+#. fConfig..Label1..Caption
+#: ConfigUtil/uConfig.dfm:30
+#. fConfig..Label2..Caption
+#: ConfigUtil/uConfig.dfm:38
+msgid "Icon:"
+msgstr ""
+
+#. fConfig..Label3..Caption
+#: ConfigUtil/uConfig.dfm:69
+msgid "Tracking of Junction Creation:"
+msgstr ""
+
+#. fConfig..IntegrateIntoDragDropMenu..Hint
+#: ConfigUtil/uConfig.dfm:76
+msgid "Allows creation of hardlinks and junctions using "
+"Drag&Drop"
+msgstr ""
+
+#. fConfig..IntegrateIntoDragDropMenu..Caption
+#: ConfigUtil/uConfig.dfm:78
+msgid "Integrate into Explorer Drag&&Drop menu"
+msgstr ""
+
+#. fConfig..EnableJunctionIconOverlays..Hint
+#: ConfigUtil/uConfig.dfm:86
+msgid "Helps differing junction points between other "
+"directories"
+msgstr ""
+
+#. fConfig..EnableJunctionIconOverlays..Caption
+#: ConfigUtil/uConfig.dfm:88
+msgid "Enable Icon Overlays for Junction Points (requires "
+"restart)"
+msgstr ""
+
+#. fConfig..EnableHardlinkIconOverlays..Hint
+#: ConfigUtil/uConfig.dfm:97
+msgid "Helps differing hard links between other "
+"files"
+msgstr ""
+
+#. fConfig..EnableHardlinkIconOverlays..Caption
+#: ConfigUtil/uConfig.dfm:99
+msgid "Enable Icon Overlays for Hardlinks (requires "
+"restart)"
+msgstr ""
+
+#. fConfig..InterceptJunctionMoving....Height
+#: ConfigUtil/uConfig.dfm:111
+msgid "Whenever you try to copy a junction point in Explorer, NTFS Link will "
+"ask whether you want to copy the junction only, or all the contents "
+"of the target folder"
+msgstr ""
+
+#. fConfig..InterceptJunctionMoving..Caption
+#: ConfigUtil/uConfig.dfm:113
+msgid "Intercept Copying of Junction Points"
+msgstr ""
+
+#. fConfig..bOK..Caption
+#: ConfigUtil/uConfig.dfm:122
+msgid "OK"
+msgstr ""
+
+#. fConfig..bCancel..Caption
+#: ConfigUtil/uConfig.dfm:134
+msgid "Cancel"
+msgstr ""
+
+#. fConfig..JunctionTrackingMode....Height
+#: ConfigUtil/uConfig.dfm:146
+msgid "NTFS Link can save information about the junctions you created, and "
+"warn you, if you attempt to delete a folder with junctions pointing "
+"to"
+msgstr ""
+
+#. fConfig..JunctionTrackingMode..Text
+#: ConfigUtil/uConfig.dfm:152
+#. fConfig..JunctionTrackingMode....Items.Strings
+#: ConfigUtil/uConfig.dfm:154
+msgid "Prefer Streams, if not available Registry"
+msgstr ""
+
+#. fConfig..JunctionTrackingMode....Items.Strings
+#: ConfigUtil/uConfig.dfm:155
+msgid "Always in Registry"
+msgstr ""
+
+#. fConfig..JunctionTrackingMode....Items.Strings
+#: ConfigUtil/uConfig.dfm:156
+msgid "Always in Streams (does not work on "
+"FAT)"
+msgstr ""
+
+#. fConfig..JunctionTrackingMode....Items.Strings
+#: ConfigUtil/uConfig.dfm:157
+msgid "Deactivate"
+msgstr ""
+
+#. fConfig..IntegrateIntoContextMenu....Height
+#: ConfigUtil/uConfig.dfm:190
+msgid "Adds a menu item into the context menu of junction points und empty "
+"directories"
+msgstr ""
+
+#. fConfig..IntegrateIntoContextMenu..Caption
+#: ConfigUtil/uConfig.dfm:192
+msgid "Integrate into Explorer Right-Click "
+"menu"
+msgstr ""
+
+#. Template used to name the created links; can be overridden by lang file
+#. Programmer's name for it: LINK_PREFIX_TEMPLATE_DEFAULT
+#: Constants.pas:40
+msgid "Link%s to %s"
+msgstr ""
+
+#. Programmer's name for it: COPY_PREFIX_TEMPLATE_DEFAULT
+#: Constants.pas:41
+msgid "Copy%s of %s"
+msgstr ""
+
+#: ContextMenuHook.pas:77
+msgid "Link selected folder to another directory or "
+"drive"
+msgstr ""
+
+#: ContextMenuHook.pas:79
+msgid "Remove this folder's junction point"
+msgstr ""
+
+#: ContextMenuHook.pas:81
+msgid "Open the target of this junction in Windows "
+"Explorer"
+msgstr ""
+
+#. Add items to the submenu, depending on mode
+#: ContextMenuHook.pas:175
+msgid "Link Folder..."
+msgstr ""
+
+#: ContextMenuHook.pas:177
+msgid "Unlink From \"%s\""
+msgstr ""
+
+#: ContextMenuHook.pas:179
+msgid "Open \"%s\""
+msgstr ""
+
+#. If the thing went not smoothly, then show a message
+#: CopyHook.pas:162
+msgid "\"%s\" could not be moved, because there is already a directory "
+"\"%s\"."
+msgstr ""
+
+#: CopyHook.pas:167
+msgid "\"%s\" could not be moved to \"%s\" because of unkown "
+"reasons."
+msgstr ""
+
+#. Moving the junction point is not possible
+#: CopyHook.pas:174
+msgid "\"%s\" is a junction point, but the target file system does not support "
+"junctions."
+msgstr ""
+
+#. Ask user what he wants to do
+#: CopyHook.pas:192
+msgid "\"%s\" is a junction point. If you want to copy the junction only, "
+"click \"Yes\", if you want to copy the target directory including all "
+"it's content, click \"No\". If you choose \"Cancel\", nothing will "
+"happen."
 msgstr ""
 
 #. Tell the user if an error occurred
-#: DragDropHook.pas:203
-msgid "Failed to create link"
+#: DragDropHook.pas:156
+#. If positive result, then try to create hardlink
+#: ShellNewExports.pas:85
+msgid "Failed to create link. Most likely the target file system does not "
+"support this feature, or you tried to create a hard link across "
+"different partitions."
 msgstr ""
 
-#. TODO use icons?
-#: DragDropHook.pas:231
+#. an appropriate menu caption
+#: DragDropHook.pas:184
 msgid "Create Hardlink Here"
 msgstr ""
 
-#: DragDropHook.pas:232
+#: DragDropHook.pas:185
 msgid "Create Hardlinks Here"
 msgstr ""
 
-#: DragDropHook.pas:235
+#: DragDropHook.pas:188
 msgid "Create Junction Here"
 msgstr ""
 
-#: DragDropHook.pas:236
-msgid "Create JunctionsHere"
+#: DragDropHook.pas:189
+msgid "Create Junctions Here"
 msgstr ""
 
-#: DragDropHook.pas:239
+#: DragDropHook.pas:192
 msgid "Create Links Here"
+msgstr ""
+
+#. Init other struct members
+#: ShellNewExports.pas:68
+msgid "Choose the file you want to create a hard link "
+"to"
+msgstr ""
+
+#: ShellNewExports.pas:69
+msgid "All Files"
+msgstr ""
+
+#. Init BrowseInfo struct
+#: ShellNewExports.pas:105
+msgid "Choose the target folder or drive to which you want to create a "
+"junction point."
+msgstr ""
+
+#. If junction creation failed, show message box
+#: ShellNewExports.pas:128
+msgid "Failed to create junction. Most likely the target file system does "
+"not support this feature."
+msgstr ""
+
+#. Programmer's name: CAPTION
+#: DialogLinksExisting.rc:12
+msgid "NTFS Link"
+msgstr ""
+
+#. Programmer's name: CONTROL
+#: DialogLinksExisting.rc:15
+msgid "There are junctions pointing to this folder or a subfolder (see list "
+"below). If you delete it, these link will no longer working. Are you "
+"sure?"
+msgstr ""
+
+#. Programmer's name: CONTROL
+#: DialogLinksExisting.rc:17
+msgid "Yes, and delete links"
+msgstr ""
+
+#. Programmer's name: CONTROL
+#: DialogLinksExisting.rc:18
+msgid "Yes"
+msgstr ""
+
+#. Programmer's name: CONTROL
+#: DialogLinksExisting.rc:19
+msgid "No"
 msgstr ""
 
