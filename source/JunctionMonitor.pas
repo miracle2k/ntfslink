@@ -22,10 +22,6 @@ unit JunctionMonitor;
 // TODO [future] If a folder is deleted, check if there are junctions for
 // objects within subdirectories.
 
-// TODO [future] With time comin gand going the registry will be spammed
-// with old junction tracking entries, woth targets were deleted a long
-// time ago. Somehow somebody somewhere this should be cleaned up.
-
 interface
 
 uses
@@ -37,13 +33,18 @@ uses
 function GetFolderLinkCount(Folder: string; var LinksAsString: string): Integer;
 
 // Call this whenever a junction is created; it will store the neccessary
-// tracking information in a stream, or the registry. 
+// tracking information in a stream, or the registry.
 procedure TrackJunctionCreate(Junction, Target: string);
+
+// If registry tracking is activated, with time coming and going, more and
+// more unneccessary space will be wasted, so we call this function, which will
+// delete all tracking entries related to not existing folders.
+procedure CleanRegistryTrackingInformation;
 
 implementation
 
 uses
-  JclNTFS, JclRegistry, Global, ShellObjExtended;
+  JclNTFS, JclRegistry, Global, Constants, ShellObjExtended, ComObj;
 
 function GetFolderLinkCount(Folder: string; var LinksAsString: string): Integer;
 
@@ -148,7 +149,6 @@ function GetFolderLinkCount(Folder: string; var LinksAsString: string): Integer;
     end;
   end;
 
-
 begin
   try
     LinksAsString := '';
@@ -178,13 +178,21 @@ var
   Handle: THandle;
   {BytesWritten: Cardinal;}
   StrToWrite: string;
+  TrackingMode: Integer;
 begin
   // Check if this the target path is prefixed with "\??\", if yes, remove it
   if Copy(Target, 1, 4) = '\??\' then
     Delete(Target, 1, 4);
 
+  // Try to extract the tracking mode setting from registry
+  TrackingMode := RegReadIntegerDef(HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
+                                    'JunctionTrackingMode', 0);
+  // If Mode = 3 = Deactivated, then exit right here
+  if TrackingMode = 3 then exit;
+
   // If the target file system supports streams, store information there
-  if NtfsStreamsSupported(ExtractFileDrive(Target) + '\') then
+  if (NtfsStreamsSupported(ExtractFileDrive(Target) + '\')) and
+     ((TrackingMode = 0(*Prefer Streams*)) or (TrackingMode = 2(*Always Streams*))) then
   begin
     // Open the file, append the new junction path, close
     Handle := CreateFile(PChar(RemoveBackslash(Target) + ':' + NTFSLINK_TRACKING_STREAM),
@@ -207,6 +215,56 @@ begin
     RegCreateKey(HKEY_LOCAL_MACHINE, NTFSLINK_TRACKINGDATA_KEY + Target, '');
     RegWriteString(HKEY_LOCAL_MACHINE, NTFSLINK_TRACKINGDATA_KEY + Target, Junction, '');
   end;
+end;
+
+procedure CleanRegistryTrackingInformation;
+
+  function CleanUp(AKey: string): boolean;
+  var
+    KeyList: TStringList;
+    i: Integer;
+    DirNotExisting: boolean;
+  begin
+    // Default result is "true"
+    Result := True;
+
+    // Make sure the passed key has a backslash at the end
+    AKey := CheckBackslash(AKey);
+
+    // Check if the directory we are currently testing is still existing;
+    // We will delete the key only if it is not.
+    DirNotExisting := not
+      DirectoryExists(Copy(AKey, Length(NTFSLINK_TRACKINGDATA_KEY) + 1, MaxInt));
+
+    try
+      KeyList := TStringList.Create;
+      try
+        // Try to get the subkeys
+        RegGetKeyNames(HKEY_LOCAL_MACHINE, AKey, KeyList);
+
+        // Try to delete each of the subkeys
+        for i := 0 to KeyList.Count - 1 do
+          if not CleanUp(CheckBackslash(AKey + KeyList[i])) then
+            Result := False;
+
+        // If Result <> False ==> all subkeys were deleted; now, if the dir
+        // reflected by tge current key is not existing, delete the key too.
+        // Otherwise return false, to indicate that nothing happend.
+        if (Result) and (DirNotExisting) then
+          RegDeleteKeyTree(HKEY_LOCAL_MACHINE, AKey)
+        else
+          Result := False;
+      finally
+        KeyList.Free;
+      end;
+    except
+      // If anything went wrong, do not delete the key and return false
+      Result := False;
+    end;
+  end;
+
+begin
+  CleanUp(NTFSLINK_TRACKINGDATA_KEY);
 end;
 
 end.
