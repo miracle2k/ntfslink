@@ -93,7 +93,7 @@ const
 implementation
 
 uses
-  ComServ, JclNTFS, JclRegistry, Global;
+  ComServ, JclNTFS, JclRegistry, Constants;
 
 { TJunctionOverlayHook }
 
@@ -187,16 +187,20 @@ begin
   Result := E_NOTIMPL;
 end;
 
-procedure TIconOverlayHook.LoadSettings;     
+procedure TIconOverlayHook.LoadSettings;
 begin
   ConfigIconFile := RegReadStringDef(
            HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
            Config_Prefix + 'OverlayFile',
-           GetModuleName(HINSTANCE)); 
+           '');
+  if ConfigIconFile = '' then
+    ConfigIconFile := GetModuleName(HINSTANCE);
   ConfigIconIndex := RegReadIntegerDef(
            HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
            Config_Prefix + 'OverlayIndex',
-           Config_IconIndex_Default);
+           -1);
+  if ConfigIconIndex = -1 then
+    ConfigIconIndex := Config_IconIndex_Default;
   ConfigOverlayPriority := RegReadIntegerDef(
            HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
            Config_Prefix + 'OverlayPriority',
