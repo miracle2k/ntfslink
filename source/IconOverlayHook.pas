@@ -53,15 +53,13 @@ type
     function GetOverlayInfo(pwszIconFile: PWideChar; cchMax: Integer;
       var pIndex: Integer; var pdwFlags: DWORD): HResult; stdcall;
     function GetPriority(out pIPriority: Integer): HResult; stdcall;
-  public
-    constructor Create; reintroduce;
   end;
 
-  // TODO add comment
+  // We need this type later to access the static class methods 
   TIconOverlayHookClass = class of TIconOverlayHook;
 
   // Icon Overlay Hook for JunctionPoints
-  TJunctionOverlayHook = class(TIconOverlayHook)
+  TJunctionOverlayHook = class(TIconOverlayHook, IShellIconOverlayIdentifier)
   protected
     class function Config_Prefix: string; override;
     class function Config_IconIndex_Default: Integer; override;
@@ -150,15 +148,11 @@ end;
 
 { TIconOverlayHook }
 
-constructor TIconOverlayHook.Create;
-begin
-  inherited Create;
-  LoadSettings;
-end;
-
 function TIconOverlayHook.GetOverlayInfo(pwszIconFile: PWideChar;
   cchMax: Integer; var pIndex: Integer; var pdwFlags: DWORD): HResult;
-begin         LoadSettings;
+begin
+  LoadSettings;
+
   // We need the string as a PWideChar
   StringToWideChar(ConfigIconFile, pwszIconFile, cchMax);
   
@@ -186,24 +180,23 @@ begin
   Result := E_NOTIMPL;
 end;
 
-procedure TIconOverlayHook.LoadSettings;
+procedure TIconOverlayHook.LoadSettings;     // TODO load settings only once
 begin
   ConfigIconFile := RegReadStringDef(
            HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
-           ConfigIconFile + 'OverlayFile',
-           '');      // TODO we need the main module here
+           Config_Prefix + 'OverlayFile',
+           'F:\Developing\Projects\NTFSLink\source\ntfslink.dll');      // TODO we need the main module here
   ConfigIconIndex := RegReadIntegerDef(
            HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
-           ConfigIconFile + 'OverlayIndex',
-           -1);
+           Config_Prefix + 'OverlayIndex',
+           Config_IconIndex_Default);
   ConfigOverlayPriority := RegReadIntegerDef(
            HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
-           ConfigIconFile + 'OverlayPriority',
-           -1);
+           Config_Prefix + 'OverlayPriority',
+           OVERLAY_PRIORITY_DEFAULT);
 
-  // TODO remove this, hack
-  ConfigIconFile := 'F:\Developing\Projects\NTFSLink\source\hl_cust.ico';
-  ConfigIconIndex := -1;
+          // ConfigIconFile := 'F:\Developing\Projects\NTFSLink\source\graphics\hardlink.ico';
+          // ConfigIconIndex := -1;
 end;
 
 { TIconOverlayHookFactory }
@@ -239,14 +232,14 @@ begin
 end;
 
 initialization
-  TIconOverlayHookFactory.Create(ComServer, TJunctionOverlayHook,
-      Class_JunctionOverlayHook, '',
-      'NTFSLink OverlayIcon Shell Extension for JunctionPoints',
-      ciMultiInstance, tmApartment);
-
   TIconOverlayHookFactory.Create(ComServer, THardlinkOverlayHook,
       Class_HardlinkOverlayHook, '',
       'NTFSLink OverlayIcon Shell Extension for Hardlinks',
+      ciMultiInstance, tmApartment);
+      
+  TIconOverlayHookFactory.Create(ComServer, TJunctionOverlayHook,
+      Class_JunctionOverlayHook, '',
+      'NTFSLink OverlayIcon Shell Extension for JunctionPoints',
       ciMultiInstance, tmApartment);
 
 end.

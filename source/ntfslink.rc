@@ -1,0 +1,5 @@
+// Overlay icon for hardlinks points
+HARDLINK   ICON  DISCARDABLE IMPURE   "graphics\\hardlink.ico"
+
+// Overlay icon for junction points
+JUNCTION   ICON  DISCARDABLE IMPURE   "graphics\\junction.ico"
