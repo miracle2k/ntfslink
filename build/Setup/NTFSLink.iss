@@ -2,7 +2,7 @@
 ; Changing the AppID requires changes in code section!
 AppID=ntfslink
 AppName=NTFS Link
-AppVerName=NTFS Link 2.0
+AppVerName=NTFS Link 2.1
 AppCopyright=Copyright ©2004 by Michael Elsdörfer
 DefaultDirName={pf}\NTFS Link
 AlwaysRestart=yes
@@ -28,6 +28,7 @@ Name: {app}\locale\de\LC_MESSAGES
 [Files]
 Source: locale\de\LC_MESSAGES\default.mo; DestDir: {app}\locale\de\LC_MESSAGES
 Source: ConfigUtil.exe; DestDir: {app}
+Source: ChangeLog.html; DestDir: {app}
 Source: ntfslink.dll; DestDir: {app}; Flags: regserver uninsrestartdelete;
 
 [Icons]

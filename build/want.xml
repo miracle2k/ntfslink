@@ -45,7 +45,7 @@
   <property name="source.dir" value="${basedir}/../source" />
   <property name="working.dir" value="${basedir}/ntfslink-temp" />
   <property name="dist.dir" value="${basedir}/dist" />
-  <property name="iscc.path" value="C:\Programme\Inno Setup 4\" />
+  <property name="iscc.path" value="C:\Programme\Inno Setup 5\" />
   
   <!-- build the filename of the zip-file -->
   <tstamp>
@@ -76,13 +76,13 @@
   
   <patternset id="nl.source">
     <include name="**/*.pas" />
-    <include name="**/*.rc" />
-    <include name="**/*.inc" />
+    <include name="**/*.rc" />    
     <include name="**/*.dfm" />
     <include name="**/*.cfg" />
+    <include name="**/*.inc" />    
     <include name="**/*.dpr" />
     <include name="**/*.dof" />
-    <include name="**/*.res" />
+    <include name="**/*.res" />    
   </patternset>
   
 <!----------------------------------------------------------------------------->
@@ -125,7 +125,9 @@
 
   <!-- Compiles the ressources -->
   <target name="resources">
-    <brcc file="${working.dir}/ntfslink.rc" output="${working.dir}/ntfslink.res" />
+    <!-- ntfslink.res is as a binary in cvs! (managed by Delphi IDE) -->
+    <brcc file="${working.dir}/Icons.rc" output="${working.dir}/Icons.res" />
+    <brcc file="${working.dir}/DialogLinksExisting.rc" output="${working.dir}/DialogLinksExisting.res" />
   </target>  	
 	
   <!-- Compiles NTFSLink (DLL and Config) -->
@@ -178,7 +180,7 @@
           <include name="**" />
           <!-- Exclude filetypes -->
           <exclude name="**.exe" />
-          <exclude name="**.dll" />
+          <exclude name="**.dll" />          
         </patternset>
       </fileset>
     </copy>
@@ -201,16 +203,7 @@
 
   <!-- Compiles the InnoSetup -->
   <target name="dist-setup" depends="prepare-dist">
-     <!--    <iscc source="Setup\Setup.iss" />  -->
-  </target>
-  
-  <!-- Creates the Zip-File -->
-  <target name="dist-zip" depends="prepare-dist">
-<!--    <zip zipfile="${dist.zip.filename}">
-      <fileset dir=".">
-        <include name="${owb.dir}\**" />
-      </fileset>
-    </zip>  -->
+         <iscc source="Setup\NTFSLink.iss" /> 
   </target>
 
 <!----------------------------------------------------------------------------->
@@ -220,8 +213,7 @@
   <target name="complete-copy">
     <want target="cvscopy" />
     <want target="build" />
-    <want target="dist-setup" />
-    <want target="dist-zip" />
+    <want target="dist-setup" />   
     <want target="clean" />
   </target>
   

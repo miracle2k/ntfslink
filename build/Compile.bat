@@ -1,1 +1,1 @@
-want clean cvscopy build dist-setup dist-zip clean
+want clean cvscopy build dist-setup clean
