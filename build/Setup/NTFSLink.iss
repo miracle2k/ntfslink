@@ -51,10 +51,10 @@ Type: files; Name: {app}\NTFSLink.url
 Root: HKLM; Subkey: Software\elsdoerfer.net\NTFS Link\Config; Flags: uninsdeletekey
 
 [CustomMessages]
-English.AlreadyInstalled=A previous version of NTFS Link was found. Before installing a new version, you have to uninstall the old one. Do you want to execute the uninstaller now?
-English.UninstallationFailed=Uninstallation failed. You you want to continue with installation?
-Deutsch.AlreadyInstalled=Bereits isntalliertz
-Deutsch.UninstallationFailed=Deinsatllation fehlgeschlagen.
+English.AlreadyInstalled=An older version of NTFS Link was found. You have to uninstall every previous version, before you can continue. Do you want to uninstall the old version now?
+English.UninstallationFailed=Uninstallation failed. You you want to continue with the installation of the new version?
+Deutsch.AlreadyInstalled=Eine alte Version von NTFS Link wurde gefunden. Sie müssen ältere Versionen deinstallieren, bevor sie die Installation fortsetzen können. Wollen sie die Deinstallation der alten Version nun starten?
+Deutsch.UninstallationFailed=Deinstallation fehlgeschlagen. Wollen sie trotzdem mit der Installation der neuen Version fortfahren?
 
 [Code]
 function QueryUninstallKey(RootKey: Integer; AppID: string; var UninstallExec: string): boolean;
@@ -115,7 +115,7 @@ begin
     begin
       if not ShellExec('open', UnInstallProgram, UnInstallParams, '', SW_SHOW, ewWaitUntilTerminated, ErrorCode) then
       begin
-        if MsgBox(ExpandConstant('{cm:UninstallationFailed}'), mbConfirmation, MB_YESNO) = IDYES then
+        if MsgBox(ExpandConstant('{cm:UninstallationFailed}') + #13#10 + SysErrorMessage(ErrorCode), mbConfirmation, MB_YESNO) = IDYES then
           Result := True;
       end
       else
