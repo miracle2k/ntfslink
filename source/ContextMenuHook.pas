@@ -24,7 +24,7 @@ interface
 uses
   Windows, SysUtils, ActiveX, ComObj, ShlObj, BaseExtensionFactory;
 
-// TODO [future] Let the context menu extension operate on multiple folders
+// TODO [v2.1] Let the context menu extension operate on multiple folders
 
 type
   // Depending on what object is selected in explorer, we have to provide
@@ -61,7 +61,8 @@ const
 implementation
 
 uses
-  JclNTFS, ShellAPI, ComServ, GNUGetText, Global, ShellNewExports;
+  JclNTFS, JclRegistry, ShellAPI, ComServ, GNUGetText, Global, ShellNewExports,
+  Constants;
 
 { TContextMenuHook }
 
@@ -219,6 +220,14 @@ var
   end;
 
 begin
+  // Make sure this extension is not disabled
+  if not RegReadBoolDef(HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
+                        'IntegrateIntoContextMenu', True) then
+  begin
+    Result := E_ABORT;
+    exit;
+  end;
+
   // Initialize FormatEtc
   with FormatEtc do begin
     cfFormat := CF_HDROP;
