@@ -107,7 +107,7 @@ begin
       // If we already found a file, then we now have both types 
       if FSourceFileMode = ddmFile then begin
         FSourceFileMode := ddmFileAndDirectory;
-        break;  // Mode can not change anymore now
+        break;   // Mode can not change anymore now
       end
         else FSourceFileMode := ddmDirectory
     else
@@ -154,7 +154,8 @@ begin
         ErrorMsg := _('Failed to create link');
         if (GetLastError <> 0) then
           ErrorMsg := ErrorMsg + ': ' + SysErrorMessage(GetLastError);
-        MessageBox(0, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR)
+        MessageBox(0, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'),
+                   MB_OK + MB_ICONERROR)
       end else
         Result := NOERROR;
     end;
@@ -183,7 +184,7 @@ begin
         
       ddmDirectory:
         if FSourceFileList.Count = 1 then mString := _('Create Junction Here')
-        else mString := _('Create JunctionsHere');
+        else mString := _('Create Junctions Here');
 
       ddmFileAndDirectory:
         mString := _('Create Links Here')
