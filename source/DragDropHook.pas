@@ -168,6 +168,7 @@ function TDragDropHook.QueryContextMenu(Menu: HMENU; indexMenu, idCmdFirst,
   idCmdLast, uFlags: UINT): HResult;
 var
   mString: string;
+  mPos: Integer;
 begin                  
   // No items created yet
   Result := MakeResult(SEVERITY_SUCCESS, FACILITY_NULL, 0);
@@ -176,7 +177,6 @@ begin
   begin
     // Depending on the type and the number of the source objects, choose
     // an appropriate menu caption
-    // TODO Perhaps it looks nicer if we use glyphs for the items here...
     case FSourceFileMode of
       ddmFile:
         if FSourceFileList.Count = 1 then mString := _('Create Hardlink Here')
@@ -191,8 +191,11 @@ begin
     end;
 
     // Add our menu item to context menu
-    InsertMenu(Menu, GetMenuItemCount(Menu) - 2, MF_STRING or MF_BYPOSITION,
+    mPos := GetMenuItemCount(Menu) - 2;
+    InsertMenu(Menu, mPos, MF_STRING or MF_BYPOSITION,
                idCmdFirst, PAnsiChar(mString));
+    SetMenuItemBitmaps(Menu, mPos, MF_BYPOSITION, GLYPH_HANDLE_JUNCTION,
+                       GLYPH_HANDLE_JUNCTION);
 
     // Return number of menu items added
     Result := MakeResult(SEVERITY_SUCCESS, FACILITY_NULL, 1);
@@ -215,6 +218,9 @@ var
     for i := FSourceFileList.Count - 1 downto 0 do
       if not
          ((DirectoryExists(FSourceFileList[i])) or
+         // TODO [future] make this a real test (currently it will fail when
+         // the the target folder is only a mount point from a different
+         // partition)
          (ExtractFileDrive(FSourceFileList[i]) = ExtractFileDrive(FTargetPath)))
       then
         FSourceFileList.Delete(i);
@@ -264,8 +270,10 @@ begin
       DragQueryFile(StgMedium.hGlobal, i, tempFile, SizeOf(tempFile));
       FSourceFileList.Add(tempFile);
     end
-  else
+  else begin
     Result := E_FAIL;
+    exit;
+  end;
 
   // Go through the list of source objects and remove invalid items
   RemoveInvalidItems;
