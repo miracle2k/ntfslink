@@ -45,14 +45,12 @@ implementation
 uses
   ShlObj, CommDlg, Global, GNUGetText;
 
-// TODO test if hardlink/junction creation is possible before trying to create / show a message if not
-
 // Parts of the following code were taken from Delphi's Dialogs.pas
 procedure NewHardlinkDlg(hwnd: HWND; hinst: Cardinal;
   lpCmdLine: LPTSTR; nCmdShow: Integer); stdcall;
 var
   OpenFileName: TOpenFileName;
-  TempFileName: string;
+  TempFileName, ErrorMsg: string;
 begin
   FillChar(OpenFileName, SizeOf(OpenFileName), 0);
   with OpenFileName do
@@ -62,7 +60,7 @@ begin
     lpstrFile := PChar(TempFilename);
     FillChar(lpstrFile^, nMaxFile + 2, 0);
     StrLCopy(lpstrFile, '', nMaxFile);
-
+                                            
     // Init other struct members
     lStructSize := SizeOf(TOpenFilename);
     hInstance := SysInit.HInstance;
@@ -72,7 +70,7 @@ begin
     nFilterIndex := 1;
     lpstrFileTitle := nil;
     nMaxFileTitle := 0;
-    lpstrInitialDir := '.';
+    lpstrInitialDir := PAnsiChar(CheckBackslash(lpCmdLine));
     Flags := OFN_PATHMUSTEXIST or OFN_FILEMUSTEXIST or OFN_HIDEREADONLY;
   end;
 
@@ -80,8 +78,14 @@ begin
   if GetOpenFileName(OpenFileName) then
     // If positive result, then try to create hardlink
     try
-      InternalCreateHardlink(OpenFileName.lpstrFile, lpCmdLine);
-    except end;
+      InternalCreateHardlink(OpenFileName.lpstrFile, ExtractFilePath(lpCmdLine));
+    except
+      ErrorMsg := _('Failed to create link. Most likely the target file ' +
+                    'system does not support this feature, or you tried ' +
+                    'to create a hard link across different partitions.');
+      MessageBox(hwnd, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'),
+                 MB_OK + MB_ICONERROR)
+    end;
 end;
 
 procedure NewJunctionDlgInternal(hwnd: HWND; Directory: string;
@@ -90,13 +94,15 @@ var
   bi: TBrowseInfoA;
   a: array[0..MAX_PATH] of Char;
   idl: PItemIDList;
+  ErrorMsg: string;
+  Success: boolean;
 begin
-  FillChar(bi, SizeOf(bi), #0);
-
   // Init BrowseInfo struct
+  FillChar(bi, SizeOf(bi), #0);
   bi.hwndOwner := 0;
   bi.pszDisplayName := @a[0];
-  bi.lpszTitle := PChar(string(_('Choose the target folder or drive to which you want to create a junction point.' )));
+  bi.lpszTitle := PChar(string(_('Choose the target folder or drive to which ' +
+                                 'you want to create a junction point.' )));
   bi.ulFlags := BIF_RETURNONLYFSDIRS or BIF_NEWDIALOGSTYLE or BIF_VALIDATE;
   bi.lParam := 0;
   bi.pidlRoot := nil;
@@ -106,20 +112,30 @@ begin
   idl := SHBrowseForFolder(bi);
 
   // If successful, create junction
-  if idl <> nil then begin
+  if idl <> nil then
+  begin
     SHGetPathFromIDList(idl, a);
 
+    // See comment at declaration why the "SubFolder" parameter is needed
     if SubFolder then
-      InternalCreateJunction(StrPas(a), Directory)
+      Success := InternalCreateJunction(StrPas(a), Directory)
     else
-      InternalCreateJunctionBase(StrPas(a), Directory);
-  end;    
+      Success := InternalCreateJunctionBase(StrPas(a), Directory);
+
+    // If junction creation failed, show message box
+    if not Success then begin
+      ErrorMsg := _('Failed to create junction. Most likely the target file ' +
+                    'system does not support this feature.');
+      MessageBox(hwnd, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'),
+                 MB_OK + MB_ICONERROR);
+    end;
+  end;
 end;
 
 procedure NewJunctionDlg(hwnd: HWND; hinst: Cardinal;
   lpCmdLine: LPTSTR; nCmdShow: Integer); stdcall;
 begin
-  NewJunctionDlgInternal(hwnd, lpCmdLine, True);
+  NewJunctionDlgInternal(hwnd, ExtractFilePath(lpCmdLine), True);
 end;
 
 end.
