@@ -14,9 +14,9 @@ FONT 8, "MS Shell Dlg 2", 400, 0
 {                                
   CONTROL "There are junctions pointing to this folder or a subfolder (see list below). If you continue the operation, these links will no longer work. Are you sure?", IDC_CAPTION, "static", WS_CHILD | SS_NOTIFY | SS_LEFT | WS_VISIBLE, 40, 6, 214, 25, 0x00
   CONTROL "", IDC_MLINKS, "edit", WS_CHILD | ES_MULTILINE | WS_VISIBLE | ES_READONLY, 40, 40, 214, 79, 0x00 | WS_EX_CLIENTEDGE  
-  CONTROL "", IDC_BYESDELETE, "button", WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE | WS_TABSTOP, 67, 124, 79, 15, 0x00
+  CONTROL "", IDC_BYESDELETE, "button", WS_CHILD | WS_GROUP | BS_PUSHBUTTON | WS_VISIBLE | WS_TABSTOP, 67, 124, 79, 15, 0x00
   CONTROL "Yes", IDC_BYES, "button", WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE | WS_TABSTOP, 150, 124, 50, 15, 0x00
-  CONTROL "No", IDC_BNO, "button", WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE | WS_TABSTOP, 204, 124, 50, 15, 0x00
+  CONTROL "No", IDC_BNO, "button", WS_CHILD | BS_DEFPUSHBUTTON | WS_VISIBLE | WS_TABSTOP, 204, 124, 50, 15, 0x00
   CONTROL "", IDC_ICON, "static", SS_ICON | WS_CHILD | WS_VISIBLE | WS_GROUP, 8, 10, 32, 32
 }
 

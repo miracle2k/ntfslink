@@ -91,8 +91,6 @@ begin
       SendDlgItemMessage(hDlg, IDC_ICON, STM_SETIMAGE, IMAGE_ICON, IconHandle);
 
       // Set focus to "no" button
-      // TODO [future] Somehow this focus is not complete;
-      // pressing "enter" does not work, but "space" does
       if (GetDlgCtrlID(wParam) <> IDC_BNO) then
       begin
         SetActiveWindow(GetDlgItem(hDlg, IDC_BNO));
@@ -100,6 +98,9 @@ begin
         Result := False;
       end;
     end;
+
+    WM_SETFOCUS:
+      Result := True;
 
     WM_CLOSE:
       // Close dialog: pass wParam as the result value
