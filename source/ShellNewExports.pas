@@ -65,7 +65,7 @@ begin
     lStructSize := SizeOf(TOpenFilename);
     hInstance := SysInit.HInstance;
     nMaxFile := MAX_PATH;    
-    lpstrTitle := PAnsiChar(string(_('Choose the source file you want to create a hard link to')));
+    lpstrTitle := PAnsiChar(string(_('Choose the file you want to create a hard link to')));
     lpstrFilter := PAnsiChar(string(_('All Files') + #0'*.*'#0));        
     nFilterIndex := 1;
     lpstrFileTitle := nil;
