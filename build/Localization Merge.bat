@@ -1,0 +1,1 @@
+want -buildfile localization.xml merge

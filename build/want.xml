@@ -1,0 +1,239 @@
+<!--
+  The contents of this file are subject to the GNU General Public License
+  Version 1.1 or later (the "License"); you may not use this file except in
+  compliance with the License. You may obtain a copy of the License at
+  http://www.gnu.org/copyleft/gpl.html
+
+  Software distributed under the License is distributed on an "AS IS" basis,
+  WITHOUT WARRANTY OF ANY KIND, either expressed or implied. See the License
+  for the specific language governing rights and limitations under the License.
+
+  The Initial Developer of the Original Code is Michael Elsdörfer.
+  All Rights Reserved.
+
+  You may retrieve the latest version of this file at the NTFS Link Homepage
+  located at http://www.elsdoerfer.net/ntfslink/
+
+  ****************************************************************************
+  
+  How To Use:
+  -----------
+  Basicly this build script can do 4 things for you:
+    a) prepare the files for the steps following next
+    b) compile the source code
+    c) distribute: create a zip file and a inno setup wizard
+    d) publish: upload the files
+    
+  For every step above there is a main target (sub-targets / dependencies are
+  possible), which you should use to accomplish that step. These targets are:
+    a) [ clean   ]
+    b) [ build   ]
+    c) [ dist    ]
+    d) [ publish ]
+    
+  If you want to do everything in a single step, use the target [ complete ]
+  ****************************************************************************
+-->
+
+<project name="NTFSLink" basedir="." default="complete">
+
+<!----------------------------------------------------------------------------->
+<!-- Properties --------------------------------------------------------------->
+<!----------------------------------------------------------------------------->
+
+  <property name="bin.dir" value="${basedir}/../bin" />
+  <property name="source.dir" value="${basedir}/../source" />
+  <property name="working.dir" value="${basedir}/ntfslink-temp" />
+  <property name="dist.dir" value="${basedir}/dist" />
+  <property name="iscc.path" value="C:\Programme\Inno Setup 4\" />
+  
+  <!-- build the filename of the zip-file -->
+  <tstamp>
+    <format property="date" pattern="yyyy-mm-dd" />
+  </tstamp>
+  <property name="dist.zip.filename" value="${dist.dir}/cvs-${date}.zip" />
+  
+<!----------------------------------------------------------------------------->
+<!-- Patternsets -------------------------------------------------------------->
+<!----------------------------------------------------------------------------->
+  
+  <!-- Some file patternsets -->
+  <patternset id="nl.obsolete">
+    <!-- Exclude some filetypes (mostly compiled objects) -->
+    <include name="**/*.dcu" />
+    <include name="**/*.res" />
+    <include name="**/*.ddp" />
+    <include name="**/*.map" />
+    <include name="**/*.drc" />
+    <include name="**/dxgettext.ini" />
+    <include name="NTFSLink.drc" />
+    <!-- include non mergable files created by CVS, like .#uMain.dfm.1.19 -->
+    <include name="**/.#*.*.*" />
+    <!-- include Backup and Dummy files -->
+    <include name="**/*.~*" />
+    <include name="**/dummy.txt" />
+  </patternset>
+  
+  <patternset id="nl.source">
+    <include name="**/*.pas" />
+    <include name="**/*.rc" />
+    <include name="**/*.inc" />
+    <include name="**/*.dfm" />
+    <include name="**/*.cfg" />
+    <include name="**/*.dpr" />
+    <include name="**/*.dof" />
+    <include name="**/*.res" />
+  </patternset>
+  
+<!----------------------------------------------------------------------------->
+<!-- Clean -------------------------------------------------------------------->
+<!----------------------------------------------------------------------------->
+  
+  <!-- Clean up everything -->
+  <target name="clean">
+    <delete>
+      <!-- Delete ALL existing files -->
+      <fileset dir="${working.dir}">
+        <patternset><include name="**" /></patternset>
+      </fileset>
+      <!-- Delete the directory itself -->
+      <fileset dir=".">
+        <patternset><include name="${working.dir}" /></patternset>
+      </fileset>
+    </delete>
+  </target>
+	
+<!----------------------------------------------------------------------------->
+<!-- Get files and prepare ---------------------------------------------------->
+<!----------------------------------------------------------------------------->	
+	
+  <!-- Copies the files from the local disk assuming the cvs hierachy -->
+  <target name="cvscopy" depends="clean">
+    <!-- Copy the files -->
+    <copy todir="${working.dir}">
+      <fileset dir="${source.dir}">
+        <patternset>
+          <patternset refid="nl.source" />
+        </patternset>
+      </fileset>
+    </copy>
+  </target>
+	
+<!----------------------------------------------------------------------------->
+<!-- Build -------------------------------------------------------------------->
+<!----------------------------------------------------------------------------->
+
+  <!-- Compiles the ressources -->
+  <target name="resources">
+    <brcc file="${working.dir}/ntfslink.rc" output="${working.dir}/ntfslink.res" />
+  </target>  	
+	
+  <!-- Compiles NTFSLink (DLL and Config) -->
+  <target name="build" depends="resources">
+    <!-- Build DLL -->
+    <dcc basedir="${working.dir}" source="ntfslink.dpr"
+         uselibrarypath="true"
+         usecfg="true">
+      <exeoutput path="." />
+      <optimize value="true" />
+      <build value="true" />
+      <resourcepath path="${working.dir}" />
+      <map value="detailed" />
+      <console value="false" />
+    </dcc>
+    <!-- Build Config -->
+    <dcc basedir="${working.dir}\ConfigUtil" source="ConfigUtil.dpr"
+         uselibrarypath="true"
+         usecfg="true">
+      <exeoutput path="../" />
+      <optimize value="true" />
+      <build value="true" />
+      <resourcepath path="${working.dir}" />
+      <map value="detailed" />
+      <console value="false" />
+    </dcc>
+
+  </target>
+  
+<!----------------------------------------------------------------------------->
+<!-- Distribution ------------------------------------------------------------->
+<!----------------------------------------------------------------------------->
+
+  <!-- Prepare distribution -->
+  <target name="prepare-dist">
+    <!-- delete all files -->
+    <delete>
+      <fileset dir="${working.dir}">
+        <patternset refid="nl.source" />
+        <patternset refid="nl.obsolete" />
+        <include name="ConfigUtil\" />
+      </fileset>
+    </delete>
+  
+    <!-- Copy files from distribution directory -->
+    <copy todir="${working.dir}">
+      <fileset dir="${bin.dir}">
+        <patternset>
+          <!-- By default, include everything in all sub diectories -->
+          <include name="**" />
+          <!-- Exclude filetypes -->
+          <exclude name="**.exe" />
+          <exclude name="**.dll" />
+        </patternset>
+      </fileset>
+    </copy>
+  
+    <!--
+      Delete all sourcecode and all files which will not ship. This probably
+      includes a couple of files already deleted (we removed all files except
+      the bin-Directory above), but I leave it here, because perhaps we will
+      need it in the future.
+      However, we still need it to remove obsolete files from the
+      bin-Module.
+    -->
+    <delete>
+      <fileset dir="${working.dir}">
+        <patternset refid="nl.obsolete" />
+        <patternset refid="nl.source" />
+       </fileset>
+    </delete>
+  </target>
+
+  <!-- Compiles the InnoSetup -->
+  <target name="dist-setup" depends="prepare-dist">
+     <!--    <iscc source="Setup\Setup.iss" />  -->
+  </target>
+  
+  <!-- Creates the Zip-File -->
+  <target name="dist-zip" depends="prepare-dist">
+<!--    <zip zipfile="${dist.zip.filename}">
+      <fileset dir=".">
+        <include name="${owb.dir}\**" />
+      </fileset>
+    </zip>  -->
+  </target>
+
+<!----------------------------------------------------------------------------->
+<!-- Full Targets ------------------------------------------------------------->
+<!----------------------------------------------------------------------------->
+  
+  <target name="complete-copy">
+    <want target="cvscopy" />
+    <want target="build" />
+    <want target="dist-setup" />
+    <want target="dist-zip" />
+    <want target="clean" />
+  </target>
+  
+  <target name="complete" depends="complete-copy" />  <!-- defaults to copy -->
+  
+<!----------------------------------------------------------------------------->
+<!-- Localization ------------------------------------------------------------->
+<!----------------------------------------------------------------------------->
+
+  <!-- this is just a shortcut to the localization.xml build file -->
+  <target name="localization">
+    <want buildfile="localization.xml" target="default" />
+  </target>
+  
+</project>

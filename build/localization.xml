@@ -1,0 +1,102 @@
+<!--
+  The contents of this file are subject to the GNU General Public License
+  Version 1.1 or later (the "License"); you may not use this file except in
+  compliance with the License. You may obtain a copy of the License at
+  http://www.gnu.org/copyleft/gpl.html
+
+  Software distributed under the License is distributed on an "AS IS" basis,
+  WITHOUT WARRANTY OF ANY KIND, either expressed or implied. See the License
+  for the specific language governing rights and limitations under the License.
+
+  The Initial Developer of the Original Code is Michael Elsdörfer.
+  All Rights Reserved.
+
+  You may retrieve the latest version of this file at the NTFS Link Homepage
+  located at http://www.elsdoerfer.net/ntfslink/
+
+  ****************************************************************************
+
+  This want build file will extract all language strings from the source files
+  using GNUgettext.
+
+  ****************************************************************************
+-->
+
+<project name="NTFSLink Localization" basedir="." default="default">
+
+  <!-- specify the source input directory -->
+  <property name="localization.dir" value="../localization" />
+  <property name="target.dir" value="${localization.dir}/default" />
+  <property name="distrib_lang.dir" value="../bin/locale" />
+
+  <!-- extract strings from main NTFS Link source code -->
+  <target name="scan-main">
+    <exec executable="Tools\dxgettext.exe">
+      <arg value="*.pas *.inc *.dpr *.xfm *.dfm" />
+      <arg value="-b ..\source\" />
+      <arg value="-o .\" />
+      <arg value="-r" />
+    </exec>
+  </target>
+
+  <!-- extract strings from all source files: main source ... -->
+  <target name="scan">
+    <want buildfile="localization.xml" target="scan-main" />
+  </target>
+
+  <!-- determine which strings are invalid, such as font names -->
+  <target name="get-ignored">
+    <exec executable="Tools\msgmkignore.exe">
+      <arg value="default.po" />
+      <arg value="-o ignore.po" />
+    </exec>
+  </target>
+
+  <!-- remove this invalid strings from the po-file -->
+  <target name="remove-ignored" depends="get-ignored">
+     <exec executable="Tools\msgremove.exe">
+      <arg value="default.po" />
+      <arg value="-i ignore.po" />
+      <arg value="-o ${target.dir}/default.po" />
+    </exec>
+  </target>
+  
+  <!-- delete all files except final output po-file -->
+  <target name="clean">
+    <delete>
+      <fileset>
+        <include name="ignore.po" />
+        <include name="default.po" />
+      </fileset>
+    </delete>
+  </target>
+
+  <!-- default target -->
+  <target name="default" depends="scan,remove-ignored,clean" />
+
+  <!-- make sure we have the latest cvs version before merging -->
+  <target name="update_cvs">
+     <!--<cvs dest="${localization.dir}/german/" command="update" />-->
+  </target>
+  
+  <!-- merge changes from default template into language files AND *commit* -->
+  <target name="merge" depends="update_cvs">
+     <!-- german translation -->
+     <exec executable="Tools\msgmerge.exe">
+       <arg value="-o ${localization.dir}/german/default.po" />
+       <arg value="${localization.dir}/german/default.po" />
+       <arg value="${target.dir}/default.po" />
+     </exec>
+    <!--<cvs dest="${localization.dir}/german/" command="commit" />-->
+  </target>
+  
+  <!-- compile each .po language file to it's correspondend .mo binary -->
+  <target name="compile">
+    <!-- german translation -->
+    <exec executable="Tools\msgfmt.exe">
+       <arg value="-o ${distrib_lang.dir}/de/LC_MESSAGES/default.mo" />
+       <arg value="${localization.dir}/german/default.po" />
+     </exec>
+  </target>
+  
+</project>
