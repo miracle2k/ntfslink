@@ -23,7 +23,7 @@ unit ShellObjExtended;
 interface
 
 uses
-  CommCtrl, ActiveX, Windows, ShlObj, Messages;
+  Windows, ShlObj;
 
 const
   IID_IColumnProvider: TGUID = (
@@ -31,6 +31,8 @@ const
 
   SID_IColumnProvider = '{E8025004-1C42-11D2-BE2C-00A0C9A83DA1}';
 
+  FILE_FLAG_OPEN_REPARSE_POINT = $00200000;
+                                  
 const
   MAX_COLUMN_NAME_LEN = 80;
   MAX_COLUMN_DESC_LEN = 128;
