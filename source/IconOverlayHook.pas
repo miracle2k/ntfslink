@@ -29,6 +29,8 @@ type
   // another one for hardlinks); Provides base functionality, namely looking
   // for configuration options in the registry
   TIconOverlayHook = class(TComObject, IShellIconOverlayIdentifier)
+  private
+    FSettingsLoaded: boolean;
   protected
     // File containing the overlay icon, and the index of the icon
     ConfigIconFile: string;
@@ -151,7 +153,12 @@ end;
 function TIconOverlayHook.GetOverlayInfo(pwszIconFile: PWideChar;
   cchMax: Integer; var pIndex: Integer; var pdwFlags: DWORD): HResult;
 begin
-  LoadSettings;
+  // The first time this is called, we have to make sure that the settings
+  // are loaded from the registry. I guess it should be possible to do this
+  // *somehow* in the constructor, but TComObject.Create is not virtual, so we
+  // cannot override it. Our constructor is never called, because we have to
+  // use TComObjectFactory to instantiate the class.
+  if not FSettingsLoaded then LoadSettings;
 
   // We need the string as a PWideChar
   StringToWideChar(ConfigIconFile, pwszIconFile, cchMax);
@@ -159,7 +166,7 @@ begin
   // Choose pdwFlags value depending on IconIndex config value 
   if ConfigIconIndex <> -1 then begin
     pIndex := ConfigIconIndex;
-    pdwFlags := ISIOI_ICONINDEX;
+    pdwFlags := ISIOI_ICONFILE or ISIOI_ICONINDEX;
   end
   else
     PdwFlags := ISIOI_ICONFILE;
@@ -180,12 +187,12 @@ begin
   Result := E_NOTIMPL;
 end;
 
-procedure TIconOverlayHook.LoadSettings;     // TODO load settings only once
+procedure TIconOverlayHook.LoadSettings;     
 begin
   ConfigIconFile := RegReadStringDef(
            HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
            Config_Prefix + 'OverlayFile',
-           'F:\Developing\Projects\NTFSLink\source\ntfslink.dll');      // TODO we need the main module here
+           GetModuleName(HINSTANCE)); 
   ConfigIconIndex := RegReadIntegerDef(
            HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
            Config_Prefix + 'OverlayIndex',
@@ -194,9 +201,7 @@ begin
            HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
            Config_Prefix + 'OverlayPriority',
            OVERLAY_PRIORITY_DEFAULT);
-
-          // ConfigIconFile := 'F:\Developing\Projects\NTFSLink\source\graphics\hardlink.ico';
-          // ConfigIconIndex := -1;
+  FSettingsLoaded := True;
 end;
 
 { TIconOverlayHookFactory }
