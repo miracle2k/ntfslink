@@ -19,14 +19,21 @@ Known Issues:
 
 library ntfslink;
 
-//{$R *.TLB}
+{$R 'ntfslink.res' 'ntfslink.rc'}
+
+// TODO before adding more shell extension: create a custom TComObjectFactory
+// descendant, which does all the things which are now implemented again and
+// again in each unit.
 
 uses
   ComServ,
+  ntfslink_TLB in 'ntfslink_TLB.pas',
+  Global in 'Global.pas',
+  GNUGetText in 'GNUGetText.pas',  
   DragDropHook in 'DragDropHook.pas',
   IconOverlayHook in 'IconOverlayHook.pas',
-  ntfslink_TLB in 'ntfslink_TLB.pas',
-  Global in 'Global.pas';
+  QueryInfoHook in 'QueryInfoHook.pas',
+  CopyHook in 'CopyHook.pas';
 
 exports
   DllGetClassObject,

@@ -55,7 +55,7 @@ const
 implementation
 
 uses
-  ComServ, ShellAPI, SysUtils, Registry;
+  ComServ, ShellAPI, SysUtils, Global, GNUGetText;
 
 { TDragDropHook }
 
@@ -70,7 +70,7 @@ function TDragDropHook.GetCommandString(idCmd, uType: UINT;
 begin
   if (idCmd = 0) then begin
     if (uType = GCS_HELPTEXT) then
-      StrCopy(pszName, 'Create hard links or directory junctions');
+      StrCopy(pszName, PAnsiChar(WideCharToString('Create hard links or directory junctions')));
     Result := NOERROR;
   end
   else
@@ -146,12 +146,13 @@ begin
         Success := NtfsCreateHardLink(GetLinkFileName(FSourceFileList[i], FTargetPath, False),
                                       PAnsiChar(FSourceFileList[i]));
       end;
-
+                                     
       if (GetLastError <> 0) and (not Success) then
-        MessageBox(0, PAnsiChar('An error occured (' + IntToStr(GetLastError) +
-                      '): ' + SysErrorMessage(GetLastError)), 'Failed to create link', MB_OK + MB_ICONERROR)
+        MessageBox(0, PAnsiChar(_('An error occured (') + IntToStr(GetLastError) +
+                      '): ' + SysErrorMessage(GetLastError)),
+                   PAnsiChar(_('Failed to create link')), MB_OK + MB_ICONERROR)
       else if (not Success) then
-        MessageBox(0, PAnsiChar('An error occured.'), 'Failed to create link', MB_OK + MB_ICONERROR)
+        MessageBox(0, PAnsiChar(_('An error occured.')), PAnsiChar(_('Failed to create link')), MB_OK + MB_ICONERROR)
       else Result := NOERROR;
     end;
   except
@@ -169,8 +170,8 @@ begin
      ((uFlags and CMF_EXPLORE) <> 0) then
   begin
     // Add one menu item to context menu
-    if FSourceFileList.Count = 1 then mString := 'Create Hardlink'
-    else mString := 'Create Hardlinks';
+    if FSourceFileList.Count = 1 then mString := _('Create Hardlink')
+    else mString := _('Create Hardlinks');
     InsertMenu(Menu, GetMenuItemCount(Menu) - 2, MF_STRING or MF_BYPOSITION,
                idCmdFirst, PAnsiChar(mString));
 
@@ -231,32 +232,31 @@ end;
 
 procedure TDragDropHookFactory.UpdateRegistry(Register: Boolean);
 var
-  ClassID: string;
+  ClassIDStr: string;
+  InstallationKey: string;
 begin
-  if Register then begin
+  InstallationKey := 'Folder\shellex\DragDropHandlers\ntfslink';
+
+  if Register then
+  begin
     inherited UpdateRegistry(Register);
 
-    ClassID := GUIDToString(Class_DragDropHook);
-    CreateRegKey('Folder\shellex\DragDropHandlers\ntfslink', '', ClassID);
-    if (Win32Platform = VER_PLATFORM_WIN32_NT) then
-      with TRegistry.Create do
-        try
-          RootKey := HKEY_LOCAL_MACHINE;
-          OpenKey('SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions', True);
-          OpenKey('Approved', True);
-          WriteString(ClassID, 'ntfslink dragdrop shell extension handler');
-        finally
-          Free;
-        end;
+    // Convert ClassID GUID to a string
+    ClassIDStr := GUIDToString(ClassId);
+
+    // Register the IconOverlay extension
+    CreateRegKey(InstallationKey, '', ClassIDStr, HKEY_CLASSES_ROOT);
+
+    // Approve extension (so users with restricted rights may use it too)
+    ApproveExtension(ClassIDStr, Description);
   end
   else begin
     DeleteRegKey('Folder\shellex\DragDropHandlers\ntfslink');
-
     inherited UpdateRegistry(Register);
   end;
 end;
 
 initialization
   TDragDropHookFactory.Create(ComServer, TDragDropHook, Class_DragDropHook, '',
-    'ntfslink dragdrop shell extension handler', ciMultiInstance, tmApartment);
+      'NTFSLink Drag&Drop Shell Extension', ciMultiInstance, tmApartment);
 end.
