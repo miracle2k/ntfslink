@@ -22,7 +22,7 @@ unit IconOverlayHook;
 interface
 
 uses          
-  Windows, SysUtils, ActiveX, ComObj, ShlObj, BaseExtensionFactory;
+  Windows, SysUtils, ComObj, ShlObj, BaseExtensionFactory;
 
 type
   // Base class for our IconOverlay COM objects (we need two: one for junctions,
