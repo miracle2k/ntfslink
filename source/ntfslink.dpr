@@ -25,21 +25,41 @@ library ntfslink;
 // descendant, which does all the things which are now implemented again and
 // again in each unit.
 
+// TODO Internationalization + build scripts
+// TODO correct link in header
+// TODO link count is not decremented on deletion?
+// TODO update explorer on new links
+// TODO correct english
+
 uses
   ComServ,
+  Windows,
+  JclRegistry,
   ntfslink_TLB in 'ntfslink_TLB.pas',
   Global in 'Global.pas',
-  GNUGetText in 'GNUGetText.pas',  
+  GNUGetText in 'GNUGetText.pas',
   DragDropHook in 'DragDropHook.pas',
   IconOverlayHook in 'IconOverlayHook.pas',
   QueryInfoHook in 'QueryInfoHook.pas',
-  CopyHook in 'CopyHook.pas';
+  CopyHook in 'CopyHook.pas',
+  ColumnHook in 'ColumnHook.pas',
+  ContextMenuHook in 'ContextMenuHook.pas',
+  ShellNewExports in 'ShellNewExports.pas',
+  PropertySheetHook in 'PropertySheetHook.pas';
 
 exports
   DllGetClassObject,
   DllCanUnloadNow,
   DllRegisterServer,
-  DllUnregisterServer;
+  DllUnregisterServer,
+  
+  // Used to integrate into the Shell New menu: Explorer later will use
+  // rundll32.exe to call these function
+  NewHardlink,
+  NewJunction;
 
 begin
+  // Try to load the language setting from the registry
+  UseLanguage(RegReadStringDef(
+                 HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION, 'Language', ''));
 end.

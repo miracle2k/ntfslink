@@ -22,14 +22,24 @@ unit DragDropHook;
 interface
 
 uses
-  Windows, Classes, ActiveX, ComObj, ShlObj, JclNTFS;
+  Windows, Classes, ActiveX, ComObj, ShlObj;
 
 type
+  // We have to differ between dragged files, dragged directories, or
+  // multiple dragged objects containing both types. 
+  TDragDropMode = (ddmUnknown, ddmFile, ddmDirectory, ddmFileAndDirectory);
+
+  // Our ComObject for the Handler, implementing the IContextMenu Interface
   TDragDropHook = class(TComObject, IShellExtInit, IContextMenu)
   private
+    FSourceFileMode: TDragDropMode;
     FSourceFileList: TStringList;
     FTargetPath: string;
   protected
+    // Frees the memory allocated by the source file StringList
+    procedure FreeSourceFileList;
+    // Looks at FSourceFileList to decide on the dragging mode
+    procedure InitSourceFileMode;
     { IShellExtInit }
     function IShellExtInit.Initialize = SEIInitialize; // Avoid compiler warning
     function SEIInitialize(pidlFolder: PItemIDList; lpdobj: IDataObject;
@@ -55,14 +65,21 @@ const
 implementation
 
 uses
-  ComServ, ShellAPI, SysUtils, Global, GNUGetText;
+  ComServ, ShellAPI, SysUtils, JclNTFS, Global, GNUGetText;
 
 { TDragDropHook }
 
 destructor TDragDropHook.Destroy;
 begin
-  FSourceFileList.Free;
+  FreeSourceFileList;
   inherited;
+end;
+
+procedure TDragDropHook.FreeSourceFileList;
+begin
+  if FSourceFileList <> nil then
+    FSourceFileList.Free;
+  FSourceFileList := nil;
 end;
 
 function TDragDropHook.GetCommandString(idCmd, uType: UINT;
@@ -70,52 +87,47 @@ function TDragDropHook.GetCommandString(idCmd, uType: UINT;
 begin
   if (idCmd = 0) then begin
     if (uType = GCS_HELPTEXT) then
-      StrCopy(pszName, PAnsiChar(WideCharToString('Create hard links or directory junctions')));
-    Result := NOERROR;
+      // Return nothing, as this is shown nowhere
+      StrCopy(pszName, '');
+      Result := NOERROR;
   end
   else
     Result := E_INVALIDARG;
 end;
 
+procedure TDragDropHook.InitSourceFileMode;
+var
+  i: integer;
+begin
+  FSourceFileMode := ddmUnknown;
+  
+  for i := 0 to FSourceFileList.Count - 1 do
+    // Check if it's a directory
+    if DirectoryExists(FSourceFileList[i]) then
+      // If we already found a file, then we now have both types 
+      if FSourceFileMode = ddmFile then begin
+        FSourceFileMode := ddmFileAndDirectory;
+        break;  // Mode can not change anymore now
+      end
+        else FSourceFileMode := ddmDirectory
+    else
+      // If we already found a directory, then we now have both types
+      if FSourceFileMode = ddmDirectory then begin
+        FSourceFileMode := ddmFileAndDirectory;
+        break;   // Mode can not change anymore now
+      end
+        else FSourceFileMode := ddmFile;
+end;
+
 function TDragDropHook.InvokeCommand(
   var lpici: TCMInvokeCommandInfo): HResult;
-var NewDir: string;
-    i: integer;
-    Success: boolean;
-
-    function CheckBackslash(AFileName: string): string;
-    begin
-      if (AFileName <> '') and (AFileName[length(AFileName)] <> '\') then
-        Result := AFileName + '\'
-      else Result := AFileName;
-    end;
-
-    function RemoveBackslash(AFileName: string): string;
-    begin
-      if (AFileName <> '') and (AFileName[length(AFileName)] = '\') then
-        Result := Copy(AFileName, 1, length(AFileName) - 1)
-      else Result := AFileName;
-    end;
-
-    function GetLinkFileName(Source, TargetDir: string; Directory: boolean): string;
-    var x: integer;
-    begin
-      Result := CheckBackslash(TargetDir) + ExtractFileName(Source);
-      x := 0;
-      while ((Directory) and (DirectoryExists(Result))) or
-            ((not Directory) and (FileExists(Result))) do
-      begin
-        Inc(x);
-        Result := CheckBackslash(TargetDir) + 'Copy (' + IntToStr(x) + ') of ' + ExtractFileName(Source);
-      end;
-
-      if Directory then Result := CheckBackslash(Result);
-    end;
-
+var
+  ErrorMsg: string;
+  i: integer;
+  Success: boolean;
 begin
-  // Standard Result
-  Result := E_FAIL;
-
+  Result := S_OK;
+     
   try
     // Make sure we are not being called by an application
     if (HiWord(Integer(lpici.lpVerb)) <> 0) then exit;
@@ -127,33 +139,24 @@ begin
       exit;
     end;
 
-    // Create Hardlink
+    // Create a link (hardlink or junction) for each source file
     for i := 0 to FSourceFileList.Count - 1 do
     begin
-      // Create a junction if the object is a directory,
-      // otherwise create hard link
-      if DirectoryExists(FSourceFileList[i]) then begin
-        NewDir := GetLinkFileName(RemoveBackslash(FSourceFileList[i]), FTargetPath, True);
-        // We need to create the directory first
-        Success := CreateDir(NewDir);
-        // If successfull, then try to make a junction
-        if Success then begin
-          Success := NtfsCreateJunctionPoint(NewDir, CheckBackslash(FSourceFileList[i]));
-          // if junction creation was unsuccessfull, delete created directory  
-          if not Success then RemoveDir(NewDir);
-        end;
-      end else begin
-        Success := NtfsCreateHardLink(GetLinkFileName(FSourceFileList[i], FTargetPath, False),
-                                      PAnsiChar(FSourceFileList[i]));
-      end;
-                                     
-      if (GetLastError <> 0) and (not Success) then
-        MessageBox(0, PAnsiChar(_('An error occured (') + IntToStr(GetLastError) +
-                      '): ' + SysErrorMessage(GetLastError)),
-                   PAnsiChar(_('Failed to create link')), MB_OK + MB_ICONERROR)
-      else if (not Success) then
-        MessageBox(0, PAnsiChar(_('An error occured.')), PAnsiChar(_('Failed to create link')), MB_OK + MB_ICONERROR)
-      else Result := NOERROR;
+      // Create junction if it's a directory, otherwise hardlink
+      if DirectoryExists(FSourceFileList[i]) then
+        Success := InternalCreateJunction(FSourceFileList[i], FTargetPath)
+      else
+        Success := InternalCreateHardlink(FSourceFileList[i], FTargetPath);
+
+      // Tell the user if an error occurred
+      if (not Success) then
+      begin
+        ErrorMsg := _('Failed to create link');
+        if (GetLastError <> 0) then
+          ErrorMsg := ErrorMsg + ': ' + SysErrorMessage(GetLastError);
+        MessageBox(0, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR)
+      end else
+        Result := NOERROR;
     end;
   except
     Result := E_FAIL;
@@ -162,16 +165,31 @@ end;
 
 function TDragDropHook.QueryContextMenu(Menu: HMENU; indexMenu, idCmdFirst,
   idCmdLast, uFlags: UINT): HResult;
-var mString: string;
-begin
+var
+  mString: string;
+begin                  
+  // No items created yet
   Result := MakeResult(SEVERITY_SUCCESS, FACILITY_NULL, 0);
 
-  if ((uFlags and $0000000F) = CMF_NORMAL) or
-     ((uFlags and CMF_EXPLORE) <> 0) then
+  if (uFlags and $0000000F = CMF_NORMAL) or (uFlags and CMF_EXPLORE <> 0) then
   begin
-    // Add one menu item to context menu
-    if FSourceFileList.Count = 1 then mString := _('Create Hardlink')
-    else mString := _('Create Hardlinks');
+    // Depending on the type and the number of the source objects, choose
+    // an appropriate menu caption
+    // TODO Perhaps it looks nicer if we use glyphs for the items here...
+    case FSourceFileMode of
+      ddmFile:
+        if FSourceFileList.Count = 1 then mString := _('Create Hardlink Here')
+        else mString := _('Create Hardlinks Here');
+        
+      ddmDirectory:
+        if FSourceFileList.Count = 1 then mString := _('Create Junction Here')
+        else mString := _('Create JunctionsHere');
+
+      ddmFileAndDirectory:
+        mString := _('Create Links Here')
+    end;
+
+    // Add our menu item to context menu
     InsertMenu(Menu, GetMenuItemCount(Menu) - 2, MF_STRING or MF_BYPOSITION,
                idCmdFirst, PAnsiChar(mString));
 
@@ -182,14 +200,29 @@ end;
 
 function TDragDropHook.SEIInitialize(pidlFolder: PItemIDList;
   lpdobj: IDataObject; hKeyProgID: HKEY): HResult;
-var StgMedium: TStgMedium;
-    FormatEtc: TFormatEtc;
-    AFileName, pszPath: array[0..MAX_PATH] of Char;
-    SrcCount, i: Integer;
+var
+  StgMedium: TStgMedium;
+  FormatEtc: TFormatEtc;
+  tempFile, pszPath: array[0..MAX_PATH] of Char;
+  SrcCount, i: Integer;
+
+  // Hardlinks are not supported across different file systems
+  procedure RemoveInvalidItems;
+  var
+    i: integer;
+  begin
+    for i := FSourceFileList.Count - 1 downto 0 do
+      if not
+         ((DirectoryExists(FSourceFileList[i])) or
+         (ExtractFileDrive(FSourceFileList[i]) = ExtractFileDrive(FTargetPath)))
+      then
+        FSourceFileList.Delete(i);
+  end;
+
 begin
-  // Create Source File List
+  // Create list for storing all the selected source files
+  FreeSourceFileList;
   FSourceFileList := TStringList.Create;
-  FSourceFileList.Clear;
 
   // Fail the call if lpdobj is nil.
   if (lpdobj = nil) then begin
@@ -198,6 +231,15 @@ begin
   end else begin
     SHGetPathFromIDList(pidlFolder, pszPath);
     FTargetPath := pszPath;
+  end;
+
+  // Make sure the taget file system is NTFS: To keep it as easy as possible,
+  // we just check if reparse points are supported. This is only the case on
+  // NTFS, and thus we can assume that hard links are supported as well.
+  if not (NtfsReparsePointsSupported(ExtractFileDrive(FTargetPath) + '\')) then
+  begin
+    Result := E_ABORT;
+    exit;
   end;
 
   // Initialize FormatEtc
@@ -214,17 +256,28 @@ begin
   Result := lpdobj.GetData(FormatEtc, StgMedium);
   if Failed(Result) then exit;
   
-  // If only one file is selected, retrieve the file name and store it in
-  // FFileName. Otherwise fail the call.
+  // Put all the source files in the StringList
   SrcCount := DragQueryFile(StgMedium.hGlobal, $FFFFFFFF, nil, 0);
   if SrcCount > 0 then
     for i := 0 to SrcCount - 1 do begin
-      DragQueryFile(StgMedium.hGlobal, i, AFileName, SizeOf(AFileName));
-      FSourceFileList.Add(AFileName);
+      DragQueryFile(StgMedium.hGlobal, i, tempFile, SizeOf(tempFile));
+      FSourceFileList.Add(tempFile);
     end
-  else Result := E_FAIL;
+  else
+    Result := E_FAIL;
 
-  // Free ressources
+  // Go through the list of source objects and remove invalid items
+  RemoveInvalidItems;
+  // If there are no items left, then exit
+  if FSourceFileList.Count = 0 then begin
+    Result := E_ABORT;
+    exit;
+  end;
+
+  // Have a closer look at the source files
+  InitSourceFileMode;
+
+  // Free resources
   ReleaseStgMedium(StgMedium);
 end;
 

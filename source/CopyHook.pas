@@ -38,7 +38,7 @@ type
   end;
 
 const
-  Class_CopyHook: TGUID = '{2B7A7890-365C-4BDF-BB15-B6F6D15A1DE3}';
+  Class_CopyHook: TGUID = '{28334C90-3383-4616-AFF3-BC4D5CE769AF}';
 
 implementation
 
@@ -52,7 +52,11 @@ function TCopyHook.CopyCallback(Wnd: HWND; wFunc, wFlags: UINT;
   dwDestAttribs: DWORD): UINT;
 begin
   // Per default, allow all operations
-  Result := IDYES; 
+  Result := IDYES;
+
+  // TODO What happens if junctions are moved or copied?
+  // We should intercept that too, and ask the user if he wants to copy/move
+  // the actual content or only the junction.
 
   // We do only intercept DELETE actions, and only for reparse points
   if (wFunc = FO_DELETE) and ((dwSrcAttribs and FILE_ATTRIBUTE_REPARSE_POINT) <> 0) then
@@ -63,8 +67,30 @@ begin
     // Explorer is kind enough to pass a ready-to-use parameter containing the
     // file attributes...
     if NtfsIsFolderMountPoint(pszSrcFile) then
+    begin
+      // Now, there are two possible delete operations. Either Explorer wants
+      // to delete to the recycle bin, or it wants to remove the file
+      // permanently from the disk (for example if Shift+Del was used). In
+      // the former case FOF_ALLOWUNDO is in wFlags, in the latter not.
+      // Why does this matter? Because somehow (on WinXP at least), if we
+      // are deleting directly, Explorer seems to have build up an internal
+      // list of files the folder contains when this here is called. After we
+      // have removed the junction point, the folder is empty and all the file
+      // paths in Explorer's list are invalid. This is not the case when
+      // deleting to recycle  bin.
+      // The solution: We check which delete action the Explorer is doing, and
+      // if this is an undoable action (recycle bin), we let Explorer do the
+      // actual delete (we only remove the junction). In the other case, we
+      // do both: removing the junction and deleting the folder.
       if not NtfsDeleteJunctionPoint(pszSrcFile) then
         Result := IDNO;
+
+      // Delete Folder manually, if this is not a recycle-bin-delete (see above)
+      if (FOF_ALLOWUNDO and wFlags) = 0 then begin
+        RemoveDir(pszSrcFile);
+        Result := IDNO;
+      end;
+    end;
   end;
 end;
 

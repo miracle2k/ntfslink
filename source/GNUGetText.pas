@@ -2437,7 +2437,7 @@ initialization
   if IsLibrary then begin
     // Get DLL/shared object filename
     SetLength (ExecutableFilename,300);
-    SetLength (ExecutableFilename,GetModuleFileName(0, PChar(ExecutableFilename), length(ExecutableFilename)));
+    SetLength (ExecutableFilename,GetModuleFileName(HInstance, PChar(ExecutableFilename), length(ExecutableFilename)));
   end else
     ExecutableFilename:=Paramstr(0);
   AssemblyAnalyzer:=TAssemblyAnalyzer.Create;

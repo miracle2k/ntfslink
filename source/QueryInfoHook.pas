@@ -21,6 +21,122 @@ unit QueryInfoHook;
 
 interface
 
+uses          
+  Windows, SysUtils, ActiveX, ComObj, ShlObj;
+
+type
+  TQueryInfoHook = class(TComObject, IQueryInfo, IPersistFile)
+  private
+    FFileName: string;
+  public
+    { IQueryInfo }
+    function GetInfoTip(dwFlags: DWORD; var ppwszTip: PWideChar): HResult; stdcall;
+    function GetInfoFlags(out pdwFlags: DWORD): HResult; stdcall;
+    { IPersistFile }
+    function GetClassID(out classID: TCLSID): HResult; stdcall;
+    function IsDirty: HResult; stdcall;
+    function Load(pszFileName: POleStr; dwMode: Longint): HResult;
+      stdcall;
+    function Save(pszFileName: POleStr; fRemember: BOOL): HResult;
+      stdcall;
+    function SaveCompleted(pszFileName: POleStr): HResult;
+      stdcall;
+    function GetCurFile(out pszFileName: POleStr): HResult;
+      stdcall;
+  end;
+
+  TQueryInfoHookFactory = class(TComObjectFactory)
+  public
+    procedure UpdateRegistry(Register: Boolean); override;
+  end;
+
+const
+  Class_QueryInfoHook: TGUID = '{99471CEB-396C-430D-9E14-623C9A6261CD}';
+
 implementation
+
+uses
+  ComServ, JclRegistry, Global;
+
+{ TQueryInfoHook }
+
+function TQueryInfoHook.GetClassID(out classID: TCLSID): HResult;
+begin
+  Result := E_NOTIMPL;
+end;
+
+function TQueryInfoHook.GetCurFile(out pszFileName: POleStr): HResult;
+begin
+  Result := E_NOTIMPL;
+end;
+
+function TQueryInfoHook.GetInfoFlags(out pdwFlags: DWORD): HResult;
+begin
+  Result := E_NOTIMPL;
+end;
+
+function TQueryInfoHook.GetInfoTip(dwFlags: DWORD;
+  var ppwszTip: PWideChar): HResult;
+begin
+  ppwszTip := 'Mein Tipp';
+  Result := S_OK;
+end;
+
+function TQueryInfoHook.IsDirty: HResult;
+begin
+  Result := E_NOTIMPL;
+end;
+
+function TQueryInfoHook.Load(pszFileName: POleStr;
+  dwMode: Integer): HResult;
+begin
+  FFileName := pszFileName;
+  Result := S_OK;
+end;
+
+function TQueryInfoHook.Save(pszFileName: POleStr;
+  fRemember: BOOL): HResult;
+begin
+  Result := E_NOTIMPL;
+end;
+
+function TQueryInfoHook.SaveCompleted(pszFileName: POleStr): HResult;
+begin
+  Result := E_NOTIMPL;
+end;
+
+{ TQueryInfoHookFactory }
+
+procedure TQueryInfoHookFactory.UpdateRegistry(Register: Boolean);
+var
+  ClassIDStr: string;
+  InstallationKey: string;
+begin
+  // Store the key we need to create (or delete) in a local variable
+  InstallationKey := 'txtfile\shellex\{00021500-0000-0000-C000-000000000046}';
+
+  if Register then
+  begin
+    inherited UpdateRegistry(Register);      
+
+    // Convert ClassID GUID to a string
+    ClassIDStr := GUIDToString(ClassId);
+
+    // Register the IconOverlay extension
+    CreateRegKey(InstallationKey, '', ClassIDStr, HKEY_CLASSES_ROOT);
+
+    // Approve extension (so users with restricted rights may use it too)
+    ApproveExtension(ClassIDStr, Description);
+  end
+  else
+  begin
+    DeleteRegKey(InstallationKey);
+    inherited UpdateRegistry(Register);
+  end;
+end;
+
+initialization
+//  TQueryInfoHookFactory.Create(ComServer, TQueryInfoHook, Class_QueryInfoHook,
+//      '', 'NTFSLink QueryInfo Shell Extension', ciMultiInstance, tmApartment);
 
 end.
