@@ -146,12 +146,14 @@ begin
       if DirectoryExists(FSourceFileList[i]) then
         Success := InternalCreateJunction(FSourceFileList[i], FTargetPath)
       else
-        Success := InternalCreateHardlink(FSourceFileList[i], FTargetPath);
+        Success := InternalCreateHardlinkSafe(FSourceFileList[i], FTargetPath);
 
       // Tell the user if an error occurred
       if (not Success) then
       begin
-        ErrorMsg := _('Failed to create link');
+        ErrorMsg := _('Failed to create link. Most likely the target file ' +
+                      'system does not support this feature, or you tried ' +
+                      'to create a hard link across different partitions.');
         if (GetLastError <> 0) then
           ErrorMsg := ErrorMsg + ': ' + SysErrorMessage(GetLastError);
         MessageBox(lpici.hwnd, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'),
