@@ -35,7 +35,6 @@ uses
   GNUGetText in 'GNUGetText.pas',
   DragDropHook in 'DragDropHook.pas',
   IconOverlayHook in 'IconOverlayHook.pas',
-  QueryInfoHook in 'QueryInfoHook.pas',
   CopyHook in 'CopyHook.pas',
   ColumnHook in 'ColumnHook.pas',
   ContextMenuHook in 'ContextMenuHook.pas',
