@@ -21,22 +21,34 @@ unit ShellNewExports;
 
 interface
 
-uses                   // JvBrowseFolder JvSelectDirectory
-  Windows, Messages, ActiveX, SysUtils;
+uses                  
+  Windows, ActiveX, SysUtils;
 
-procedure NewHardlink(hwnd: HWND; hinst: Cardinal;
+// Shows an Open Dialog to query the user for the /file/ to link to
+procedure NewHardlinkDlg(hwnd: HWND; hinst: Cardinal;
   lpCmdLine: LPTSTR; nCmdShow: Integer); stdcall;
-  
-procedure NewJunction(hwnd: HWND; hinst: Cardinal;
+
+// Shows an Browse Folder dialog to query the user for the /folder/ to link to
+procedure NewJunctionDlg(hwnd: HWND; hinst: Cardinal;
   lpCmdLine: LPTSTR; nCmdShow: Integer); stdcall;
+
+// Called by NewJunctionDlg(); does implement the dialog handling and executes
+// the final command to create the link;
+// If "SubFolder" is False, we directly attach the junction reparse point to the
+// folder specified by "Directory". If "SubFolder" is True, we create a
+// junction within "Directory", as a subfolder.
+procedure NewJunctionDlgInternal(hwnd: HWND; Directory: string;
+  SubFolder: boolean); stdcall;
 
 implementation
 
 uses
   ShlObj, CommDlg, Global, GNUGetText;
 
+// TODO test if hardlink/junction creation is possible before trying to create / show a message if not
+
 // Parts of the following code were taken from Delphi's Dialogs.pas
-procedure NewHardlink(hwnd: HWND; hinst: Cardinal;
+procedure NewHardlinkDlg(hwnd: HWND; hinst: Cardinal;
   lpCmdLine: LPTSTR; nCmdShow: Integer); stdcall;
 var
   OpenFileName: TOpenFileName;
@@ -67,12 +79,13 @@ begin
   // Execute the dialog
   if GetOpenFileName(OpenFileName) then
     // If positive result, then try to create hardlink
-    // TODO test hardlink creation is possible and catch all errors before they may occur
-    InternalCreateHardlink(OpenFileName.lpstrFile, lpCmdLine);
+    try
+      InternalCreateHardlink(OpenFileName.lpstrFile, lpCmdLine);
+    except end;
 end;
 
-procedure NewJunction(hwnd: HWND; hinst: Cardinal;
-  lpCmdLine: LPTSTR; nCmdShow: Integer); stdcall;
+procedure NewJunctionDlgInternal(hwnd: HWND; Directory: string;
+  SubFolder: boolean); stdcall;
 var
   bi: TBrowseInfoA;
   a: array[0..MAX_PATH] of Char;
@@ -94,9 +107,19 @@ begin
 
   // If successful, create junction
   if idl <> nil then begin
-    SHGetPathFromIDList(idl,a);
-    InternalCreateJunction(StrPas(a), lpCmdLine);
+    SHGetPathFromIDList(idl, a);
+
+    if SubFolder then
+      InternalCreateJunction(StrPas(a), Directory)
+    else
+      InternalCreateJunctionBase(StrPas(a), Directory);
   end;    
+end;
+
+procedure NewJunctionDlg(hwnd: HWND; hinst: Cardinal;
+  lpCmdLine: LPTSTR; nCmdShow: Integer); stdcall;
+begin
+  NewJunctionDlgInternal(hwnd, lpCmdLine, True);
 end;
 
 end.
