@@ -22,7 +22,9 @@ unit CopyHook;
 interface
 
 uses          
-  Windows, SysUtils, ActiveX, ComObj, ShlObj, BaseExtensionFactory;
+  Windows, SysUtils, ComObj, ShlObj, BaseExtensionFactory;
+
+// TODO [future] We have to unlink junctions from subdirectories!!
 
 type
   TCopyHook = class(TComObject, ICopyHook)
@@ -43,7 +45,8 @@ const
 implementation
 
 uses
-  Global, JunctionMonitor, JclNTFS, JclWin32, ShellAPI, ComServ;
+  Global, JunctionMonitor, JclNTFS, JclWin32, ShellAPI, ComServ, CommCtrl,
+  Classes, DialogLinksExisting, GNUGetText;
 
 { TCopyHook }
 
@@ -53,10 +56,40 @@ function TCopyHook.CopyCallback(Wnd: HWND; wFunc, wFlags: UINT;
 var
   tempDest: string;
   tempResult: Cardinal;
+  tempList: TStringList;
+  i: Integer;
   Success: boolean;
 begin
   // Per default, allow all operations
   Result := ID_YES;
+
+  // Check if there are junctions pointing to this object; if yes, warn user
+  if GetFolderLinkCount(pszSrcFile, JunctionListAsString) > 0 then
+  begin
+    tempResult := DialogBox(HInstance, MakeIntResource(1000), Wnd, @DialogCallback);
+
+    // Depending on the result, let explorer delete the folder or not
+    if not ((tempResult = ID_YES) or (tempResult = ID_RETRY)) then
+      Result := ID_NO;
+
+    // "Retry" is returned, if the user clicked "Yes, *and* delete the links.
+    // So this is what we have to to now.
+    if (tempResult = ID_RETRY) then begin
+      tempList := TStringList.Create;
+      try
+        tempList.Text := JunctionListAsString;
+        for i := 0 to tempList.Count - 1 do begin
+          // First delete the junction, then the folder itself
+          if NtfsDeleteJunctionPoint(tempList[i]) then
+            RemoveDir(tempList[i]);
+          // Notify Explorer that the directory was deleted
+          SHChangeNotify(SHCNE_RMDIR, SHCNF_PATH, PAnsiChar(tempList[i]), nil);
+        end;
+      finally
+        tempList.Free;
+      end;
+    end;
+  end;
 
   // Differ between two cases - the folder is either a junction point, or not.
   // If it is, we have to intercept the DELETE and MOVE operations
@@ -90,8 +123,8 @@ begin
       // if this is an undoable action (recycle bin), we let Explorer do the
       // actual delete (we only remove the junction). In the other case, we
       // do both: removing the junction and deleting the folder.
-      if NtfsDeleteJunctionPoint(pszSrcFile) then
-        RemoveInvalidTrackingEntries(Copy(tempDest, 5, MaxInt));  // remove \??\ prefix 
+      if not NtfsDeleteJunctionPoint(pszSrcFile) then
+        Result := ID_NO;
 
       // Delete Folder manually, if this is not a recycle-bin-delete (see above)
       if (FOF_ALLOWUNDO and wFlags) = 0 then begin
@@ -124,18 +157,21 @@ begin
         // If the thing went not smoothly, then show a message
         if not Success then
           if DirectoryExists(pszDestFile) then
-            MessageBox(Wnd, PAnsiChar('Junction could not be moved, because there ' +
-               'is already a directory named "' + pszDestFile + '".'),
+            MessageBox(Wnd, PAnsiChar(string(_(Format(
+               '"%s" could not be moved, because there ' +
+               'is already a directory "%s".', [ExtractFileName(pszSrcFile), pszDestFile])))),
                PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR)
           else
-            MessageBox(Wnd, PAnsiChar('"' + pszSrcFile + '" could not be moved to "' +
-             pszDestFile + '" because of unkown reasons.'),
+            MessageBox(Wnd, PAnsiChar(string(_(Format(
+               '"%s" could not be moved to "%s" because of ' +
+               'unkown reasons.', [ExtractFileName(pszSrcFile), pszDestFile])))),
              PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR);
       end
       else
         // Moving the junction point is not possible
-        MessageBox(Wnd, PAnsiChar('"' + pszSrcFile + '" is a junction point, ' +
-           'but the target file system does not support junctions.'),
+        MessageBox(Wnd, PAnsiChar(string(_(Format(
+           '"%s" is a junction point, but the target file system does not ' +
+           'support junctions.', [pszSrcFile])))),
            PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR);
     end
 
@@ -149,10 +185,13 @@ begin
       if NtfsReparsePointsSupported(ExtractFileDrive(pszDestFile) + '\') then
       begin
         // Ask user what he wants to do
-        tempResult := MessageBox(Wnd, PAnsiChar('The directory you want to copy is a junction. Please choose ' +
-             'whether you want to copy the junction only, or the directory contents. ' +
-             'Do you want to copy the junction only (if you click no, the contents will be copied)?'),
+        tempResult := MessageBox(Wnd, PAnsiChar(string(_(Format(
+             '"%s" is a junction point. If you want to copy the junction ' +
+             'only, click "Yes", if you want to copy the target directory ' +
+             'including all it''s content, click "No". If you choose ' +
+             '"Cancel", nothing will happen.', [pszSrcFile])))),
              PAnsiChar('NTFS Link'), MB_YESNOCANCEL + MB_ICONINFORMATION);
+             
         case tempResult of
           // User wants to copy the contents of the linked directory; this can
           // be better done by the Explorer.
@@ -181,17 +220,6 @@ begin
       else
         Result := ID_YES;
     end;
-  end
-
-  else if GetFolderLinkCount(pszSrcFile) > 0 then
-  begin
-    Result := ID_NO;
-    MessageBox(Wnd, PAnsiChar('There are junctions pointing to this directory. ' +
-           'If you delete it, this links will no longer work. Are you sure?'),
-           PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR);
-//    WarnUser;
-//    If UserAccepts then let explorer do the job;
-//    if UserWantsToDeleteJunctinos then DeleteJunctions;
   end;
 end;
 
