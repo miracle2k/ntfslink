@@ -22,7 +22,7 @@ library ntfslink;
 {$R 'ntfslink.res' 'ntfslink.rc'}
 {$R 'DialogLinksExisting.res' 'DialogLinksExisting.rc'}
 
-// TODO [future] Implement a logging mechanism
+// TODO [v2.1] Implement a logging mechanism
 // TODO [future] Enable WinXP styles 
 
 uses
@@ -41,7 +41,8 @@ uses
   ShellNewExports in 'ShellNewExports.pas',
   ShellObjExtended in 'ShellObjExtended.pas',
   JunctionMonitor in 'JunctionMonitor.pas',
-  DialogLinksExisting in 'DialogLinksExisting.pas';
+  DialogLinksExisting in 'DialogLinksExisting.pas',
+  Constants in 'Constants.pas';
 
 exports
   DllGetClassObject,
@@ -62,6 +63,7 @@ begin
   // Initialize some handles
   GLYPH_HANDLE_STD := LoadBitmap(HInstance, 'MENU_GLYPH_STD');
   GLYPH_HANDLE_JUNCTION := LoadBitmap(HInstance, 'MENU_GLYPH_JUNCTION');
+  GLYPH_HANDLE_HARDLINK := LoadBitmap(HInstance, 'MENU_GLYPH_HARDLINK');
   GLYPH_HANDLE_LINKDEL := LoadBitmap(HInstance, 'MENU_GLYPH_LINKDEL');
   GLYPH_HANDLE_EXPLORER := LoadBitmap(HInstance, 'MENU_GLYPH_EXPLORER');
 end.
