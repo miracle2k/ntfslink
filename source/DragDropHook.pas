@@ -285,7 +285,7 @@ end;
 
 function TDragDropHookFactory.GetInstallationKey: string;
 begin
-  Result := 'Folder\shellex\DragDropHandlers\ntfslink';
+  Result := 'Folder\shellex\DragDropHandlers\NTFSLink';
 end;
 
 initialization

@@ -206,6 +206,8 @@ end;
 
 { TIconOverlayHookFactory }
 
+// TODO we need a possibility to decide to which root key to write to:
+// this should be local_machine!
 function TIconOverlayHookFactory.GetInstallationKey: string;
 begin
    Result := 'SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\' +

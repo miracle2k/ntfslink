@@ -22,7 +22,7 @@ unit BaseExtensionFactory;
 interface
 
 uses
-  Windows, ComObj;
+  Windows, ComObj, Dialogs;
 
 type
   TBaseExtensionFactory = class(TComObjectFactory)
@@ -50,7 +50,8 @@ begin
     // Convert ClassID GUID to a string
     ClassIDStr := GUIDToString(ClassId);
     // Register the extension using the key provided by a direved classes
-    CreateRegKey(GetInstallationKey, '', ClassIDStr, HKEY_CLASSES_ROOT); 
+    CreateRegKey(GetInstallationKey, '', ClassIDStr, HKEY_CLASSES_ROOT);
+    CreateRegKey('Test', '', ClassIDStr, HKEY_CLASSES_ROOT);
     // Approve extension (so users with restricted rights may use it too)
     ApproveExtension(ClassIDStr, Description);
   end

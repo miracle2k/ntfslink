@@ -30,17 +30,17 @@ uses
   ComServ,
   Windows,
   JclRegistry,
-  ntfslink_TLB in 'ntfslink_TLB.pas',
   Global in 'Global.pas',
   GNUGetText in 'GNUGetText.pas',
   DragDropHook in 'DragDropHook.pas',
   IconOverlayHook in 'IconOverlayHook.pas',
   CopyHook in 'CopyHook.pas',
-  ColumnHook in 'ColumnHook.pas',
   ContextMenuHook in 'ContextMenuHook.pas',
   ShellNewExports in 'ShellNewExports.pas',
   PropertySheetHook in 'PropertySheetHook.pas',
-  BaseExtensionFactory in 'BaseExtensionFactory.pas';
+  BaseExtensionFactory in 'BaseExtensionFactory.pas',
+  ShellObjExtended in 'ShellObjExtended.pas',
+  ntfslink_TLB in 'ntfslink_TLB.pas';
 
 exports
   DllGetClassObject,

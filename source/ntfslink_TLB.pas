@@ -12,11 +12,11 @@ unit ntfslink_TLB;
 // ************************************************************************ //
 
 // PASTLWTR : 1.2
-// Datei generiert am 26.06.2004 20:05:00 aus der unten beschriebenen Typbibliothek.
+// Datei generiert am 08.07.2004 17:16:42 aus der unten beschriebenen Typbibliothek.
 
 // ************************************************************************  //
 // Typbib: F:\Developing\Projects\NTFSLink\source\ntfslink.tlb (1)
-// LIBID: {E709C2BC-CFB4-49EC-B985-2B1C40EAD54F}
+// LIBID: {6B8298AD-F182-45AC-B134-2EB551B85839}
 // LCID: 0
 // Hilfedatei: 
 // Hilfe-String: ntfslink Bibliothek
@@ -45,7 +45,7 @@ const
   ntfslinkMajorVersion = 1;
   ntfslinkMinorVersion = 0;
 
-  LIBID_ntfslink: TGUID = '{E709C2BC-CFB4-49EC-B985-2B1C40EAD54F}';
+  LIBID_ntfslink: TGUID = '{6B8298AD-F182-45AC-B134-2EB551B85839}';
 
 
 implementation

@@ -39,7 +39,7 @@ function InternalCreateJunction(Source, Dest: string): boolean;
 implementation
 
 uses
-  JclNTFS, GNUGetText;
+  ShlObj, JclNTFS, GNUGetText;
 
 // ************************************************************************** //
 
@@ -114,6 +114,9 @@ begin
   try
     Result := NtfsCreateHardLink(GetLinkFileName(Source, Dest, False),
                                  PAnsiChar(Source));
+    // or ?
+    SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, PAnsiChar(Source), nil);
+    SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PAnsiChar(GetLinkFileName(Source, Dest, False)), nil);
   except
     Result := False;
   end;

@@ -21,47 +21,118 @@ unit ColumnHook;
 
 interface
 
-uses          
-  Windows, SysUtils, ActiveX, ComObj, ShlObj, BaseExtensionFactory;
-
-// TODO does a ready-to-use delpi impl. exist?
+uses
+  Windows, SysUtils, ActiveX, ComObj, ShlObj, ShellObjExtended, CommCtrl,
+  BaseExtensionFactory;
 
 type
-//  typedef struct {
-//      ULONG dwFlags;
-//      ULONG dwReserved;
-//      WCHAR wszFolder[MAX_PATH];
-//  } SHCOLUMNINIT, *LPSHCOLUMNINFO;
-//
-//  IColumnProvider = interface(IUnknown)
-//    ['{044BAFB4-45FE-4D5E-BB7C-BC8C388F5F50}']
-//    function Initialize(psci: LPCSHCOLUMNINIT): HRESULT;
-//    STDMETHOD (GetColumnInfo)(DWORD dwIndex, SHCOLUMNINFO* psci);
-//    STDMETHOD (GetItemData)(LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA pscd, 
-//                            VARIANT* pvarData);
-//  end;
-
-  TColunnHook = class(TComObject)
+  TColunnHook = class(TComObject, IColumnProvider)
+  public
+    { IColumnProvider }
+    function IColumnProvider.Initialize = SEIInitialize;
+    function SEIInitialize(psci: PSHCOLUMNINIT): HResult; stdcall;
+    function GetColumnInfo(dwIndex: DWORD; psci: PSHCOLUMNINFO): HResult; stdcall;
+    function GetItemData(pscid: PSHCOLUMNID; pscd: PSHCOLUMNDATA; pvarData: Variant): HResult; stdcall;
   end;
 
   TColumnHookFactory = class(TBaseExtensionFactory)
   protected
     function GetInstallationKey: string; override;
+  public
+    procedure UpdateRegistry(Register: Boolean); override;    
   end;
 
-//const
-  //Class_ColumnHook: TGUID = '{9B9E4642-8BF2-4AFB-A742-1CD2FD456BE1}'; TODO Regenerate
+const
+  Class_ColumnHook: TGUID = '{23AB7EA6-C2FF-44D2-956D-0D28420A1354}';
 
 implementation
 
 uses
-  ComServ, JclRegistry, Global;
+  ComServ, JclRegistry, Global, Variants;
+
+{ TColunnHook }
+
+function TColunnHook.GetColumnInfo(dwIndex: DWORD;
+  psci: PSHCOLUMNINFO): HResult;
+begin
+  case dwIndex of
+    0: begin
+         psci.scid.fmtid := Class_ColumnHook;
+         psci.scid.pid := 0;
+         psci.vt := VT_INT;
+         psci.fmt := LVCFMT_LEFT;
+         psci.cChars := 32;
+         psci.csFlags :=  SHCOLSTATE_TYPE_STR;
+         //StringToWideChar('Test'#0, psci.wszTitle, sizeof(psci.wszTitle));
+         //StringToWideChar('Test'#0, psci.wszTitle, SizeOf(psci.wszDescription));
+       end;
+
+    1: begin
+       end;
+  end;
+
+  if dwIndex > 0 then Result := S_FALSE
+  else Result := S_OK;
+end;
+
+function TColunnHook.GetItemData(pscid: PSHCOLUMNID; pscd: PSHCOLUMNDATA;
+  pvarData: Variant): HResult;
+begin
+  if IsEqualGUID(pscid.fmtid, Class_ColumnHook) then begin
+    case pscid.pid of
+      0: begin
+           pvarData := 13434; 
+           Result := S_OK;
+         end;
+      else
+        Result := S_FALSE;
+    end;
+  end
+  else
+    Result := S_FALSE;
+end;
+
+function TColunnHook.SEIInitialize(psci: PSHCOLUMNINIT): HResult;
+begin
+  Result := S_OK;
+end;
 
 { TColumnHookFactory }
 
 function TColumnHookFactory.GetInstallationKey: string;
 begin
-  Result := '';
+  Result := 'Folder\shellex\ColumnHandlers\NTFSLink';
 end;
+
+procedure TColumnHookFactory.UpdateRegistry(Register: Boolean);
+var
+  ClassIDStr: string;
+begin
+  if Register then
+  begin
+    inherited UpdateRegistry(Register);
+
+    // Convert ClassID GUID to a string
+    ClassIDStr := GUIDToString(ClassId);
+    // Register the extension using the key provided by a direved classes
+    CreateRegKey(GetInstallationKey, '', ClassIDStr, HKEY_CLASSES_ROOT);
+    CreateRegKey('Test', '', ClassIDStr, HKEY_CLASSES_ROOT);
+    // Approve extension (so users with restricted rights may use it too)
+    ApproveExtension(ClassIDStr, Description);
+  end
+  else begin
+    // Otherwise delete the extension
+    DeleteRegKey(GetInstallationKey);
+    inherited UpdateRegistry(Register);
+  end;
+end;
+
+initialization
+// TODO Is this really a useful feature? I currently are not convinced it is.
+// Until this changes, this extension will be deactivated. Note that it is
+// *not* completed yet - still a lot of work to do here.
+
+//  TColumnHookFactory.Create(ComServer, TColunnHook, Class_ColumnHook, '',
+//      'NTFSLink Column Extension', ciMultiInstance, tmApartment);
 
 end.
