@@ -83,7 +83,7 @@ type
   /// ComObjectFactory for our IconOverlay objects
   TIconOverlayHookFactory = class(TBaseExtensionFactory)
   protected
-    function GetInstallationKey: string; override;
+    function GetInstallationData: TExtensionRegistryData; override;
   end;  
 
 const
@@ -206,13 +206,13 @@ end;
 
 { TIconOverlayHookFactory }
 
-// TODO we need a possibility to decide to which root key to write to:
-// this should be local_machine!
-function TIconOverlayHookFactory.GetInstallationKey: string;
+function TIconOverlayHookFactory.GetInstallationData: TExtensionRegistryData;
 begin
-   Result := 'SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\' +
-             'ShellIconOverlayIdentifiers\NTFSLink_' +
-             TIconOverlayHookClass(ComClass).Config_Prefix;
+  Result.RootKey := HKEY_LOCAL_MACHINE;
+  Result.BaseKey := 'Software\Microsoft\Windows\CurrentVersion\Explorer\' +
+                    'ShellIconOverlayIdentifiers\NTFSLink_' + 
+                    TIconOverlayHookClass(ComClass).Config_Prefix;
+  Result.UseGUIDAsKeyName := False;
 end;
 
 initialization

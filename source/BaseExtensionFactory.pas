@@ -25,9 +25,15 @@ uses
   Windows, ComObj, Dialogs;
 
 type
+  TExtensionRegistryData = record
+    RootKey: Cardinal;
+    BaseKey: string;
+    UseGUIDAsKeyName: boolean;
+  end;
+
   TBaseExtensionFactory = class(TComObjectFactory)
   protected
-    function GetInstallationKey: string; virtual; abstract;
+    function GetInstallationData: TExtensionRegistryData; virtual; abstract;
   public
     procedure UpdateRegistry(Register: Boolean); override;
   end;
@@ -41,23 +47,28 @@ uses
 
 procedure TBaseExtensionFactory.UpdateRegistry(Register: Boolean);
 var
-  ClassIDStr: string;
+  ClassIDStr, KeyToCreate: string;
 begin
   if Register then
   begin
     inherited UpdateRegistry(Register);
 
     // Convert ClassID GUID to a string
-    ClassIDStr := GUIDToString(ClassId);
-    // Register the extension using the key provided by a direved classes
-    CreateRegKey(GetInstallationKey, '', ClassIDStr, HKEY_CLASSES_ROOT);
-    CreateRegKey('Test', '', ClassIDStr, HKEY_CLASSES_ROOT);
+    ClassIDStr := GUIDToString(ClassId);  
+
+    // If UseGUIDAsKeyName equals true, we have to append the GUID to the key
+    KeyToCreate := GetInstallationData.BaseKey;
+    if GetInstallationData.UseGUIDAsKeyName then
+      KeyToCreate := CheckBackslash(KeyToCreate) + ClassIDStr;
+    // Register the extension using the key provided by derived classes
+    CreateRegKey(KeyToCreate, '', ClassIDStr, GetInstallationData.RootKey);
+     
     // Approve extension (so users with restricted rights may use it too)
-    ApproveExtension(ClassIDStr, Description);
+    ApproveExtension(ClassIDStr, Description);     
   end
   else begin
     // Otherwise delete the extension
-    DeleteRegKey(GetInstallationKey);
+    DeleteRegKey(GetInstallationData.BaseKey, GetInstallationData.RootKey);
     inherited UpdateRegistry(Register);
   end;
 end;

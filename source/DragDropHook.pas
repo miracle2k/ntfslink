@@ -56,7 +56,7 @@ type
 
   TDragDropHookFactory = class(TBaseExtensionFactory)
   protected
-    function GetInstallationKey: string; override;
+    function GetInstallationData: TExtensionRegistryData; override;
   end;  
 
 const
@@ -127,7 +127,7 @@ var
   Success: boolean;
 begin
   Result := S_OK;
-     
+                                         
   try
     // Make sure we are not being called by an application
     if (HiWord(Integer(lpici.lpVerb)) <> 0) then exit;
@@ -154,7 +154,7 @@ begin
         ErrorMsg := _('Failed to create link');
         if (GetLastError <> 0) then
           ErrorMsg := ErrorMsg + ': ' + SysErrorMessage(GetLastError);
-        MessageBox(0, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'),
+        MessageBox(lpici.hwnd, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'),
                    MB_OK + MB_ICONERROR)
       end else
         Result := NOERROR;
@@ -284,9 +284,11 @@ end;
 
 { TDragDropHookFactory }
 
-function TDragDropHookFactory.GetInstallationKey: string;
+function TDragDropHookFactory.GetInstallationData: TExtensionRegistryData;
 begin
-  Result := 'Folder\shellex\DragDropHandlers\NTFSLink';
+  Result.RootKey := HKEY_CLASSES_ROOT;
+  Result.BaseKey := 'Folder\shellex\DragDropHandlers\NTFSLink';
+  Result.UseGUIDAsKeyName := False;
 end;
 
 initialization

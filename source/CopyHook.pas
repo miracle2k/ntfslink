@@ -34,7 +34,7 @@ type
 
   TCopyHookFactory = class(TBaseExtensionFactory)
   protected
-    function GetInstallationKey: string; override;
+    function GetInstallationData: TExtensionRegistryData; override;
   end;
 
 const
@@ -56,13 +56,22 @@ var
   Success: boolean;
 begin
   // Per default, allow all operations
-  Result := IDYES;
+  Result := ID_YES;
 
   // Differ between two cases - the folder is either a junction point, or not.
   // If it is, we have to intercept the DELETE and MOVE operations
   if ((dwSrcAttribs and FILE_ATTRIBUTE_REPARSE_POINT) <> 0) and
      (NtfsIsFolderMountPoint(pszSrcFile)) then
   begin
+    // Attempt to get the directory the (old) junction, the one we
+    // want to move, points to. Note that NtfsGetJunctionPointDestination()
+    // has a bug and always adds a #0 at the end, which we have to remove.
+    // We use this later in several cases.
+    NtfsGetJunctionPointDestination(pszSrcFile, tempDest);
+    if (tempDest[Length(tempDest)]) = #0 then
+      Delete(tempDest, Length(tempDest), 1);
+    tempDest := CheckBackslash(tempDest);
+
     // If this is a delete operation, make sure *only* the junction point
     // will be deleted, not the contents of the target directory.
     if (wFunc = FO_DELETE) then
@@ -81,13 +90,13 @@ begin
       // if this is an undoable action (recycle bin), we let Explorer do the
       // actual delete (we only remove the junction). In the other case, we
       // do both: removing the junction and deleting the folder.
-      if not NtfsDeleteJunctionPoint(pszSrcFile) then
-        Result := IDNO;
+      if NtfsDeleteJunctionPoint(pszSrcFile) then
+        RemoveInvalidTrackingEntries(Copy(tempDest, 5, MaxInt));  // remove \??\ prefix 
 
       // Delete Folder manually, if this is not a recycle-bin-delete (see above)
       if (FOF_ALLOWUNDO and wFlags) = 0 then begin
         RemoveDir(pszSrcFile);
-        Result := IDNO;
+        Result := ID_NO;
       end;
     end
 
@@ -95,25 +104,16 @@ begin
     // *not* move the contents of the target directory, but only the junction.
     else if (wFunc = FO_MOVE) then
     begin
-      // Whatever may happen: do not allow the operation. We will have to do
-      // all the work ourself.
+      // Whatever may happen: do not allow the operation.
       Result := ID_NO;
 
       // Make sure the target drive supports reparse points
       if NtfsReparsePointsSupported(ExtractFileDrive(pszDestFile) + '\') then
       begin
-        // Attempt to get the directory the (old) junction, the one we
-        // want to move, points to. Note that NtfsGetJunctionPointDestination()
-        // has a bug and always adds a #0 at the end, which we have to remove.
-        NtfsGetJunctionPointDestination(pszSrcFile, tempDest);
-        if (tempDest[Length(tempDest)]) = #0 then
-          Delete(tempDest, Length(tempDest), 1);
-        tempDest := CheckBackslash(tempDest);
-
         // Create an empty directory and set the junction reparse point
         Success := False;
         if CreateDir(pszDestFile) then
-          if InternalCreateJunctionEx(tempDest,pszDestFile) then
+          if InternalCreateJunctionBase(tempDest,pszDestFile) then
           begin
             // Delete the old (source) junction
             Success := NtfsDeleteJunctionPoint(pszSrcFile);
@@ -124,17 +124,17 @@ begin
         // If the thing went not smoothly, then show a message
         if not Success then
           if DirectoryExists(pszDestFile) then
-            MessageBox(0, PAnsiChar('Junction could not be moved, because there ' +
+            MessageBox(Wnd, PAnsiChar('Junction could not be moved, because there ' +
                'is already a directory named "' + pszDestFile + '".'),
                PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR)
           else
-            MessageBox(0, PAnsiChar('"' + pszSrcFile + '" could not be moved to "' +
+            MessageBox(Wnd, PAnsiChar('"' + pszSrcFile + '" could not be moved to "' +
              pszDestFile + '" because of unkown reasons.'),
              PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR);
       end
       else
         // Moving the junction point is not possible
-        MessageBox(0, PAnsiChar('"' + pszSrcFile + '" is a junction point, ' +
+        MessageBox(Wnd, PAnsiChar('"' + pszSrcFile + '" is a junction point, ' +
            'but the target file system does not support junctions.'),
            PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR);
     end
@@ -149,7 +149,7 @@ begin
       if NtfsReparsePointsSupported(ExtractFileDrive(pszDestFile) + '\') then
       begin
         // Ask user what he wants to do
-        tempResult := MessageBox(0, PAnsiChar('The directory you want to copy is a junction. Please choose ' +
+        tempResult := MessageBox(Wnd, PAnsiChar('The directory you want to copy is a junction. Please choose ' +
              'whether you want to copy the junction only, or the directory contents. ' +
              'Do you want to copy the junction only (if you click no, the contents will be copied)?'),
              PAnsiChar('NTFS Link'), MB_YESNOCANCEL + MB_ICONINFORMATION);
@@ -162,17 +162,10 @@ begin
           // User wants to copy the junction point only, so we do it.
           ID_YES:
             begin
+              // We are doing all the stuff ourself
               Result := ID_NO;
 
-              // Attempt to get the directory the source junction, the one we
-              // want to copy, points to. Note that NtfsGetJunctionPointDestination()
-              // has a bug and always adds a #0 at the end, which we have to remove.
-              NtfsGetJunctionPointDestination(pszSrcFile, tempDest);
-              if (tempDest[Length(tempDest)]) = #0 then
-                Delete(tempDest, Length(tempDest), 1);
-              tempDest := CheckBackslash(tempDest);
-
-              // Finally, create the junction point
+              // Create the junction point
               InternalCreateJunction(tempDest,
                                      ExtractFilePath(RemoveBackslash(pszDestFile)),
                                      pszDestFile,
@@ -190,7 +183,12 @@ begin
     end;
   end
 
-  else if GetFolderLinkCount(pszSrcFile) > 0 then begin
+  else if GetFolderLinkCount(pszSrcFile) > 0 then
+  begin
+    Result := ID_NO;
+    MessageBox(Wnd, PAnsiChar('There are junctions pointing to this directory. ' +
+           'If you delete it, this links will no longer work. Are you sure?'),
+           PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR);
 //    WarnUser;
 //    If UserAccepts then let explorer do the job;
 //    if UserWantsToDeleteJunctinos then DeleteJunctions;
@@ -199,9 +197,11 @@ end;
 
 { TCopyHookFactory }
 
-function TCopyHookFactory.GetInstallationKey: string;
+function TCopyHookFactory.GetInstallationData: TExtensionRegistryData;
 begin
-  Result := 'Directory\shellex\CopyHookHandlers\NTFSLink';
+  Result.RootKey := HKEY_CLASSES_ROOT;
+  Result.BaseKey := 'Directory\shellex\CopyHookHandlers\NTFSLink';
+  Result.UseGUIDAsKeyName := False;
 end;
 
 initialization

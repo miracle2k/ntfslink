@@ -42,7 +42,7 @@ type
 
   TContextMenuHookFactory = class(TBaseExtensionFactory)
   protected
-    function GetInstallationKey: string; override;
+    function GetInstallationData: TExtensionRegistryData; override;
   end;
 
 const
@@ -132,9 +132,11 @@ end;
 
 { TContextMenuHookFactory }
 
-function TContextMenuHookFactory.GetInstallationKey: string;
+function TContextMenuHookFactory.GetInstallationData: TExtensionRegistryData;
 begin
-  Result := 'Directory\shellex\ContextMenuHandlers\NTFSLink';
+  Result.RootKey := HKEY_CLASSES_ROOT;
+  Result.BaseKey := 'Directory\shellex\ContextMenuHandlers\NTFSLink';
+  Result.UseGUIDAsKeyName := False;
 end;
 
 initialization

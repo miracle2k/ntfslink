@@ -24,7 +24,6 @@ library ntfslink;
 // TODO link count is not decremented on deletion?
 // TODO update explorer on new links
 // TODO correct english
-// TODO which parent handle to use in message boxes?
 
 uses
   ComServ,
