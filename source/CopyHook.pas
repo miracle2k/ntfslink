@@ -51,7 +51,8 @@ function TCopyHook.CopyCallback(Wnd: HWND; wFunc, wFlags: UINT;
   pszSrcFile: PAnsiChar; dwSrcAttribs: DWORD; pszDestFile: PAnsiChar;
   dwDestAttribs: DWORD): UINT;
 begin
-  Result := IDYES; // rewrite logic
+  // Per default, allow all operations
+  Result := IDYES; 
 
   // We do only intercept DELETE actions, and only for reparse points
   if (wFunc = FO_DELETE) and ((dwSrcAttribs and FILE_ATTRIBUTE_REPARSE_POINT) <> 0) then
@@ -62,12 +63,9 @@ begin
     // Explorer is kind enough to pass a ready-to-use parameter containing the
     // file attributes...
     if NtfsIsFolderMountPoint(pszSrcFile) then
-      if NtfsDeleteJunctionPoint(pszSrcFile) then Result := IDYES
-      else Result := IDNO;
-  end
-  else
-    // if not deleting, or no junction, than permit
-    Result := IDYES;
+      if not NtfsDeleteJunctionPoint(pszSrcFile) then
+        Result := IDNO;
+  end;
 end;
 
 { TCopyHookFactory }
