@@ -25,18 +25,28 @@ uses
   SysUtils, Windows, JclRegistry;
 
 const
+  // Paths used in registry
   NTFSLINK_REGISTRY = 'Software\elsdoerfer.net\NTFS Link\';
   NTFSLINK_CONFIGURATION = NTFSLINK_REGISTRY + 'Config\';
 
+  // Junction Tracking: Define where the data should be stored
+  NTFSLINK_TRACKINGDATA_KEY = NTFSLINK_REGISTRY + 'Tracking\';
   NTFSLINK_TRACKING_STREAM = 'ntfslink.junction-tracking';
 
+  // Some default values, can (mostly) be overridden by configuration values
   OVERLAY_HARDLINK_ICONINDEX = 0;
   OVERLAY_JUNCTION_ICONINDEX = 1;
   OVERLAY_PRIORITY_DEFAULT = 50;
-
-const
+  // Template used to name the created links; can be overridden by lang file
   LINK_PREFIX_TEMPLATE_DEFAULT =  'Link%s to %s';
   COPY_PREFIX_TEMPLATE_DEFAULT =  'Copy%s of %s';
+
+var
+  // Handles to various glyphs used in shell menus; initialized at startup;
+  GLYPH_HANDLE_STD: HBITMAP;
+  GLYPH_HANDLE_JUNCTION: HBITMAP;
+  GLYPH_HANDLE_LINKDEL: HBITMAP;
+  GLYPH_HANDLE_EXPLORER: HBITMAP;
 
 
 // Make certain registry entries to make sure the extension also works for
@@ -54,12 +64,22 @@ function RemoveBackslash(AFileName: string): string;
 function GetLinkFileName(Source, TargetDir: string; Directory: boolean;
   PrefixTemplate: string = LINK_PREFIX_TEMPLATE_DEFAULT): string;
 
-// Internal functions used to create a links
+// Internal function used to create hardlinks
 function InternalCreateHardlink(Source, Destination: string): boolean;
-function InternalCreateJunctionEx(LinkTarget, Junction: string): boolean;
+
+// Interal functions used to create junctions; The Base-function actually creates
+// the junctions using a final directory name, the other one first generates
+// the directory name based on a template and a base name (e.g. does the
+// "Link (x) of..."), and then calls InternalCreateJunctionEx()
+function InternalCreateJunctionBase(LinkTarget, Junction: string): boolean;
 function InternalCreateJunction(LinkTarget, Junction: string;
-  TargetFileName: string = '';  
+  TargetDirName: string = '';  
   PrefixTemplate: string = LINK_PREFIX_TEMPLATE_DEFAULT): boolean;
+
+// Wrapper around NtfsGetJunctionPointDestination(), passing the
+// destination as the result, not as a var parameter; In addition, fix some
+// issues with the result value of the JCL function, e.g. remove \\?\ prefix.
+function GetJPDestination(Folder: string): string;  
 
 implementation
 
@@ -136,13 +156,17 @@ end;
 // ************************************************************************** //
 
 function InternalCreateHardlink(Source, Destination: string): boolean;
+var
+  NewFileName: string;
 begin
   try
-    Result := NtfsCreateHardLink(GetLinkFileName(Source, Destination, False),
-                                 PAnsiChar(Source));
-    // TODO correctly notify and set position
+    NewFileName := GetLinkFileName(Source, Destination, False);
+    Result := NtfsCreateHardLink(NewFileName, PAnsiChar(Source));
+
+    // TODO [future] Would be great, if position of the links is automatically
+    // set to where the user dropped the source file.
+    SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PAnsiChar(NewFileName), nil);
     SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, PAnsiChar(Source), nil);
-    SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PAnsiChar(GetLinkFileName(Source, Destination, False)), nil);
   except
     Result := False;
   end;
@@ -150,15 +174,16 @@ end;
 
 // ************************************************************************** //
 
-// TODO comment, to describe differences between these two functions
-function InternalCreateJunctionEx(LinkTarget, Junction: string): boolean;
+function InternalCreateJunctionBase(LinkTarget, Junction: string): boolean;
 begin
-  // Create an empty directory first
-  Result := CreateDir(Junction);
+  // Create an empty directory first; note that we continue, if the directory
+  // already exists, because this is required when the ContextMenu hook wants
+  // to make a junction based on an existing, empty folder.
+  Result := CreateDir(Junction) or DirectoryExists(Junction);
   // If successful, then try to make a junction
   if Result then
   begin
-    Result := NtfsCreateJunctionPoint(Junction, LinkTarget);
+    Result := NtfsCreateJunctionPoint(CheckBackslash(Junction), LinkTarget);
     // if junction creation was unsuccessful, delete created directory  
     if not Result then
       RemoveDir(Junction)
@@ -166,18 +191,21 @@ begin
     // new junction, so that we can later find out about how many junctions are
     // pointing to a certain directory.
     else
-      TrackJunction(Junction, LinkTarget);
+      TrackJunctionCreate(Junction, LinkTarget);
+
+    // Notify explorer of the change
+    SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PAnsiChar(Junction), nil);
   end;
 end;
 
 function InternalCreateJunction(LinkTarget, Junction: string;
-  TargetFileName: string = '';  // see inline comment
+  TargetDirName: string = '';  // see inline comment
   PrefixTemplate: string = LINK_PREFIX_TEMPLATE_DEFAULT): boolean;
 var
   NewDir: string;
 begin
   // Calculate name of directory to create
-  if TargetFileName <> '' then
+  if TargetDirName <> '' then
     // The TargetFileName parameter was added, because this function is
     // called in two different situations. For one, from the DragDrop Hook,
     // were we simply have the source directory we want to link to, and the
@@ -189,13 +217,27 @@ begin
     // directory to link to, in the second this is not the case. Therefore,
     // a new parameter, TargetFileName, was added, which will be used as a
     // template. In the second case, we can use "Junction" for that.
-    NewDir := GetLinkFileName(TargetFileName, Junction, True, PrefixTemplate)
+    NewDir := GetLinkFileName(TargetDirName, Junction, True, PrefixTemplate)
   else
     NewDir := GetLinkFileName(LinkTarget, Junction, True, PrefixTemplate);
 
-  // Call the sibling function which does create the hardlink, but which takes
+  // Call the sibling function which creates the hardlink, but which takes
   // the final filename of the junction as a parameter
-  Result := InternalCreateJunctionEx(LinkTarget, NewDir);
+  Result := InternalCreateJunctionBase(LinkTarget, NewDir);
+end;
+
+// ************************************************************************** //
+
+function GetJPDestination(Folder: string): string;
+begin
+  NtfsGetJunctionPointDestination(Folder, Result);
+  // Bug in JCL? There is always a #0 appended..
+  if (Result[Length(Result)]) = #0 then
+    Delete(Result, Length(Result), 1);
+  Result := CheckBackslash(Result);
+  // Remove the \\?\ if existing
+  if Pos('\??\', Result) = 1 then
+    Delete(Result, 1, 4);
 end;
 
 end.
