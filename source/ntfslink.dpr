@@ -21,11 +21,6 @@ library ntfslink;
 
 {$R 'ntfslink.res' 'ntfslink.rc'}
 
-// TODO before adding more shell extension: create a custom TComObjectFactory
-// descendant, which does all the things which are now implemented again and
-// again in each unit.
-
-// TODO Internationalization + build scripts
 // TODO correct link in header
 // TODO link count is not decremented on deletion?
 // TODO update explorer on new links
@@ -45,7 +40,8 @@ uses
   ColumnHook in 'ColumnHook.pas',
   ContextMenuHook in 'ContextMenuHook.pas',
   ShellNewExports in 'ShellNewExports.pas',
-  PropertySheetHook in 'PropertySheetHook.pas';
+  PropertySheetHook in 'PropertySheetHook.pas',
+  BaseExtensionFactory in 'BaseExtensionFactory.pas';
 
 exports
   DllGetClassObject,

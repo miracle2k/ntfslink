@@ -21,7 +21,7 @@ unit ContextMenuHook;
 
 interface
 uses          
-  Windows, SysUtils, ActiveX, ComObj, ShlObj;
+  Windows, SysUtils, ActiveX, ComObj, ShlObj, BaseExtensionFactory;
 
 type
   TContextMenuHook = class(TComObject, IShellExtInit, IContextMenu)
@@ -40,9 +40,9 @@ type
       pszName: LPSTR; cchMax: UINT): HResult; stdcall; 
   end;
 
-  TContextMenuHookFactory = class(TComObjectFactory)
-  public
-    procedure UpdateRegistry(Register: Boolean); override;
+  TContextMenuHookFactory = class(TBaseExtensionFactory)
+  protected
+    function GetInstallationKey: string; override;
   end;
 
 const
@@ -132,30 +132,9 @@ end;
 
 { TContextMenuHookFactory }
 
-procedure TContextMenuHookFactory.UpdateRegistry(Register: Boolean);
-var
-  ClassIDStr: string;
-  InstallationKey: string;
+function TContextMenuHookFactory.GetInstallationKey: string;
 begin
-  InstallationKey := 'Directory\shellex\ContextMenuHandlers\NTFSLink';
-
-  if Register then
-  begin
-    inherited UpdateRegistry(Register);
-
-    // Convert ClassID GUID to a string
-    ClassIDStr := GUIDToString(ClassId);
-
-    // Register the IconOverlay extension
-    CreateRegKey(InstallationKey, '', ClassIDStr, HKEY_CLASSES_ROOT);
-
-    // Approve extension (so users with restricted rights may use it too)
-    ApproveExtension(ClassIDStr, Description);
-  end
-  else begin
-    DeleteRegKey(InstallationKey);
-    inherited UpdateRegistry(Register);
-  end;
+  Result := 'Directory\shellex\ContextMenuHandlers\NTFSLink';
 end;
 
 initialization
@@ -163,4 +142,4 @@ initialization
       Class_ContextMenuHook, '', 'NTFSLink ContextMenu Shell Extension',
       ciMultiInstance, tmApartment);
 
-end.
+end.      

@@ -22,7 +22,7 @@ unit IconOverlayHook;
 interface
 
 uses          
-  Windows, SysUtils, ActiveX, ComObj, ShlObj;
+  Windows, SysUtils, ActiveX, ComObj, ShlObj, BaseExtensionFactory;
 
 type
   // Base class for our IconOverlay COM objects (we need two: one for junctions,
@@ -81,9 +81,9 @@ type
   end;  
 
   /// ComObjectFactory for our IconOverlay objects
-  TIconOverlayHookFactory = class(TComObjectFactory)
-  public
-    procedure UpdateRegistry(Register: Boolean); override;
+  TIconOverlayHookFactory = class(TBaseExtensionFactory)
+  protected
+    function GetInstallationKey: string; override;
   end;  
 
 const
@@ -206,34 +206,11 @@ end;
 
 { TIconOverlayHookFactory }
 
-procedure TIconOverlayHookFactory.UpdateRegistry(Register: Boolean);
-var
-  ClassIDStr: string;
-  InstallationKey: string;
+function TIconOverlayHookFactory.GetInstallationKey: string;
 begin
-  // Store the key we need to create (or delete) in a local variable
-  InstallationKey := 'SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\' +
-                        'ShellIconOverlayIdentifiers\NTFSLink_' +
-                        TIconOverlayHookClass(ComClass).Config_Prefix; 
-
-  if Register then
-  begin
-    inherited UpdateRegistry(Register);      
-
-    // Convert ClassID GUID to a string
-    ClassIDStr := GUIDToString(ClassId);
-
-    // Register the IconOverlay extension
-    CreateRegKey(InstallationKey, '', ClassIDStr, HKEY_LOCAL_MACHINE);
-
-    // Approve extension (so users with restricted rights may use it too)
-    ApproveExtension(ClassIDStr, Description);
-  end
-  else
-  begin
-    DeleteRegKey(InstallationKey);
-    inherited UpdateRegistry(Register);
-  end;
+   Result := 'SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\' +
+             'ShellIconOverlayIdentifiers\NTFSLink_' +
+             TIconOverlayHookClass(ComClass).Config_Prefix;
 end;
 
 initialization

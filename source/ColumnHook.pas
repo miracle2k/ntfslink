@@ -22,7 +22,7 @@ unit ColumnHook;
 interface
 
 uses          
-  Windows, SysUtils, ActiveX, ComObj, ShlObj;
+  Windows, SysUtils, ActiveX, ComObj, ShlObj, BaseExtensionFactory;
 
 // TODO does a ready-to-use delpi impl. exist?
 
@@ -44,13 +44,13 @@ type
   TColunnHook = class(TComObject)
   end;
 
-  TColumnHookFactory = class(TComObjectFactory)
-  public
-    procedure UpdateRegistry(Register: Boolean); override;
+  TColumnHookFactory = class(TBaseExtensionFactory)
+  protected
+    function GetInstallationKey: string; override;
   end;
 
-const
-  Class_ColumnHook: TGUID = '{9B9E4642-8BF2-4AFB-A742-1CD2FD456BE1}';
+//const
+  //Class_ColumnHook: TGUID = '{9B9E4642-8BF2-4AFB-A742-1CD2FD456BE1}'; TODO Regenerate
 
 implementation
 
@@ -59,10 +59,9 @@ uses
 
 { TColumnHookFactory }
 
-procedure TColumnHookFactory.UpdateRegistry(Register: Boolean);
+function TColumnHookFactory.GetInstallationKey: string;
 begin
-  inherited;
-
+  Result := '';
 end;
 
 end.

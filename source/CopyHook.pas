@@ -22,7 +22,7 @@ unit CopyHook;
 interface
 
 uses          
-  Windows, SysUtils, ActiveX, ComObj, ShlObj;
+  Windows, SysUtils, ActiveX, ComObj, ShlObj, BaseExtensionFactory;
 
 type
   TCopyHook = class(TComObject, ICopyHook)
@@ -32,9 +32,9 @@ type
       dwSrcAttribs: DWORD; pszDestFile: PAnsiChar; dwDestAttribs: DWORD): UINT; stdcall;
   end;
 
-  TCopyHookFactory = class(TComObjectFactory)
-  public
-    procedure UpdateRegistry(Register: Boolean); override;
+  TCopyHookFactory = class(TBaseExtensionFactory)
+  protected
+    function GetInstallationKey: string; override;
   end;
 
 const
@@ -96,32 +96,9 @@ end;
 
 { TCopyHookFactory }
 
-procedure TCopyHookFactory.UpdateRegistry(Register: Boolean);
-var
-  ClassIDStr: string;
-  InstallationKey: string;
+function TCopyHookFactory.GetInstallationKey: string;
 begin
-  // Store the key we need to create (or delete) in a local variable
-  InstallationKey := 'Directory\shellex\CopyHookHandlers\NTFSLink';
-
-  if Register then
-  begin
-    inherited UpdateRegistry(Register);      
-
-    // Convert ClassID GUID to a string
-    ClassIDStr := GUIDToString(ClassId);
-
-    // Register the CopyHook extension
-    CreateRegKey(InstallationKey, '', ClassIDStr, HKEY_CLASSES_ROOT);
-
-    // Approve extension (so users with restricted rights may use it too)
-    ApproveExtension(ClassIDStr, Description);
-  end
-  else
-  begin
-    DeleteRegKey(InstallationKey);
-    inherited UpdateRegistry(Register);
-  end;
+  Result := 'Directory\shellex\CopyHookHandlers\NTFSLink';
 end;
 
 initialization

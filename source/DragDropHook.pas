@@ -22,7 +22,7 @@ unit DragDropHook;
 interface
 
 uses
-  Windows, Classes, ActiveX, ComObj, ShlObj;
+  Windows, Classes, ActiveX, ComObj, ShlObj, BaseExtensionFactory;
 
 type
   // We have to differ between dragged files, dragged directories, or
@@ -54,9 +54,9 @@ type
     destructor Destroy; override;
   end;
 
-  TDragDropHookFactory = class(TComObjectFactory)
-  public
-    procedure UpdateRegistry(Register: Boolean); override;
+  TDragDropHookFactory = class(TBaseExtensionFactory)
+  protected
+    function GetInstallationKey: string; override;
   end;  
 
 const
@@ -283,30 +283,9 @@ end;
 
 { TDragDropHookFactory }
 
-procedure TDragDropHookFactory.UpdateRegistry(Register: Boolean);
-var
-  ClassIDStr: string;
-  InstallationKey: string;
+function TDragDropHookFactory.GetInstallationKey: string;
 begin
-  InstallationKey := 'Folder\shellex\DragDropHandlers\ntfslink';
-
-  if Register then
-  begin
-    inherited UpdateRegistry(Register);
-
-    // Convert ClassID GUID to a string
-    ClassIDStr := GUIDToString(ClassId);
-
-    // Register the IconOverlay extension
-    CreateRegKey(InstallationKey, '', ClassIDStr, HKEY_CLASSES_ROOT);
-
-    // Approve extension (so users with restricted rights may use it too)
-    ApproveExtension(ClassIDStr, Description);
-  end
-  else begin
-    DeleteRegKey('Folder\shellex\DragDropHandlers\ntfslink');
-    inherited UpdateRegistry(Register);
-  end;
+  Result := 'Folder\shellex\DragDropHandlers\ntfslink';
 end;
 
 initialization
