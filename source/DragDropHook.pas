@@ -65,7 +65,8 @@ const
 implementation
 
 uses
-  ComServ, ShellAPI, SysUtils, JclNTFS, Global, GNUGetText;
+  ComServ, ShellAPI, SysUtils, JclNTFS, JclRegistry, GNUGetText, Global,
+  Constants;
 
 { TDragDropHook }
 
@@ -87,9 +88,13 @@ function TDragDropHook.GetCommandString(idCmd, uType: UINT;
 begin
   if (idCmd = 0) then begin
     if (uType = GCS_HELPTEXT) then
+    begin
       // Return nothing, as this is shown nowhere
       StrCopy(pszName, '');
       Result := NOERROR;
+    end
+    else
+      Result := E_INVALIDARG;
   end
   else
     Result := E_INVALIDARG;
@@ -171,6 +176,7 @@ function TDragDropHook.QueryContextMenu(Menu: HMENU; indexMenu, idCmdFirst,
 var
   mString: string;
   mPos: Integer;
+  mBitmap: HBITMAP;
 begin                  
   // No items created yet
   Result := MakeResult(SEVERITY_SUCCESS, FACILITY_NULL, 0);
@@ -196,8 +202,11 @@ begin
     mPos := GetMenuItemCount(Menu) - 2;
     InsertMenu(Menu, mPos, MF_STRING or MF_BYPOSITION,
                idCmdFirst, PAnsiChar(mString));
-    SetMenuItemBitmaps(Menu, mPos, MF_BYPOSITION, GLYPH_HANDLE_JUNCTION,
-                       GLYPH_HANDLE_JUNCTION);
+    // Set an appropriate icon
+    if FSourceFileMode = ddmFile then mBitmap := GLYPH_HANDLE_HARDLINK
+    else if FSourceFileMode = ddmDirectory then mBitmap := GLYPH_HANDLE_JUNCTION
+    else mBitmap := GLYPH_HANDLE_STD;
+    SetMenuItemBitmaps(Menu, mPos, MF_BYPOSITION, mBitmap, mBitmap);
 
     // Return number of menu items added
     Result := MakeResult(SEVERITY_SUCCESS, FACILITY_NULL, 1);
@@ -220,15 +229,20 @@ var
     for i := FSourceFileList.Count - 1 downto 0 do
       if not
          ((DirectoryExists(FSourceFileList[i])) or
-         // TODO [future] make this a real test (currently it will fail when
-         // the the target folder is only a mount point from a different
-         // partition)
          (ExtractFileDrive(FSourceFileList[i]) = ExtractFileDrive(FTargetPath)))
       then
         FSourceFileList.Delete(i);
   end;
 
 begin
+  // Make sure this extension is not disabled
+  if not RegReadBoolDef(HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
+                        'IntegrateIntoDragDropMenu', True) then
+  begin
+    Result := E_ABORT;
+    exit;
+  end;
+
   // Create list for storing all the selected source files
   FreeSourceFileList;
   FSourceFileList := TStringList.Create;
