@@ -45,6 +45,7 @@ type
     JunctionOverlay: TJvComboEdit;
     HardlinkOverlay: TJvComboEdit;
     IntegrateIntoContextMenu: TCheckBox;
+    CreateLinksSuppressPrefix: TCheckBox;
     procedure bCancelClick(Sender: TObject);
     procedure bOKClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -118,6 +119,7 @@ procedure TfConfig.LoadCurrentStateFromRegistry;
 begin
   LoadCheckBox(IntegrateIntoDragDropMenu);
   LoadCheckBox(IntegrateIntoContextMenu);
+  LoadCheckBox(CreateLinksSuppressPrefix);
   LoadCheckBox(EnableJunctionIconOverlays);
   LoadIconComboEdit(JunctionOverlay);
   LoadCheckBox(EnableHardlinkIconOverlays);
@@ -155,6 +157,7 @@ procedure TfConfig.WriteStateToRegistry;
 begin
   WriteCheckBox(IntegrateIntoDragDropMenu);
   WriteCheckBox(IntegrateIntoContextMenu);
+  WriteCheckBox(CreateLinksSuppressPrefix);
   WriteCheckBox(EnableJunctionIconOverlays);
   WriteIconComboEdit(JunctionOverlay);
   WriteCheckBox(EnableHardlinkIconOverlays);

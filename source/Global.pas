@@ -41,6 +41,9 @@ function CheckBackslash(AFileName: string): string;
 // Exactly the opposite: removes the backslash, if it is there
 function RemoveBackslash(AFileName: string): string;
 
+// Result depends on configuration - whether to add a "Link to" prefix or not.
+function IsLinkPrefixTemplateDisabled: boolean;
+
 // Return the name of the file/directory to create. This depends on the
 // existing files/directories, i.e. if the user creates multiple links
 // of the same file, we will enumerate them: Copy(1), Copy(2), etc..
@@ -55,10 +58,10 @@ function InternalCreateHardlinkSafe(Source, Destination: string): boolean;
 // Interal functions used to create junctions; The Base-function actually creates
 // the junctions using a final directory name, the other one first generates
 // the directory name based on a template and a base name (e.g. does the
-// "Link (x) of..."), and then calls InternalCreateJunctionEx()
+// "Link (x) of..."), and then calls InternalCreateJunctionBase()
 function InternalCreateJunctionBase(LinkTarget, Junction: string): boolean;
 function InternalCreateJunction(LinkTarget, Junction: string;
-  TargetDirName: string = '';  
+  TargetDirName: string = '';
   PrefixTemplate: string = LINK_PREFIX_TEMPLATE_DEFAULT): boolean;
 
 // Wrapper around NtfsGetJunctionPointDestination(), passing the
@@ -89,6 +92,14 @@ end;
 
 // ************************************************************************** //
 
+function IsLinkPrefixTemplateDisabled: boolean;
+begin
+  Result := RegReadBoolDef(HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
+                          'CreateLinksSuppressPrefix', False);
+end;
+
+// ************************************************************************** //
+
 function GetLinkFileName(Source, TargetDir: string; Directory: boolean;
   PrefixTemplate: string = LINK_PREFIX_TEMPLATE_DEFAULT): string;
 var
@@ -106,8 +117,13 @@ begin
   repeat
     Inc(x);
 
-    // Try to get the translated Format-template for the filename
-    LinkStr := _(PrefixTemplate);
+    // If "Link to" prefix is disabled and this is the first link, then use our
+    // "light" template (without a prefix). Otherwise, use the specified template.
+    if (x = 1) and (IsLinkPrefixTemplateDisabled) then
+      LinkStr := LINK_NO_PREFIX_TEMPLATE
+    else
+      LinkStr := _(PrefixTemplate);
+      
     // The very first link does not get a number
     if x > 1 then NumStr := ' (' + IntToStr(x) + ')' else NumStr := '';
 

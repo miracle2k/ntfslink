@@ -40,6 +40,7 @@ const
   LINK_PREFIX_TEMPLATE_DEFAULT =  'Link%s to %s';
   COPY_PREFIX_TEMPLATE_DEFAULT =  'Copy%s of %s';
   {gnugettext:reset}
+  LINK_NO_PREFIX_TEMPLATE      =  '%1:s%0:s';
 
 implementation
 

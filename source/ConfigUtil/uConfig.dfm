@@ -4,7 +4,7 @@ object fConfig: TfConfig
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'NTFS Link Configuration'
-  ClientHeight = 313
+  ClientHeight = 333
   ClientWidth = 440
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,12 +18,12 @@ object fConfig: TfConfig
   OnCreate = FormCreate
   DesignSize = (
     440
-    313)
+    333)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
     Left = 64
-    Top = 109
+    Top = 133
     Width = 25
     Height = 13
     Alignment = taRightJustify
@@ -31,7 +31,7 @@ object fConfig: TfConfig
   end
   object Label2: TLabel
     Left = 64
-    Top = 165
+    Top = 189
     Width = 25
     Height = 13
     Alignment = taRightJustify
@@ -39,7 +39,7 @@ object fConfig: TfConfig
   end
   object Bevel2: TBevel
     Left = 16
-    Top = 67
+    Top = 91
     Width = 402
     Height = 8
     Anchors = [akLeft, akTop, akRight]
@@ -47,7 +47,7 @@ object fConfig: TfConfig
   end
   object Bevel: TBevel
     Left = 0
-    Top = 273
+    Top = 293
     Width = 440
     Height = 40
     Align = alBottom
@@ -55,7 +55,7 @@ object fConfig: TfConfig
   end
   object Bevel3: TBevel
     Left = 16
-    Top = 195
+    Top = 219
     Width = 402
     Height = 8
     Anchors = [akLeft, akTop, akRight]
@@ -63,7 +63,7 @@ object fConfig: TfConfig
   end
   object Label3: TLabel
     Left = 24
-    Top = 240
+    Top = 264
     Width = 144
     Height = 13
     Caption = 'Tracking of Junction Creation:'
@@ -80,7 +80,7 @@ object fConfig: TfConfig
   end
   object EnableJunctionIconOverlays: TCheckBox
     Left = 24
-    Top = 80
+    Top = 104
     Width = 395
     Height = 17
     Hint = 'Helps differing junction points between other directories'
@@ -91,7 +91,7 @@ object fConfig: TfConfig
   end
   object EnableHardlinkIconOverlays: TCheckBox
     Left = 24
-    Top = 136
+    Top = 160
     Width = 395
     Height = 17
     Hint = 'Helps differing hard links between other files'
@@ -102,7 +102,7 @@ object fConfig: TfConfig
   end
   object InterceptJunctionCopying: TCheckBox
     Left = 24
-    Top = 208
+    Top = 232
     Width = 395
     Height = 17
     Hint = 
@@ -115,7 +115,7 @@ object fConfig: TfConfig
   end
   object bOK: TButton
     Left = 277
-    Top = 281
+    Top = 301
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -126,7 +126,7 @@ object fConfig: TfConfig
   end
   object bCancel: TButton
     Left = 357
-    Top = 281
+    Top = 301
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -137,7 +137,7 @@ object fConfig: TfConfig
   end
   object JunctionTrackingMode: TComboBox
     Left = 184
-    Top = 233
+    Top = 257
     Width = 234
     Height = 21
     Hint = 
@@ -158,7 +158,7 @@ object fConfig: TfConfig
   end
   object JunctionOverlay: TJvComboEdit
     Left = 96
-    Top = 104
+    Top = 128
     Width = 321
     Height = 21
     Anchors = [akLeft, akTop, akRight]
@@ -170,7 +170,7 @@ object fConfig: TfConfig
   end
   object HardlinkOverlay: TJvComboEdit
     Left = 96
-    Top = 160
+    Top = 184
     Width = 321
     Height = 21
     Anchors = [akLeft, akTop, akRight]
@@ -192,9 +192,21 @@ object fConfig: TfConfig
     Caption = 'Integrate into Explorer Right-Click menu'
     TabOrder = 1
   end
+  object CreateLinksSuppressPrefix: TCheckBox
+    Left = 24
+    Top = 64
+    Width = 395
+    Height = 17
+    Hint = 
+      'By default, a "Link to" prefix will be added to every link, like' +
+      ' the Explorer does with copies'
+    Anchors = [akLeft, akTop, akRight]
+    Caption = 'Do not add "Link to" prefix when creating links'
+    TabOrder = 10
+  end
   object JvChangeIconDialog: TJvChangeIconDialog
     IconIndex = 0
     Left = 376
-    Top = 80
+    Top = 104
   end
 end

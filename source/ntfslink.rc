@@ -3,7 +3,7 @@ HARDLINK              ICON    DISCARDABLE   IMPURE   "..\\graphics\\hardlink.ico
 
 // Overlay icon for junction points
 JUNCTION              ICON    DISCARDABLE   IMPURE   "..\\graphics\\junction.ico"
-
+ 
 // Icons used for various of menu items of NTFS Link
 MENU_GLYPH_STD        BITMAP  DISCARDABLE   IMPURE   "..\\graphics\\menu_glyph_ntfslink.bmp"
 MENU_GLYPH_JUNCTION   BITMAP  DISCARDABLE   IMPURE   "..\\graphics\\menu_glyph_junction.bmp"
@@ -11,4 +11,34 @@ MENU_GLYPH_HARDLINK   BITMAP  DISCARDABLE   IMPURE   "..\\graphics\\menu_glyph_h
 MENU_GLYPH_LINKDEL    BITMAP  DISCARDABLE   IMPURE   "..\\graphics\\menu_glyph_linkdel.bmp"
 MENU_GLYPH_EXPLORER   BITMAP  DISCARDABLE   IMPURE   "..\\graphics\\menu_glyph_explorer.bmp"
 
-//3 RT_MANIFEST "ntfslink.manifest"      
+//3 RT_MANIFEST "ntfslink.manifest"
+
+1 VERSIONINFO
+FILEVERSION 6,0,4064,0
+PRODUCTVERSION 6,0,4064,0
+FILEOS 0x4
+FILETYPE 0x2
+BEGIN
+BLOCK "StringFileInfo"
+BEGIN
+	BLOCK "000004b0"
+	BEGIN
+		VALUE "Comments", "Microsoft Command-Line Shell Namespace Providers Resources Assembly"
+		VALUE "CompanyName", "Michael Elsdörfer"  
+		VALUE "FileDescription", "NTFS link"
+		VALUE "FileVersion", "6.0.4064.0"
+		VALUE "InternalName", "ntfslink.dll"
+		VALUE "LegalCopyright", "Copyright (c) Michael Elsdörfer. All rights reserved."
+		VALUE "LegalTrademarks", ""
+		VALUE "OriginalFilename", "ntfslink.dll"
+		VALUE "ProductName", "NTFS LInk"
+		VALUE "ProductVersion", "6.0.4064.0"
+		VALUE "Assembly Version", "6.0.4064.0"
+	END
+END
+
+BLOCK "VarFileInfo"
+BEGIN
+	VALUE "Translation", 0x0000 0x04B0
+END
+END
