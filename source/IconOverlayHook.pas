@@ -169,7 +169,7 @@ var
   DriveType: Cardinal;
 begin
   DriveType := GetDriveType(PAnsiChar(ExtractFileDrive(Drive)));
-  Result := (DriveType = DRIVE_FIXED) and (DriveType = DRIVE_RAMDISK);
+  Result := (DriveType = DRIVE_FIXED) or (DriveType = DRIVE_RAMDISK);
 end;
 
 function TIconOverlayHook.GetOverlayInfo(pwszIconFile: PWideChar;
