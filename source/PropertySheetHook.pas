@@ -22,7 +22,7 @@ unit PropertySheetHook;
 interface
 
 uses
-  Windows, Classes, ActiveX, ComObj, CommCtrl, ShlObj, BaseExtensionFactory;
+  Windows, ActiveX, ShlObj, CommCtrl, ComObj, BaseExtensionFactory;
 
 type
   // The type of the object we operate on; note that we only handle hardlinks
@@ -33,7 +33,7 @@ type
   TPropertySheetHook = class(TComObject, IShellExtInit, IShellPropSheetExt)
   private
     FSourceObject: string;
-    FMode: TSourceFileMode;
+//    FMode: TSourceFileMode;
   public
     { IShellExtInit }
     function IShellExtInit.Initialize = SEIInitialize; // Avoid compiler warning
@@ -57,20 +57,20 @@ const
 implementation
 
 uses
-  ComServ, ShellAPI, SysUtils, JclNTFS, Global, GNUGetText;
+  ShellAPI;
 
 { TPropertySheetHook }
 
 function TPropertySheetHook.AddPages(lpfnAddPage: TFNAddPropSheetPage;
   lParam: LPARAM): HResult;
 begin
-
+  Result := S_OK;
 end;
 
 function TPropertySheetHook.ReplacePage(uPageID: UINT;
   lpfnReplaceWith: TFNAddPropSheetPage; lParam: LPARAM): HResult;
 begin
-
+  Result := S_OK;
 end;
 
 function TPropertySheetHook.SEIInitialize(pidlFolder: PItemIDList;
@@ -120,7 +120,7 @@ begin
 end;
 
 initialization
-//  TODO [future] Implement the Property Sheet Extensions
+//  TODO [v2.1] Implement the Property Sheet Extensions
 //  TPropertySheetHookFactory.Create(ComServer, TPropertySheetHook,
 //      Class_PropertySheetHook, '', 'NTFSLink Property Sheet Shell Extension',
 //      ciMultiInstance, tmApartment);
