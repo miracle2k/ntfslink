@@ -20,13 +20,21 @@ Known Issues:
 unit ContextMenuHook;
 
 interface
-uses          
+
+uses
   Windows, SysUtils, ActiveX, ComObj, ShlObj, BaseExtensionFactory;
 
 type
+  // Depending on what object is selected in explorer, we have to provide
+  // different menu items and do different things.
+  TContextMenuType = (cmmUnkown, cmmEmptyFolder, cmmJunctionPoint);
+
   TContextMenuHook = class(TComObject, IShellExtInit, IContextMenu)
   private
-    FFileName: string;
+  private
+    FSourceDirMode: TContextMenuType;
+    FDirectory: string;
+    FJunctionTarget: string;
   public
     { IShellExtInit }
     function IShellExtInit.Initialize = SEIInitialize; // Avoid compiler warning
@@ -51,18 +59,29 @@ const
 implementation
 
 uses
-  ShellAPI, ComServ, JclRegistry, GNUGetText, Global;
+  JclNTFS, ShellAPI, ComServ, GNUGetText, Global, ShellNewExports;
 
 { TContextMenuHook }
 
 function TContextMenuHook.GetCommandString(idCmd, uType: UINT;
   pwReserved: PUINT; pszName: LPSTR; cchMax: UINT): HResult;
+var
+  HelpStr: string;
 begin
-  if (idCmd = 0) then begin
-    if (uType = GCS_HELPTEXT) then
-      // Return nothing, as this is shown nowhere
-      StrCopy(pszName, 'Remove the junction point');
-      Result := NOERROR;
+  HelpStr := '';
+  if (uType = GCS_HELPTEXT) then
+    case idCmd of
+      0:
+        HelpStr := _('Link selected folder to another directory or drive');
+      1:
+        HelpStr := _('Remove this folder''s junction point');
+      2:
+        HelpStr := _('Open the target of this junction in Windows Explorer');
+    end;
+
+  if HelpStr <> '' then begin
+    StrCopy(pszName, PAnsiChar(HelpStr));
+    Result := S_OK
   end
   else
     Result := E_INVALIDARG;
@@ -71,27 +90,102 @@ end;
 function TContextMenuHook.InvokeCommand(
   var lpici: TCMInvokeCommandInfo): HResult;
 begin
+  // Make sure we aren't being passed an invalid command id
+  case (LoWord(lpici.lpVerb))of
+    0:
+      begin
+        // Call the "Create Junction" dialog
+        NewJunctionDlgInternal(lpici.hwnd, FDirectory, False);
+        // Notify the explorer, so that our icon overlay will be displayed
+        SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PAnsiChar(FDirectory), nil);
+      end;
+      
+    1:
+      begin
+        // Delete the junction point
+        NtfsDeleteJunctionPoint(FDirectory);
+        // Notify the explorer, so that our icon overlay will be removed
+        SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PAnsiChar(FDirectory), nil);
+      end;
+
+    2:
+      // Open the target folder in explorer
+      ShellExecute(0, 'explore', PAnsiChar(FJunctionTarget), nil, nil, SW_NORMAL);
+      
+    else
+      begin
+        Result := E_INVALIDARG;
+        exit;
+      end;
+  end;
+
   Result := S_OK;
 end;
 
 function TContextMenuHook.QueryContextMenu(Menu: HMENU; indexMenu,
   idCmdFirst, idCmdLast, uFlags: UINT): HResult;
 var
-  mString: string;
-begin                  
+  SubMenu: HMENU;
+
+  procedure CreateMenuItem(Menu: HMENU; Caption: string; Glyph: HBITMAP = 0;
+    ItemID: Cardinal = 0; ByIndex: Integer = MaxInt; SubMenu: HMENU = 0);
+  var
+    mii: TMenuItemInfo;
+  begin
+    // First off, initialize the MENUITEMINFO structure
+    with mii do
+    begin
+      cbSize := SizeOf(TMenuItemInfo);
+      // Some members are always passed, reflect that in the default mask
+      fMask := MIIM_STRING or MIIM_ID;
+      // Initialize this standard members
+      wID := ItemID;
+      dwTypeData := PAnsiChar(Caption);            
+      // If a submenu handle is specified, use it + include SUBMENU flag
+      if SubMenu <> 0 then begin
+        fMask := fMask or MIIM_SUBMENU;
+        hSubMenu := SubMenu;
+      end;
+      // Assign the glyph, if a handle is specified, and include correct flag;
+      if Glyph <> 0 then begin
+        fMask := fMask or MIIM_CHECKMARKS;
+        hbmpUnchecked := Glyph;
+        hbmpChecked := Glyph;
+      end;
+    end;
+
+    // Finally, insert the item
+    InsertMenuItem(Menu, ByIndex, True, mii);
+  end;
+
+begin
   // No items created yet
   Result := MakeResult(SEVERITY_SUCCESS, FACILITY_NULL, 0);
 
   if (uFlags and $0000000F = CMF_NORMAL) or (uFlags and CMF_EXPLORE <> 0) then
   begin
-    mString := _('Unlink Junction');
+    // Create submenu
+    SubMenu := CreatePopupMenu;
+    CreateMenuItem(Menu, 'NTFS Link', GLYPH_HANDLE_STD, 0, indexMenu, SubMenu);
+                                                         
+      // Add items to the submenu, depending on mode
+      if FSourceDirMode = cmmEmptyFolder then
+        CreateMenuItem(SubMenu, _('Link Folder...'), GLYPH_HANDLE_JUNCTION, idCmdFirst)
+      else begin
+        CreateMenuItem(SubMenu, Format(_('Unlink From "%s"'), [FJunctionTarget]),
+                       GLYPH_HANDLE_LINKDEL, idCmdFirst + 1);
+        CreateMenuItem(SubMenu, Format(_('Open "%s"'), [FJunctionTarget]),
+                       GLYPH_HANDLE_EXPLORER, idCmdFirst + 2);
+      end;
 
-    // Add our menu item to context menu
-    InsertMenu(Menu, indexMenu, MF_STRING or MF_BYPOSITION,
-               idCmdFirst, PAnsiChar(mString));
-
-    // Return number of menu items added
-    Result := MakeResult(SEVERITY_SUCCESS, FACILITY_NULL, 1);
+    // The required return value is (according to lastest MSDN) the largest
+    // command id *minus* idCmdFirst (that's the offset) *plus* 1.
+    // In our case, the larget command id varies, depending on the number of
+    // items created. To keep things simple, we will always calculate the
+    // return value based on the largest command id used in *any* case, also
+    // if in the *current* case we created fewer items (which is a bit a waste
+    // of command id's, but who cares :-);
+    Result := MakeResult(SEVERITY_SUCCESS, FACILITY_NULL, 3);  // (idCmdFirst + 2) - idCmdFirst + 1
   end;
 end;
 
@@ -102,6 +196,26 @@ var
   FormatEtc: TFormatEtc;
   tempFile: array[0..MAX_PATH] of Char;
   SrcCount: Integer;
+
+  function IsDirectoryEmpty(ADir: string): boolean;
+  var
+    SearchData: TSearchRec;
+  begin
+    Result := True;
+    
+    if FindFirst(CheckBackslash(ADir) + '*', faAnyFile or faDirectory, SearchData) = 0 then
+      try
+        while FindNext(SearchData) = 0 do
+          if (SearchData.Name <> '.') and (SearchData.Name <> '..') then
+          begin
+            Result := False;
+            break;
+          end;
+      finally
+        FindClose(SearchData);
+      end;
+  end;
+
 begin
   // Initialize FormatEtc
   with FormatEtc do begin
@@ -117,17 +231,41 @@ begin
   Result := lpdobj.GetData(FormatEtc, StgMedium);
   if Failed(Result) then exit;
   
-  // Put all the source files in the StringList
+  // Get the selected object; note that only *1* is supported;
   SrcCount := DragQueryFile(StgMedium.hGlobal, $FFFFFFFF, nil, 0);
   if SrcCount = 1 then begin
     DragQueryFile(StgMedium.hGlobal, 0, tempFile, SizeOf(tempFile));
-    FFileName := tempFile;
+    FDirectory := tempFile;
   end
-  else
+  else begin
     Result := E_INVALIDARG;
+    exit;
+  end;
 
   // Free resources
   ReleaseStgMedium(StgMedium);
+
+  // Try to find out whether to show our menu item here, and which mode to use
+  FSourceDirMode := cmmUnkown;
+  if (DirectoryExists(FDirectory)) then
+  begin
+    // Either the directory is a junction point..
+    if (NtfsIsFolderMountPoint(FDirectory)) then
+    begin
+      FSourceDirMode := cmmJunctionPoint;
+      // In that case, we also need the junction taraget, so query it
+      FJunctionTarget := GetJPDestination(FDirectory);
+    end
+    // .. or it is empty
+    else if (IsDirectoryEmpty(FDirectory)) then
+      FSourceDirMode := cmmEmptyFolder
+  end;
+
+  // If no mode was selected, fail and do not show our menu item
+  if FSourceDirMode = cmmUnkown then
+    Result := E_INVALIDARG
+  else
+    Result := S_OK;
 end;
 
 { TContextMenuHookFactory }
@@ -144,4 +282,4 @@ initialization
       Class_ContextMenuHook, '', 'NTFSLink ContextMenu Shell Extension',
       ciMultiInstance, tmApartment);
 
-end.      
+end.
