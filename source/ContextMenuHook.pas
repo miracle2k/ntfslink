@@ -24,6 +24,8 @@ interface
 uses
   Windows, SysUtils, ActiveX, ComObj, ShlObj, BaseExtensionFactory;
 
+// TODO [future] Let the context menu extension operate on multiple folders
+
 type
   // Depending on what object is selected in explorer, we have to provide
   // different menu items and do different things.
