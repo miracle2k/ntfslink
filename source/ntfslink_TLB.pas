@@ -12,16 +12,16 @@ unit ntfslink_TLB;
 // ************************************************************************ //
 
 // PASTLWTR : 1.2
-// Datei generiert am 24.01.2004 10:57:39 aus der unten beschriebenen Typbibliothek.
+// Datei generiert am 26.06.2004 20:05:00 aus der unten beschriebenen Typbibliothek.
 
 // ************************************************************************  //
-// Typbib: G:\dev\projects\current\ntfslink\ntfslink.tlb (1)
-// LIBID: {0E916E78-F599-418E-95E1-954491F47283}
+// Typbib: F:\Developing\Projects\NTFSLink\source\ntfslink.tlb (1)
+// LIBID: {E709C2BC-CFB4-49EC-B985-2B1C40EAD54F}
 // LCID: 0
 // Hilfedatei: 
 // Hilfe-String: ntfslink Bibliothek
 // DepndLst: 
-//   (1) v2.0 stdole, (C:\WINDOWS\System32\stdole2.tlb)
+//   (1) v2.0 stdole, (C:\windows\System32\stdole2.tlb)
 // ************************************************************************ //
 {$TYPEDADDRESS OFF} // Unit muß ohne Typüberprüfung für Zeiger compiliert werden. 
 {$WARN SYMBOL_PLATFORM OFF}
@@ -45,7 +45,7 @@ const
   ntfslinkMajorVersion = 1;
   ntfslinkMinorVersion = 0;
 
-  LIBID_ntfslink: TGUID = '{0E916E78-F599-418E-95E1-954491F47283}';
+  LIBID_ntfslink: TGUID = '{E709C2BC-CFB4-49EC-B985-2B1C40EAD54F}';
 
 
 implementation

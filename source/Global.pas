@@ -17,22 +17,30 @@ located at http://www.elsdoerfer.net/?pid=ntfslink
 Known Issues:
 -----------------------------------------------------------------------------}
 
-library ntfslink;
+unit Global;
 
-//{$R *.TLB}
+interface
 
 uses
-  ComServ,
-  DragDropHook in 'DragDropHook.pas',
-  IconOverlayHook in 'IconOverlayHook.pas',
-  ntfslink_TLB in 'ntfslink_TLB.pas',
-  Global in 'Global.pas';
+  SysUtils, Windows, JclRegistry;
 
-exports
-  DllGetClassObject,
-  DllCanUnloadNow,
-  DllRegisterServer,
-  DllUnregisterServer;
+const
+  NTFSLINK_REGISTRY = 'Software\elsdoerfer.net\NTFSLink\';
+  NTFSLINK_CONFIGURATION = NTFSLINK_REGISTRY + 'Config\';
 
+  OVERLAY_JUNCTION_ICONINDEX = 1;
+  OVERLAY_HARDLINK_ICONINDEX = 2;
+
+procedure ApproveExtension(ClassIDStr, Description: string);
+
+implementation
+
+procedure ApproveExtension(ClassIDStr, Description: string);
 begin
+  if (Win32Platform = VER_PLATFORM_WIN32_NT) then
+    RegWriteString(HKEY_LOCAL_MACHINE,
+       'SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved',
+       ClassIDStr, Description);
+end;
+
 end.

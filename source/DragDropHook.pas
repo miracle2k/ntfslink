@@ -54,7 +54,8 @@ const
 
 implementation
 
-uses ComServ, ShellAPI, SysUtils, Registry;
+uses
+  ComServ, ShellAPI, SysUtils, Registry;
 
 { TDragDropHook }
 
