@@ -22,32 +22,15 @@ unit Global;
 interface
 
 uses
-  SysUtils, Windows, JclRegistry;
-
-const
-  // Paths used in registry
-  NTFSLINK_REGISTRY = 'Software\elsdoerfer.net\NTFS Link\';
-  NTFSLINK_CONFIGURATION = NTFSLINK_REGISTRY + 'Config\';
-
-  // Junction Tracking: Define where the data should be stored
-  NTFSLINK_TRACKINGDATA_KEY = NTFSLINK_REGISTRY + 'Tracking\';
-  NTFSLINK_TRACKING_STREAM = 'ntfslink.junction-tracking';
-
-  // Some default values, can (mostly) be overridden by configuration values
-  OVERLAY_HARDLINK_ICONINDEX = 0;
-  OVERLAY_JUNCTION_ICONINDEX = 1;
-  OVERLAY_PRIORITY_DEFAULT = 50;
-  // Template used to name the created links; can be overridden by lang file
-  LINK_PREFIX_TEMPLATE_DEFAULT =  'Link%s to %s';
-  COPY_PREFIX_TEMPLATE_DEFAULT =  'Copy%s of %s';
+  SysUtils, Windows, JclRegistry, Constants;
 
 var
   // Handles to various glyphs used in shell menus; initialized at startup;
   GLYPH_HANDLE_STD: HBITMAP;
   GLYPH_HANDLE_JUNCTION: HBITMAP;
+  GLYPH_HANDLE_HARDLINK: HBITMAP;
   GLYPH_HANDLE_LINKDEL: HBITMAP;
-  GLYPH_HANDLE_EXPLORER: HBITMAP;
-
+  GLYPH_HANDLE_EXPLORER: HBITMAP;  
 
 // Make certain registry entries to make sure the extension also works for
 // non-Admin accounts with restricted rights.
@@ -165,8 +148,6 @@ begin
   if not NtfsCreateHardLink(NewFileName, PAnsiChar(Source)) then
     raise Exception.Create('NtfsCreateHardLink() failed.');
 
-  // TODO [future] Would be great, if position of the links is automatically
-  // set to where the user dropped the source file.
   SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PAnsiChar(NewFileName), nil);
   SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, PAnsiChar(Source), nil);
 end;
@@ -192,8 +173,15 @@ begin
   // If successful, then try to make a junction
   if Result then
   begin
+    // Allow to easily override existing junction points with a new target
+    // folder: If there is already a junction point, just delete it.
+    if GetJPDestination(Junction) <> '' then
+      NtfsDeleteJunctionPoint(Junction);
+
+    // Create the junction
     Result := NtfsCreateJunctionPoint(CheckBackslash(Junction), LinkTarget);
-    // if junction creation was unsuccessful, delete created directory  
+    // if junction creation was unsuccessful, delete created directory
+
     if not Result then
       RemoveDir(Junction)
     // otherwise (junction successful created): store the information about the
@@ -239,14 +227,20 @@ end;
 
 function GetJPDestination(Folder: string): string;
 begin
+  // Use JCL utility function to get the target folder
   NtfsGetJunctionPointDestination(Folder, Result);
-  // Bug in JCL? There is always a #0 appended..
-  if (Result[Length(Result)]) = #0 then
-    Delete(Result, Length(Result), 1);
-  Result := CheckBackslash(Result);
-  // Remove the \\?\ if existing
-  if Pos('\??\', Result) = 1 then
-    Delete(Result, 1, 4);
+
+  // If a path was returned, make some corrections
+  if (Result <> '') then
+  begin
+    // Bug in JCL? There is always a #0 appended..
+    if (Result[Length(Result)]) = #0 then
+      Delete(Result, Length(Result), 1);
+    Result := CheckBackslash(Result);
+    // Remove the \\?\ if existing
+    if Pos('\??\', Result) = 1 then
+      Delete(Result, 1, 4);
+  end;
 end;
 
 end.
