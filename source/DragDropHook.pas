@@ -57,8 +57,8 @@ type
   TDragDropHookFactory = class(TBaseExtensionFactory)
   protected
     function GetInstallationData: TExtensionRegistryData; override;
-  end;  
-
+  end;
+                   
 const
   Class_DragDropHook: TGUID = '{93A6090E-DCD1-4E94-9499-8AB61B3F37E8}';
 
@@ -215,11 +215,6 @@ end;
 
 function TDragDropHook.SEIInitialize(pidlFolder: PItemIDList;
   lpdobj: IDataObject; hKeyProgID: HKEY): HResult;
-var
-  StgMedium: TStgMedium;
-  FormatEtc: TFormatEtc;
-  tempFile, pszPath: array[0..MAX_PATH] of Char;
-  SrcCount, i: Integer;
 
   // Hardlinks are not supported across different file systems
   procedure RemoveInvalidItems;
@@ -228,12 +223,20 @@ var
   begin
     for i := FSourceFileList.Count - 1 downto 0 do
       if not
-         ((DirectoryExists(FSourceFileList[i])) or
-         (ExtractFileDrive(FSourceFileList[i]) = ExtractFileDrive(FTargetPath)))
+        (
+         (DirectoryExists(FSourceFileList[i])) or
+         (ExtractFileDrive(FSourceFileList[i]) = ExtractFileDrive(FTargetPath))
+        )
+
       then
         FSourceFileList.Delete(i);
   end;
 
+var
+  StgMedium: TStgMedium;
+  FormatEtc: TFormatEtc;
+  tempFile, pszPath: array[0..MAX_PATH] of Char;
+  SrcCount, i: Integer;
 begin
   // Make sure this extension is not disabled
   if not RegReadBoolDef(HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
@@ -259,6 +262,9 @@ begin
   // Make sure the taget file system is NTFS: To keep it as easy as possible,
   // we just check if reparse points are supported. This is only the case on
   // NTFS, and thus we can assume that hard links are supported as well.
+  // TODO [v2.1] Make a better check; maybe a FAT drive is mounted into
+  // an NTFS hierarchie - this should be detected. GetVolumePathName() might
+  // be a solution, but seems not to work.
   if not (NtfsReparsePointsSupported(ExtractFileDrive(FTargetPath) + '\')) then
   begin
     Result := E_ABORT;

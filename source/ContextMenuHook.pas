@@ -92,6 +92,10 @@ end;
 
 function TContextMenuHook.InvokeCommand(
   var lpici: TCMInvokeCommandInfo): HResult;
+var
+  VolumeName: array[0..MAX_PATH] of Char;
+  i: integer;
+  flags: cardinal;
 begin
   // Make sure we aren't being passed an invalid command id
   case (LoWord(lpici.lpVerb))of
@@ -112,8 +116,18 @@ begin
       end;
 
     2:
-      // Open the target folder in explorer
-      ShellExecute(0, 'explore', PAnsiChar(FJunctionTarget), nil, nil, SW_NORMAL);
+      begin
+        // First check if this is a volume mount point using a volume GUID; if
+        // so, we have to find out what
+        if Pos('Volume{', FJunctionTarget) = 1 then
+        begin
+          for i := ord('a') to ord('z') do begin
+            GetVolumeInformation(PAnsiChar(string(Chr(i) + ':')), VolumeName, MAX_PATH, nil, flags, flags,nil, 0);
+            MessageBox(0, VolumeName, '', 0);
+          end;
+        end else
+          ShellExecute(0, 'explore', PAnsiChar(FJunctionTarget), nil, nil, SW_NORMAL);
+      end;
       
     else
       begin
@@ -177,8 +191,11 @@ begin
       else begin
         CreateMenuItem(SubMenu, Format(_('Unlink From "%s"'), [FJunctionTarget]),
                        GLYPH_HANDLE_LINKDEL, idCmdFirst + 1);
-        CreateMenuItem(SubMenu, Format(_('Open "%s"'), [FJunctionTarget]),
-                       GLYPH_HANDLE_EXPLORER, idCmdFirst + 2);
+        // TODO [v2.1] Currently we are not able to handle mount points using
+        // a target in Volume{GUID} format. Until then, just disable the item. 
+        if Pos('Volume{', FJunctionTarget) <> 1 then
+          CreateMenuItem(SubMenu, Format(_('Open "%s"'), [FJunctionTarget]),
+                         GLYPH_HANDLE_EXPLORER, idCmdFirst + 2);
       end;
 
     // The required return value is (according to lastest MSDN) the largest

@@ -19,12 +19,13 @@ Known Issues:
 
 unit CopyHook;
 
+// TODO [v2.1] If a folder is deleted, check if there are junctions for
+// objects within subdirectories. If so, show our dialog
+
 interface
 
 uses          
   Windows, SysUtils, ComObj, ShlObj, BaseExtensionFactory;
-
-// TODO [future] We have to unlink junctions from subdirectories!!
 
 type
   TCopyHook = class(TComObject, ICopyHook)
@@ -45,14 +46,44 @@ const
 implementation
 
 uses
-  Global, JunctionMonitor, JclNTFS, JclWin32, JclRegistry, ShellAPI, ComServ, 
-  Classes, DialogLinksExisting, GNUGetText, Constants;
+  Global, JunctionMonitor, JclNTFS, JclWin32, JclRegistry, ShellAPI, JclShell,
+  ComServ, Classes, DialogLinksExisting, GNUGetText, Constants;
 
 { TCopyHook }
 
 function TCopyHook.CopyCallback(Wnd: HWND; wFunc, wFlags: UINT;
   pszSrcFile: PAnsiChar; dwSrcAttribs: DWORD; pszDestFile: PAnsiChar;
   dwDestAttribs: DWORD): UINT;
+
+  function DeleteJunctionsInDirectory(ADir: string): boolean;
+  var
+    SearchData: TSearchRec;
+    CurrDir: string;
+  begin
+    Result := False;
+
+    if FindFirst(CheckBackslash(ADir) + '*', faDirectory, SearchData) = 0 then
+      try
+        repeat
+          CurrDir := CheckBackslash(ADir) + SearchData.Name;
+          if (SearchData.Name <> '.') and (SearchData.Name <> '..') and
+             ((SearchData.Attr and faDirectory) <> 0) then
+            if NtfsIsFolderMountPoint(CurrDir) then
+            begin
+               // We have found a junction, so return true
+               Result := True;
+               // Delete junction point
+               if NtfsDeleteJunctionPoint(CurrDir) then
+                 RemoveDir(CurrDir);
+            end
+            else
+              DeleteJunctionsInDirectory(CurrDir);
+        until FindNext(SearchData) <> 0;
+      finally
+        FindClose(SearchData);
+      end;
+  end;
+
 var
   tempDest: string;
   tempResult: Cardinal;
@@ -123,7 +154,8 @@ begin
   // Differ between two cases - the folder is either a junction point, or not.
   // If it is, we have to intercept the DELETE and MOVE operations
   if ((dwSrcAttribs and FILE_ATTRIBUTE_REPARSE_POINT) <> 0) and
-     (NtfsIsFolderMountPoint(pszSrcFile)) then
+     (NtfsIsFolderMountPoint(pszSrcFile)) and
+     (Result = ID_YES)  (* Maybe previous code already deactivated operation *) then
   begin
     // Attempt to get the directory the (old) junction, the one we
     // want to move, points to. Note that NtfsGetJunctionPointDestination()
@@ -250,7 +282,26 @@ begin
           end;
         end;
     end;
-  end;
+  end
+  
+  // Before we let explorer delete a (non junction) folder, search for
+  // junctions within subfolders, and make sure they are all unlinked
+  else
+    if (Result = ID_YES) and (wFunc = FO_DELETE) then
+      // If this function returns false, it means we have found junctions. In
+      // that case, do not delete the folder - Explorer has already an internal
+      // list of files it wants to delete, and as the junctions are now unlinked,
+      // it might not find all of them and show an error.
+      // Instead, we call SHDeleteFolder to instruct Explorer do start the
+      // delete operation again
+      if (DeleteJunctionsInDirectory(pszSrcFile)) then
+      begin
+        Result := ID_NO;
+        if (FOF_ALLOWUNDO and wFlags) = 0 then
+          SHDeleteFolder(Wnd, pszSrcFile, [doSilent])
+        else
+          SHDeleteFolder(Wnd, pszSrcFile, [doSilent, doAllowUndo])
+      end;
 end;
 
 { TCopyHookFactory }

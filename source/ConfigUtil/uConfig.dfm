@@ -1,9 +1,11 @@
-object Form1: TForm1
+object fConfig: TfConfig
   Left = 192
   Top = 109
-  Width = 443
-  Height = 437
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
   Caption = 'NTFS Link Configuration'
+  ClientHeight = 313
+  ClientWidth = 440
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,148 +13,188 @@ object Form1: TForm1
   Font.Name = 'MS Shell Dlg 2'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
+  ShowHint = True
+  OnCreate = FormCreate
   DesignSize = (
-    435
-    407)
+    440
+    313)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 24
-    Top = 24
-    Width = 51
+    Left = 64
+    Top = 109
+    Width = 25
     Height = 13
-    Caption = 'Language:'
+    Alignment = taRightJustify
+    Caption = 'Icon:'
   end
-  object ComboBox1: TComboBox
-    Left = 88
-    Top = 16
-    Width = 145
-    Height = 21
-    ItemHeight = 13
-    TabOrder = 0
-    Text = 'ComboBox1'
+  object Label2: TLabel
+    Left = 64
+    Top = 165
+    Width = 25
+    Height = 13
+    Alignment = taRightJustify
+    Caption = 'Icon:'
   end
-  object CheckBox1: TCheckBox
-    Left = 24
-    Top = 56
-    Width = 390
-    Height = 17
+  object Bevel2: TBevel
+    Left = 16
+    Top = 67
+    Width = 402
+    Height = 8
     Anchors = [akLeft, akTop, akRight]
-    Caption = 'Enable Drag&&Drop Extension'
-    TabOrder = 1
+    Shape = bsTopLine
   end
-  object CheckBox2: TCheckBox
+  object Bevel: TBevel
+    Left = 0
+    Top = 273
+    Width = 440
+    Height = 40
+    Align = alBottom
+    Shape = bsTopLine
+  end
+  object Bevel3: TBevel
+    Left = 16
+    Top = 195
+    Width = 402
+    Height = 8
+    Anchors = [akLeft, akTop, akRight]
+    Shape = bsTopLine
+  end
+  object Label3: TLabel
+    Left = 24
+    Top = 240
+    Width = 144
+    Height = 13
+    Caption = 'Tracking of Junction Creation:'
+  end
+  object IntegrateIntoDragDropMenu: TCheckBox
+    Left = 24
+    Top = 16
+    Width = 395
+    Height = 17
+    Hint = 'Allows creation of hardlinks and junctions using Drag&Drop'
+    Anchors = [akLeft, akTop, akRight]
+    Caption = 'Integrate into Explorer Drag&&Drop menu'
+    TabOrder = 0
+  end
+  object EnableJunctionIconOverlays: TCheckBox
     Left = 24
     Top = 80
-    Width = 390
+    Width = 395
     Height = 17
+    Hint = 'Helps differing junction points between other directories'
     Anchors = [akLeft, akTop, akRight]
-    Caption = 'Enable Junction Overlay'
+    Caption = 'Enable Icon Overlays for Junction Points (requires restart)'
     TabOrder = 2
+    OnClick = EnabledStateChange
   end
-  object CheckBox3: TCheckBox
+  object EnableHardlinkIconOverlays: TCheckBox
     Left = 24
-    Top = 128
-    Width = 390
+    Top = 136
+    Width = 395
     Height = 17
+    Hint = 'Helps differing hard links between other files'
     Anchors = [akLeft, akTop, akRight]
-    Caption = 'Enable Hardlink Overlay'
-    TabOrder = 3
-  end
-  object CheckBox4: TCheckBox
-    Left = 24
-    Top = 184
-    Width = 390
-    Height = 17
-    Anchors = [akLeft, akTop, akRight]
-    Caption = 'Intercept Deletion of Junctions'
+    Caption = 'Enable Icon Overlays for Hardlinks (requires restart)'
     TabOrder = 4
+    OnClick = EnabledStateChange
   end
-  object CheckBox5: TCheckBox
+  object InterceptJunctionCopying: TCheckBox
     Left = 24
     Top = 208
-    Width = 390
+    Width = 395
     Height = 17
+    Hint = 
+      'Whenever you try to copy a junction point in Explorer, NTFS Link' +
+      ' will ask whether you want to copy the junction only, or all the' +
+      ' contents of the target folder'
     Anchors = [akLeft, akTop, akRight]
-    Caption = 'Intercept Copying/Moving of Junctions'
-    TabOrder = 5
-  end
-  object CheckBox6: TCheckBox
-    Left = 24
-    Top = 256
-    Width = 390
-    Height = 17
-    Anchors = [akLeft, akTop, akRight]
-    Caption = 'PropertySheet Extension'
+    Caption = 'Intercept Copying of Junction Points'
     TabOrder = 6
   end
-  object CheckBox7: TCheckBox
-    Left = 24
-    Top = 280
-    Width = 390
-    Height = 17
-    Anchors = [akLeft, akTop, akRight]
-    Caption = 'Column Extension'
-    TabOrder = 7
-  end
-  object CheckBox8: TCheckBox
-    Left = 24
-    Top = 304
-    Width = 390
-    Height = 17
-    Anchors = [akLeft, akTop, akRight]
-    Caption = 'ContextMenu Extension'
-    TabOrder = 8
-  end
-  object CheckBox9: TCheckBox
-    Left = 24
-    Top = 328
-    Width = 390
-    Height = 17
-    Anchors = [akLeft, akTop, akRight]
-    Caption = 'ShellNew Items'
-    TabOrder = 9
-  end
-  object Button1: TButton
-    Left = 184
-    Top = 368
+  object bOK: TButton
+    Left = 277
+    Top = 281
     Width = 75
     Height = 25
+    Anchors = [akRight, akBottom]
     Caption = 'OK'
-    TabOrder = 10
+    Default = True
+    TabOrder = 8
+    OnClick = bOKClick
   end
-  object Button2: TButton
-    Left = 264
-    Top = 368
+  object bCancel: TButton
+    Left = 357
+    Top = 281
     Width = 75
     Height = 25
+    Anchors = [akRight, akBottom]
+    Cancel = True
     Caption = 'Cancel'
-    TabOrder = 11
+    TabOrder = 9
+    OnClick = bCancelClick
   end
-  object Button3: TButton
-    Left = 344
-    Top = 368
-    Width = 75
-    Height = 25
-    Caption = 'About...'
-    TabOrder = 12
+  object JunctionTrackingMode: TComboBox
+    Left = 184
+    Top = 233
+    Width = 234
+    Height = 21
+    Hint = 
+      'NTFS Link can save information about the junctions you created, ' +
+      'and warn you, if you attempt to delete a folder with junctions p' +
+      'ointing to'
+    Style = csDropDownList
+    Anchors = [akLeft, akTop, akRight]
+    ItemHeight = 13
+    ItemIndex = 0
+    TabOrder = 7
+    Text = 'Prefer Streams, if not available Registry'
+    Items.Strings = (
+      'Prefer Streams, if not available Registry'
+      'Always in Registry'
+      'Always in Streams (does not work on FAT)'
+      'Deactivate')
   end
-  object JvFilenameEdit1: TJvFilenameEdit
-    Left = 48
+  object JunctionOverlay: TJvComboEdit
+    Left = 96
     Top = 104
-    Width = 353
+    Width = 321
     Height = 21
+    Anchors = [akLeft, akTop, akRight]
     ButtonFlat = False
-    TabOrder = 13
-    Text = 'JvFilenameEdit1'
+    ButtonWidth = 17
+    ImageKind = ikEllipsis
+    TabOrder = 3
+    OnButtonClick = OverlayIconChange
   end
-  object JvFilenameEdit2: TJvFilenameEdit
-    Left = 48
-    Top = 144
-    Width = 353
+  object HardlinkOverlay: TJvComboEdit
+    Left = 96
+    Top = 160
+    Width = 321
     Height = 21
+    Anchors = [akLeft, akTop, akRight]
     ButtonFlat = False
-    TabOrder = 14
-    Text = 'JvFilenameEdit1'
+    ButtonWidth = 17
+    ImageKind = ikEllipsis
+    TabOrder = 5
+    OnButtonClick = OverlayIconChange
+  end
+  object IntegrateIntoContextMenu: TCheckBox
+    Left = 24
+    Top = 40
+    Width = 395
+    Height = 17
+    Hint = 
+      'Adds a menu item into the context menu of junction points und em' +
+      'pty directories'
+    Anchors = [akLeft, akTop, akRight]
+    Caption = 'Integrate into Explorer Right-Click menu'
+    TabOrder = 1
+  end
+  object JvChangeIconDialog: TJvChangeIconDialog
+    IconIndex = 0
+    Left = 376
+    Top = 80
   end
 end

@@ -23,7 +23,8 @@ library ntfslink;
 {$R 'DialogLinksExisting.res' 'DialogLinksExisting.rc'}
 
 // TODO [v2.1] Implement a logging mechanism
-// TODO [future] Enable WinXP styles 
+// TODO [v2.1] Enable WinXP visual styles 
+// TODO [v2.1] Support for target.lnk style links?
 
 uses
   ComServ,

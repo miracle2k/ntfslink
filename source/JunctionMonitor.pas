@@ -19,9 +19,6 @@ Known Issues:
 
 unit JunctionMonitor;
 
-// TODO [future] If a folder is deleted, check if there are junctions for
-// objects within subdirectories.
-
 interface
 
 uses
