@@ -93,10 +93,11 @@ end;
 function TContextMenuHook.InvokeCommand(
   var lpici: TCMInvokeCommandInfo): HResult;
 var
-  VolumeUniqueName, VolumeName, DriveBuf: array[0..MAX_PATH] of Char;
   i: integer;
-  temp: Cardinal;
-  FindRec: Cardinal;
+  VolumeName: array[0..MAX_PATH] of Char;
+//  VolumeUniqueName, VolumeName, DriveBuf: array[0..MAX_PATH] of Char;
+//  temp: Cardinal;
+//  FindRec: Cardinal;
 begin
   // Make sure we aren't being passed an invalid command id
   case (LoWord(lpici.lpVerb))of
