@@ -32,7 +32,7 @@
   <!-- extract strings from main NTFS Link source code -->
   <target name="scan-main">
     <exec executable="Tools\dxgettext.exe">
-      <arg value="*.pas *.inc *.dpr *.xfm *.dfm" />
+      <arg value="*.pas *.inc *.dpr *.xfm *.dfm DialogLinksExisting.rc" />
       <arg value="-b ..\source\" />
       <arg value="-o .\" />
       <arg value="-r" />
