@@ -33,7 +33,7 @@ const
   // Some default values, can (mostly) be overridden by configuration values
   OVERLAY_HARDLINK_ICONINDEX = 0;
   OVERLAY_JUNCTION_ICONINDEX = 1;
-  OVERLAY_PRIORITY_DEFAULT = 50;
+  OVERLAY_PRIORITY_DEFAULT = 0;
 
   // Template used to name the created links; can be overridden by lang file
   {gnugettext:scan-all}
