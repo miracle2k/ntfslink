@@ -7,7 +7,6 @@ Thumbs.db
 *.hsdesk
 *.exe
 *.dll
-*.res
 *.gex
 *.dof
 *.drc
