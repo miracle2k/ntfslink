@@ -35,9 +35,13 @@ type
     // File containing the overlay icon, and the index of the icon
     ConfigIconFile: string;
     ConfigIconIndex: Integer;
+    ConfigEnableNetworkDrives: Boolean;
     // The value we return in IShellIconOverlayIdentifier.GetPriority()
     ConfigOverlayPriority: Cardinal;
 
+    // Returns true, if icon overlays should be activated for the drive
+    // passed as the paramter; Result depends on drive type.
+    function EnableHooksForDrive(Drive: PWideChar): boolean;
     // Tries to load the above configuration values from the registry
     procedure LoadSettings; virtual;
     // Every derived class has it's own set of the configuration values above.
@@ -111,6 +115,11 @@ function TJunctionOverlayHook.IsMemberOf(pwszPath: PWideChar;
   dwAttrib: DWORD): HResult;
 begin
   Result := S_FALSE;
+
+  // IconOverlays are disabled for some drive types (e.g. remote)
+  if not EnableHooksForDrive(pwszPath) then
+    exit;
+    
   try
     if NtfsFileHasReparsePoint(pwszPath) then
       Result := S_OK;
@@ -137,6 +146,11 @@ var
   LinkInfo: TNtfsHardLinkInfo;
 begin
   Result := S_FALSE;
+
+  // IconOverlays are disabled for some drive types (e.g. remote)
+  if not EnableHooksForDrive(pwszPath) then
+    exit;
+
   try
     // Retrieve file information, and look if there are links existing; if no,
     // than this file is *not* a link, and we skip
@@ -149,6 +163,14 @@ begin
 end;
 
 { TIconOverlayHook }
+
+function TIconOverlayHook.EnableHooksForDrive(Drive: PWideChar): boolean;
+var
+  DriveType: Cardinal;
+begin
+  DriveType := GetDriveType(PAnsiChar(ExtractFileDrive(Drive)));
+  Result := (DriveType <> DRIVE_REMOTE) and (DriveType <>  DRIVE_REMOVABLE);
+end;
 
 function TIconOverlayHook.GetOverlayInfo(pwszIconFile: PWideChar;
   cchMax: Integer; var pIndex: Integer; var pdwFlags: DWORD): HResult;
@@ -205,6 +227,9 @@ begin
            HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
            Config_Prefix + 'OverlayPriority',
            OVERLAY_PRIORITY_DEFAULT);
+  ConfigEnableNetworkDrives := RegReadBoolDef(
+           HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
+           'EnableRemoveDriveIconOverlays', False);
   FSettingsLoaded := True;
 end;
 
