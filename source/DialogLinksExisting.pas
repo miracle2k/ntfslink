@@ -29,12 +29,16 @@ function DialogCallback(hDlg: HWND; uMsg: dword; wParam: wParam;
 
 var
   // Global variable (uh :-), used to pass the list of junctions to the dialog
-  JunctionListAsString: string = '';
+  Dialog_JunctionListAsString: string = '';
+  
+  // Another global, used to pass whether the object is to be deleted or
+  // if it's moved/renamed. Used to adjusted some texts in the dialog.
+  Dialog_IsDeleteOperation: boolean = True;  // true = delete; false = move;
 
 implementation
 
 uses
-  GNUGetText, SysUtils;
+  GNUGetText;
 
 const
   IDC_TFLINKSEXISTINGDIALOG = 1000;
@@ -50,17 +54,16 @@ function DialogCallback(hDlg: HWND; uMsg: dword; wParam: wParam;
 
   procedure TranslateDialogItemText(DlgItem: Integer);
   var
-    ItemText: string;
+    ItemText: array[0..150] of Char;
   begin
-    SetString(ItemText, nil, 150);
-    GetDlgItemText(hDlg, DlgItem, PANsiChar(ItemText), Length(ItemText));
-    ItemText := PAnsiChar(string(_(ItemText)));
-    SetDlgItemText(hDlg, DlgItem, PAnsiChar(ItemText));
+    GetDlgItemText(hDlg, DlgItem, ItemText, High(ItemText));
+    SetDlgItemText(hDlg, DlgItem, PAnsiChar(string(_(ItemText))));
   end;
 
 var
   IconHandle: HICON;
 begin
+  // "True" means: we handled the message ourself
   Result := True;
 
   case uMsg of
@@ -70,17 +73,26 @@ begin
       TranslateDialogItemText(IDC_CAPTION);
       TranslateDialogItemText(IDC_BNO);
       TranslateDialogItemText(IDC_BYES);
-      TranslateDialogItemText(IDC_BYESDELETE);
+
+      // Depending on the operation mode (delete or copy/move), set the
+      // text of the third option button
+      if Dialog_IsDeleteOperation then
+        SetDlgItemText(hDlg, IDC_BYESDELETE,
+                       PAnsiChar(string(_('Yes, and delete links'))))
+      else
+        SetDlgItemText(hDlg, IDC_BYESDELETE,
+                       PAnsiChar(string(_('Yes, and correct links'))));
 
       // Display the list of junctions
-      SetDlgItemText(hDlg, IDC_MLINKS, PAnsiChar(JunctionListAsString));
+      SetDlgItemText(hDlg, IDC_MLINKS, PAnsiChar(Dialog_JunctionListAsString));
 
       // Display a standard windows "question" icon
-      IconHandle := LoadIcon(0, MakeINtResource(IDI_QUESTION));
+      IconHandle := LoadIcon(0, MakeIntResource(IDI_QUESTION));
       SendDlgItemMessage(hDlg, IDC_ICON, STM_SETIMAGE, IMAGE_ICON, IconHandle);
 
       // Set focus to "no" button
-      // TODO [future] Somehow this focus is not complete; pressing "enter" does not work, but "space" does
+      // TODO [future] Somehow this focus is not complete;
+      // pressing "enter" does not work, but "space" does
       if (GetDlgCtrlID(wParam) <> IDC_BNO) then
       begin
         SetActiveWindow(GetDlgItem(hDlg, IDC_BNO));
