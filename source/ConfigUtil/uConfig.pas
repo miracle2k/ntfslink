@@ -85,6 +85,8 @@ end;
 
 procedure TfConfig.FormCreate(Sender: TObject);
 begin
+  UseLanguage(RegReadStringDef(
+                 HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION, 'Language', ''));
   TranslateComponent(Self);
   LoadCurrentStateFromRegistry;
   UpdateEnabledStates;
