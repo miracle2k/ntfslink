@@ -24,7 +24,9 @@ library ntfslink;
 
 // TODO [v2.1] Implement a logging mechanism
 // TODO [v2.1] Enable WinXP visual styles 
-// TODO [v2.1] Support for target.lnk style links?
+// TODO [v2.1] Support for target.lnk style links?       
+// TODO [v2.1] Create hardlinks automatically for each file in directory and
+//             subdirectories [by Gunthar Müller]
 
 uses
   ComServ,
