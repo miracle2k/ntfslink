@@ -25,6 +25,7 @@ library ntfslink;
 // TODO link count is not decremented on deletion?
 // TODO update explorer on new links
 // TODO correct english
+// TODO which parent handle to use in message boxes?
 
 uses
   ComServ,
@@ -40,7 +41,8 @@ uses
   PropertySheetHook in 'PropertySheetHook.pas',
   BaseExtensionFactory in 'BaseExtensionFactory.pas',
   ShellObjExtended in 'ShellObjExtended.pas',
-  ntfslink_TLB in 'ntfslink_TLB.pas';
+  ntfslink_TLB in 'ntfslink_TLB.pas',
+  JunctionMonitor in 'JunctionMonitor.pas';
 
 exports
   DllGetClassObject,
