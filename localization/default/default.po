@@ -1,0 +1,60 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2004-07-03 19:24\n"
+"PO-Revision-Date: 2004-07-03 19:24\n"
+"Last-Translator: Somebody <your.email@address.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Dxgettext 1.1.1\n"
+
+#. Form1..Caption
+#: uConfig.dfm:6
+#. Form1..Caption
+#: ConfigUtil/uConfig.dfm:6
+msgid "Form1"
+msgstr ""
+
+#. Form1..Font.Name
+#: uConfig.dfm:11
+#. Form1..Font.Name
+#: ConfigUtil/uConfig.dfm:11
+msgid "MS Shell Dlg 2"
+msgstr ""
+
+#: ContextMenuHook.pas:87
+msgid "Unlink Junction"
+msgstr ""
+
+#. Tell the user if an error occurred
+#: DragDropHook.pas:203
+msgid "Failed to create link"
+msgstr ""
+
+#. TODO use icons?
+#: DragDropHook.pas:231
+msgid "Create Hardlink Here"
+msgstr ""
+
+#: DragDropHook.pas:232
+msgid "Create Hardlinks Here"
+msgstr ""
+
+#: DragDropHook.pas:235
+msgid "Create Junction Here"
+msgstr ""
+
+#: DragDropHook.pas:236
+msgid "Create JunctionsHere"
+msgstr ""
+
+#: DragDropHook.pas:239
+msgid "Create Links Here"
+msgstr ""
+
