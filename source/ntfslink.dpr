@@ -12,7 +12,7 @@ The Initial Developer of the Original Code is Michael Elsdörfer.
 All Rights Reserved.
 
 You may retrieve the latest version of this file at the NTFS Link Homepage
-located at http://www.elsdoerfer.net/?pid=ntfslink
+located at http://www.elsdoerfer.net/ntfslink/
 
 Known Issues:
 -----------------------------------------------------------------------------}
@@ -21,7 +21,6 @@ library ntfslink;
 
 {$R 'ntfslink.res' 'ntfslink.rc'}
 
-// TODO correct link in header
 // TODO link count is not decremented on deletion?
 // TODO update explorer on new links
 // TODO correct english

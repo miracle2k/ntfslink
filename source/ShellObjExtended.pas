@@ -12,7 +12,7 @@ The Initial Developer of the Original Code is Michael Elsdörfer.
 All Rights Reserved.
 
 You may retrieve the latest version of this file at the NTFS Link Homepage
-located at http://www.elsdoerfer.net/?pid=ntfslink
+located at http://www.elsdoerfer.net/ntfslink/
 
 Contains declarations which are not included in the ShlObj.pas version that
 ships with Delphi 7.
