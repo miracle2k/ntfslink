@@ -13,3 +13,5 @@ Thumbs.db
 *.drc
 *.stat
 *.tlb
+*.cfg
+*.map
