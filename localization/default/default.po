@@ -5,8 +5,8 @@
 #
 msgid ""
 msgstr "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-07-26 21:23\n"
-"PO-Revision-Date: 2004-07-26 21:23\n"
+"POT-Creation-Date: 2004-07-31 19:20\n"
+"PO-Revision-Date: 2004-07-31 19:20\n"
 "Last-Translator: Somebody <your.email@address.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -72,14 +72,14 @@ msgid "Enable Icon Overlays for Hardlinks (requires "
 "restart)"
 msgstr ""
 
-#. fConfig..InterceptJunctionMoving....Height
+#. fConfig..InterceptJunctionCopying....Height
 #: ConfigUtil/uConfig.dfm:111
 msgid "Whenever you try to copy a junction point in Explorer, NTFS Link will "
 "ask whether you want to copy the junction only, or all the contents "
 "of the target folder"
 msgstr ""
 
-#. fConfig..InterceptJunctionMoving..Caption
+#. fConfig..InterceptJunctionCopying..Caption
 #: ConfigUtil/uConfig.dfm:113
 msgid "Intercept Copying of Junction Points"
 msgstr ""
@@ -147,60 +147,70 @@ msgstr ""
 msgid "Copy%s of %s"
 msgstr ""
 
-#: ContextMenuHook.pas:77
+#: ContextMenuHook.pas:78
 msgid "Link selected folder to another directory or "
 "drive"
 msgstr ""
 
-#: ContextMenuHook.pas:79
+#: ContextMenuHook.pas:80
 msgid "Remove this folder's junction point"
 msgstr ""
 
-#: ContextMenuHook.pas:81
+#: ContextMenuHook.pas:82
 msgid "Open the target of this junction in Windows "
 "Explorer"
 msgstr ""
 
 #. Add items to the submenu, depending on mode
-#: ContextMenuHook.pas:175
+#: ContextMenuHook.pas:190
 msgid "Link Folder..."
 msgstr ""
 
-#: ContextMenuHook.pas:177
+#: ContextMenuHook.pas:192
 msgid "Unlink From \"%s\""
 msgstr ""
 
-#: ContextMenuHook.pas:179
+#. a target in Volume{GUID} format. Until then, just disable the item.
+#: ContextMenuHook.pas:197
 msgid "Open \"%s\""
 msgstr ""
 
 #. If the thing went not smoothly, then show a message
-#: CopyHook.pas:162
+#: CopyHook.pas:223
 msgid "\"%s\" could not be moved, because there is already a directory "
 "\"%s\"."
 msgstr ""
 
-#: CopyHook.pas:167
+#: CopyHook.pas:228
 msgid "\"%s\" could not be moved to \"%s\" because of unkown "
 "reasons."
 msgstr ""
 
 #. Moving the junction point is not possible
-#: CopyHook.pas:174
+#: CopyHook.pas:235
 msgid "\"%s\" is a junction point, but the target file system does not support "
 "junctions."
 msgstr ""
 
 #. Ask user what he wants to do
-#: CopyHook.pas:192
+#: CopyHook.pas:257
 msgid "\"%s\" is a junction point. If you want to copy the junction only, "
 "click \"Yes\", if you want to copy the target directory including all "
 "it's content, click \"No\". If you choose \"Cancel\", nothing will "
 "happen."
 msgstr ""
 
+#. text of the third option button
+#: DialogLinksExisting.pas:81
+msgid "Yes, and delete links"
+msgstr ""
+
+#: DialogLinksExisting.pas:84
+msgid "Yes, and correct links"
+msgstr ""
+
 #. Tell the user if an error occurred
-#: DragDropHook.pas:156
+#: DragDropHook.pas:161
 #. If positive result, then try to create hardlink
 #: ShellNewExports.pas:85
 msgid "Failed to create link. Most likely the target file system does not "
@@ -209,23 +219,23 @@ msgid "Failed to create link. Most likely the target file system does not "
 msgstr ""
 
 #. an appropriate menu caption
-#: DragDropHook.pas:184
+#: DragDropHook.pas:190
 msgid "Create Hardlink Here"
 msgstr ""
 
-#: DragDropHook.pas:185
+#: DragDropHook.pas:191
 msgid "Create Hardlinks Here"
 msgstr ""
 
-#: DragDropHook.pas:188
+#: DragDropHook.pas:194
 msgid "Create Junction Here"
 msgstr ""
 
-#: DragDropHook.pas:189
+#: DragDropHook.pas:195
 msgid "Create Junctions Here"
 msgstr ""
 
-#: DragDropHook.pas:192
+#: DragDropHook.pas:198
 msgid "Create Links Here"
 msgstr ""
 
@@ -259,13 +269,8 @@ msgstr ""
 #. Programmer's name: CONTROL
 #: DialogLinksExisting.rc:15
 msgid "There are junctions pointing to this folder or a subfolder (see list "
-"below). If you delete it, these link will no longer working. Are you "
-"sure?"
-msgstr ""
-
-#. Programmer's name: CONTROL
-#: DialogLinksExisting.rc:17
-msgid "Yes, and delete links"
+"below). If you continue the operation, these links will no longer "
+"work. Are you sure?"
 msgstr ""
 
 #. Programmer's name: CONTROL

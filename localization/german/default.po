@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-07-26 21:23\n"
-"PO-Revision-Date: 2004-07-26 21:24+0100\n"
+"POT-Creation-Date: 2004-07-31 19:20\n"
+"PO-Revision-Date: 2004-07-31 19:23+0100\n"
 "Last-Translator: Michael Elsdörfer <michael@elsdoerfer.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgstr "Icon:"
 #. fConfig..Label3..Caption
 #: ConfigUtil/uConfig.dfm:69
 msgid "Tracking of Junction Creation:"
-msgstr "Junction Informationen speichern:"
+msgstr "Junction Infos speichern:"
 
 #. fConfig..IntegrateIntoDragDropMenu..Hint
 #: ConfigUtil/uConfig.dfm:76
@@ -66,12 +66,12 @@ msgstr "Hilft Hardlinks visuell von anderen Dateien zu unterscheiden"
 msgid "Enable Icon Overlays for Hardlinks (requires restart)"
 msgstr "Aktiviere Icon-Kennzeichnung für Hardlinks (erfordert Neustart)"
 
-#. fConfig..InterceptJunctionMoving....Height
+#. fConfig..InterceptJunctionCopying....Height
 #: ConfigUtil/uConfig.dfm:111
 msgid "Whenever you try to copy a junction point in Explorer, NTFS Link will ask whether you want to copy the junction only, or all the contents of the target folder"
 msgstr "Immer wenn Sie versuchen, eine Junction im Explorer zu kopieren, wird NTFS Link fragen, ob Sie nur die Junction oder den kompletten Inhalt des Ziel-Ordners kopieren wollen"
 
-#. fConfig..InterceptJunctionMoving..Caption
+#. fConfig..InterceptJunctionCopying..Caption
 #: ConfigUtil/uConfig.dfm:113
 msgid "Intercept Copying of Junction Points"
 msgstr "Kopieren von Junctions kontrollieren"
@@ -95,7 +95,7 @@ msgstr "NTFS Link kann Informationen über die erzeugten Junctions speichern, un
 #. fConfig..JunctionTrackingMode....Items.Strings
 #: ConfigUtil/uConfig.dfm:152
 msgid "Prefer Streams, if not available Registry"
-msgstr "Streams vorziehen, Registry falls nicht verfügbar"
+msgstr "Streams vorziehen, falls unmöglich Registry"
 
 #. fConfig..JunctionTrackingMode....Items.Strings
 #: ConfigUtil/uConfig.dfm:155
@@ -133,74 +133,84 @@ msgstr "Link%s zu %s"
 msgid "Copy%s of %s"
 msgstr "Copy%s von %s"
 
-#: ContextMenuHook.pas:77
+#: ContextMenuHook.pas:78
 msgid "Link selected folder to another directory or drive"
 msgstr "Den markierten Ordner auf ein anderes Verzeichnis zeigen lassen"
 
-#: ContextMenuHook.pas:79
+#: ContextMenuHook.pas:80
 msgid "Remove this folder's junction point"
 msgstr "Den Junction Point dieses Ordners entfernen"
 
-#: ContextMenuHook.pas:81
+#: ContextMenuHook.pas:82
 msgid "Open the target of this junction in Windows Explorer"
 msgstr "Das Zielverzeichnis dieser Junction im Windows Explorer öffnen"
 
 #. Add items to the submenu, depending on mode
-#: ContextMenuHook.pas:175
+#: ContextMenuHook.pas:190
 msgid "Link Folder..."
 msgstr "Ordner verlinken..."
 
-#: ContextMenuHook.pas:177
+#: ContextMenuHook.pas:192
 msgid "Unlink From \"%s\""
 msgstr "Link auf \"%s\" entfernen"
 
-#: ContextMenuHook.pas:179
+#. a target in Volume{GUID} format. Until then, just disable the item.
+#: ContextMenuHook.pas:197
 msgid "Open \"%s\""
 msgstr "\"%s\" öffnen"
 
 #. If the thing went not smoothly, then show a message
-#: CopyHook.pas:162
+#: CopyHook.pas:223
 msgid "\"%s\" could not be moved, because there is already a directory \"%s\"."
 msgstr "\"%s\" konnte nicht verschoben werden, weil ein Verzeichnis \"%s\" bereits existiert."
 
-#: CopyHook.pas:167
+#: CopyHook.pas:228
 msgid "\"%s\" could not be moved to \"%s\" because of unkown reasons."
 msgstr "\"%s\" konnte nicht nach \"%s\" verschoben werden (Grund unbekannt)."
 
 #. Moving the junction point is not possible
-#: CopyHook.pas:174
+#: CopyHook.pas:235
 msgid "\"%s\" is a junction point, but the target file system does not support junctions."
 msgstr "\"%s\"  ist ein Junction Point, aber das Ziel-Dateisystem unterstützt keine Junctions."
 
 #. Ask user what he wants to do
-#: CopyHook.pas:192
+#: CopyHook.pas:257
 msgid "\"%s\" is a junction point. If you want to copy the junction only, click \"Yes\", if you want to copy the target directory including all it's content, click \"No\". If you choose \"Cancel\", nothing will happen."
 msgstr "\"%s\" ist ein Junction Point. Wenn Sie nur die Junction kopieren wollen, klicken sie \"Ja\", wenn Sie das Zielverzeichnis inclusive des kompletten Inhalts kopieren wollen, \"Nein\". Wenn Sie \"Abbrechen\" wählen, wird nichts geschehen."
 
+#. text of the third option button
+#: DialogLinksExisting.pas:81
+msgid "Yes, and delete links"
+msgstr "Ja, und Links löschen"
+
+#: DialogLinksExisting.pas:84
+msgid "Yes, and correct links"
+msgstr "Ja, und Links korregieren"
+
 #. Tell the user if an error occurred
 #. If positive result, then try to create hardlink
-#: DragDropHook.pas:156
+#: DragDropHook.pas:161
 msgid "Failed to create link. Most likely the target file system does not support this feature, or you tried to create a hard link across different partitions."
 msgstr "Link konnte nicht erzeugt werden. Wahrscheinlich unterstützt das Dateisystem des Ziels dieses Feature nicht, oder Sie haben versucht einen Hardlink über verschiedene Partitionen zu erstellen"
 
 #. an appropriate menu caption
-#: DragDropHook.pas:184
+#: DragDropHook.pas:190
 msgid "Create Hardlink Here"
 msgstr "Hardlink hier erstellen"
 
-#: DragDropHook.pas:185
+#: DragDropHook.pas:191
 msgid "Create Hardlinks Here"
 msgstr "Hardlinks hier erstellen"
 
-#: DragDropHook.pas:188
+#: DragDropHook.pas:194
 msgid "Create Junction Here"
 msgstr "Junction hier erstellen"
 
-#: DragDropHook.pas:189
+#: DragDropHook.pas:195
 msgid "Create Junctions Here"
 msgstr "Junctions hier erstellen"
 
-#: DragDropHook.pas:192
+#: DragDropHook.pas:198
 msgid "Create Links Here"
 msgstr "Links hier erstellen"
 
@@ -230,13 +240,8 @@ msgstr "NTFS Link"
 
 #. Programmer's name: CONTROL
 #: DialogLinksExisting.rc:15
-msgid "There are junctions pointing to this folder or a subfolder (see list below). If you delete it, these link will no longer working. Are you sure?"
-msgstr "Es existieren Junctions, die auf diesen Ordner oder einen der Unterordner zeigen (siehe Liste). Wenn Sie den Ordner löschen, werden dieses Links nicht mehr funktionieren. Sind Sie sicher?"
-
-#. Programmer's name: CONTROL
-#: DialogLinksExisting.rc:17
-msgid "Yes, and delete links"
-msgstr "Ja, und alle Links löschen"
+msgid "There are junctions pointing to this folder or a subfolder (see list below). If you continue the operation, these links will no longer work. Are you sure?"
+msgstr "Es existieren Junctions, die auf diesen Ordner oder einen der Unterordner zeigen (siehe Liste). Wenn Sie die fortfahren, werden dieses Links nicht mehr funktionieren. Sind Sie sicher?"
 
 #. Programmer's name: CONTROL
 #: DialogLinksExisting.rc:18
