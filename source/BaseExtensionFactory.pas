@@ -22,7 +22,7 @@ unit BaseExtensionFactory;
 interface
 
 uses
-  Windows, ComObj, Dialogs;
+  ComObj;
 
 type
   TExtensionRegistryData = record
