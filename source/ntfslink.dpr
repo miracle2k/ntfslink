@@ -19,8 +19,10 @@ Known Issues:
 
 library ntfslink;
 
-{$R 'ntfslink.res' 'ntfslink.rc'}
+{$R *.res}  // ntfslink.res
+{$R Icons.res}
 {$R 'DialogLinksExisting.res' 'DialogLinksExisting.rc'}
+
 
 // TODO [v2.1] Implement a logging mechanism
 // TODO [v2.1] Enable WinXP visual styles 
