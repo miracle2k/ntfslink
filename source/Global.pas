@@ -28,8 +28,9 @@ const
   NTFSLINK_REGISTRY = 'Software\elsdoerfer.net\NTFSLink\';
   NTFSLINK_CONFIGURATION = NTFSLINK_REGISTRY + 'Config\';
 
+  OVERLAY_HARDLINK_ICONINDEX = 0;  
   OVERLAY_JUNCTION_ICONINDEX = 1;
-  OVERLAY_HARDLINK_ICONINDEX = 2;
+  OVERLAY_PRIORITY_DEFAULT = 50;
 
 procedure ApproveExtension(ClassIDStr, Description: string);
 
