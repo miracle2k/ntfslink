@@ -28,7 +28,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Mask, JvExMask, JvToolEdit, ExtCtrls, JvComponent,
-  JvBaseDlg, JvWinDialogs, XPMan;
+  JvBaseDlg, JvWinDialogs;
 
 type
   TfConfig = class(TForm)

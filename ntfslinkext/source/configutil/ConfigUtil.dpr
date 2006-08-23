@@ -25,9 +25,9 @@ program ConfigUtil;
 
 uses
   Forms,
-  uConfig in 'uConfig.pas' {fConfig},
-  GNUGetText in '..\GNUGetText.pas',
-  Constants in '..\Constants.pas';
+  uConfig,
+  Constants in '..\common\Constants.pas',
+  GNUGetText in '..\common\GNUGetText.pas';
 
 {$R *.res}
 
