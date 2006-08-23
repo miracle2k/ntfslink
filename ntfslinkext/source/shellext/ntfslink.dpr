@@ -26,29 +26,18 @@ library ntfslink;
 {$R *.res}
 
 // TODO [v2.1] Implement a logging mechanism
-// TODO [v2.1] Enable WinXP visual styles
 // TODO [v2.1] Support for target.lnk style links?
 // TODO [v2.1] Create hardlinks automatically for each file in directory and
 //             subdirectories [by Gunthar Müller]
 
 uses
-  ComServ,
-  Windows,
+  ComServ,Windows,
   JclRegistry,
-  Global in 'Global.pas',
-  GNUGetText in 'GNUGetText.pas',
-  BaseExtensionFactory in 'BaseExtensionFactory.pas',
-  DragDropHook in 'DragDropHook.pas',
-  IconOverlayHook in 'IconOverlayHook.pas',
-  CopyHook in 'CopyHook.pas',
-  ContextMenuHook in 'ContextMenuHook.pas',
-  PropertySheetHook in 'PropertySheetHook.pas',
-  ShellNewDummyHook in 'ShellNewDummyHook.pas',
-  ShellNewExports in 'ShellNewExports.pas',
-  ShellObjExtended in 'ShellObjExtended.pas',
-  JunctionMonitor in 'JunctionMonitor.pas',
-  DialogLinksExisting in 'DialogLinksExisting.pas',
-  Constants in 'Constants.pas';
+  Global,BaseExtensionFactory,DragDropHook,IconOverlayHook,CopyHook,
+  ContextMenuHook,PropertySheetHook,ShellNewDummyHook,ShellNewExports,
+  ShellObjExtended,JunctionMonitor,DialogLinksExisting,
+  Constants in '..\common\Constants.pas',
+  GNUGetText in '..\common\GNUGetText.pas';
 
 exports
   DllGetClassObject,
