@@ -75,6 +75,7 @@ uses
   JclRegistry, GNUGetText, Constants;
 
 {$R *.dfm}
+{$R WinXP.res}
 
 procedure TfConfig.bCancelClick(Sender: TObject);
 begin

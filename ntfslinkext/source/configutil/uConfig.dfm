@@ -162,7 +162,6 @@ object fConfig: TfConfig
     Width = 321
     Height = 21
     Anchors = [akLeft, akTop, akRight]
-    ButtonFlat = False
     ButtonWidth = 17
     ImageKind = ikEllipsis
     TabOrder = 3
@@ -174,7 +173,6 @@ object fConfig: TfConfig
     Width = 321
     Height = 21
     Anchors = [akLeft, akTop, akRight]
-    ButtonFlat = False
     ButtonWidth = 17
     ImageKind = ikEllipsis
     TabOrder = 5
