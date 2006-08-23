@@ -2,7 +2,7 @@
 ; Changing the AppID requires changes in code section!
 AppID=ntfslink
 AppName=NTFS Link
-AppVerName=NTFS Link 2.1
+AppVerName=NTFS Link 2.2
 AppCopyright=Copyright ©2004 by Michael Elsdörfer
 DefaultDirName={pf}\NTFS Link
 AlwaysRestart=yes
@@ -89,7 +89,7 @@ begin
         SpaceSep := i;
         break;
       end;
-  
+
   // Split command
   if SpaceSep > 0 then begin
     FileName := Copy(Command, 1, SpaceSep - 1);
@@ -102,13 +102,13 @@ end;
 
 function InitializeSetup(): Boolean;
 var
-	UnInstallExec: string;
-	UnInstallProgram, UnInstallParams: string;
-	ErrorCode: Integer;
+  UnInstallExec: string;
+  UnInstallProgram, UnInstallParams: string;
+  ErrorCode: Integer;
 begin
   UnInstallExec := GetUninstallExec('ntfslink');  // THIS MUST BE THE APPID!
   SplitCommandLine(UnInstallExec, UnInstallProgram, UnInstallParams);
-  
+
   Result := False;
   if (Length(UnInstallExec) > 0) then
   begin
@@ -127,9 +127,10 @@ begin
     Result := True;
 end;
 
-(*var
+(*
+var
   LogOffPage: TInputOptionWizardPage;
-  
+
 procedure InitializeWizard;
 begin
   { Create the pages }
@@ -163,8 +164,8 @@ const EWX_FORCE = 4;
 const EWX_POWEROFF = 8;
 
 function ExitWindowsEx(
-	uFlags: Longint;
-	dwReserved: LongInt ) : Integer;
+  uFlags: Longint;
+  dwReserved: LongInt ) : Integer;
 external 'ExitWindowsEx@user32.dll stdcall';
 
 function GetLastError( ) : Integer;
@@ -174,8 +175,8 @@ function Reboot(): Boolean;
 var answ: Integer; CrLf: String;
     ercode: Integer;
 begin
- Result := False;
- exit;
+  Result := False;
+  exit;
   CrLf := #13#10;
 
   // if is nt alogged on an Admin ask if wants logoff
@@ -199,4 +200,5 @@ begin
       end;
     end;
   end;
-end;    *)
+end;
+*)
