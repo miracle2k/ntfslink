@@ -23,10 +23,7 @@ located at http://www.elsdoerfer.net/ntfslink/
 
 library ntfslink;
 
-{$R *.res}  // ntfslink.res
-{$R Icons.res}
-{$R 'DialogLinksExisting.res' 'DialogLinksExisting.rc'}
-
+{$R *.res}
 
 // TODO [v2.1] Implement a logging mechanism
 // TODO [v2.1] Enable WinXP visual styles

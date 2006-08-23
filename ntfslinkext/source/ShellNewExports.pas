@@ -94,6 +94,9 @@ end;
 
 procedure NewJunctionDlgInternal(hwnd: HWND; Directory: string;
   SubFolder: boolean); stdcall;
+const
+  // Some versions of Delphi miss this in ShlObj.pas.
+  BIF_NEWDIALOGSTYLE = $0040;
 var
   bi: TBrowseInfoA;
   a: array[0..MAX_PATH] of Char;
