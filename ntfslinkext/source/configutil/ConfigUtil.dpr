@@ -33,7 +33,7 @@ uses
 
 begin
   Application.Initialize;
-  Application.Title := 'NTFS Link';
+  Application.Title := 'NTFS Link Configuration';
   Application.CreateForm(TfConfig, fConfig);
   Application.Run;
 end.
