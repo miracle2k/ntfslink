@@ -11,10 +11,14 @@ the specific language governing rights and limitations under the License.
 The Initial Developer of the Original Code is Michael Elsdörfer.
 All Rights Reserved.
 
-You may retrieve the latest version of this file at the NTFS Link Homepage
-located at http://www.elsdoerfer.net/ntfslink/
+Development of the extended version has been moved from Novell Forge to
+SourceForge by Sebastian Schuberth.
 
-Known Issues:
+You may retrieve the latest extended version at the "NTFS Link Ext" project page
+located at http://sourceforge.net/projects/ntfslinkext/
+
+The original version can still be retrieved from the "NTFS Link" homepage
+located at http://www.elsdoerfer.net/ntfslink/
 -----------------------------------------------------------------------------}
 
 unit JunctionMonitor;
@@ -70,9 +74,9 @@ function GetFolderLinkCount(Folder: string; var LinksAsString: string): Integer;
 
     // Open the stream
     Handle := CreateFile(PChar(RemoveBackslash(Folder) + ':' + NTFSLINK_TRACKING_STREAM),
-                         {FILE_READ_DATA, not defined in Windows.pas}$1, 
+                         {FILE_READ_DATA, not defined in Windows.pas}$1,
                          0, nil, OPEN_EXISTING,
-                         FILE_FLAG_BACKUP_SEMANTICS or FILE_FLAG_OPEN_REPARSE_POINT,  
+                         FILE_FLAG_BACKUP_SEMANTICS or FILE_FLAG_OPEN_REPARSE_POINT,
                          0);
     if Handle <> 0 then
       try
@@ -116,7 +120,7 @@ function GetFolderLinkCount(Folder: string; var LinksAsString: string): Integer;
   begin
     // Assume zero links
     Result := 0;
-    
+
     try
       LinkList := TStringList.Create;
       try
@@ -170,7 +174,7 @@ procedure TrackJunctionCreate(Junction, Target: string);
     if Result then
       Result := (Flags and FILE_NAMED_STREAMS) <> 0;
   end;
-  
+
 var
   Handle: THandle;
   {BytesWritten: Cardinal;}
@@ -206,7 +210,7 @@ begin
         CloseHandle(Handle);
       end;
   end
-  
+
   // If streams are not supported, use the registry
   else begin
     RegCreateKey(HKEY_LOCAL_MACHINE, NTFSLINK_TRACKINGDATA_KEY + Target, '');

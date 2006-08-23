@@ -11,10 +11,14 @@ the specific language governing rights and limitations under the License.
 The Initial Developer of the Original Code is Michael Elsdörfer.
 All Rights Reserved.
 
-You may retrieve the latest version of this file at the NTFS Link Homepage
-located at http://www.elsdoerfer.net/ntfslink/
+Development of the extended version has been moved from Novell Forge to
+SourceForge by Sebastian Schuberth.
 
-Known Issues:
+You may retrieve the latest extended version at the "NTFS Link Ext" project page
+located at http://sourceforge.net/projects/ntfslinkext/
+
+The original version can still be retrieved from the "NTFS Link" homepage
+located at http://www.elsdoerfer.net/ntfslink/
 -----------------------------------------------------------------------------}
 
 unit DragDropHook;
@@ -26,7 +30,7 @@ uses
 
 type
   // We have to differ between dragged files, dragged directories, or
-  // multiple dragged objects containing both types. 
+  // multiple dragged objects containing both types.
   TDragDropMode = (ddmUnknown, ddmFile, ddmDirectory, ddmFileAndDirectory);
 
   // Our ComObject for the Handler, implementing the IContextMenu Interface
@@ -58,7 +62,7 @@ type
   protected
     function GetInstallationData: TExtensionRegistryData; override;
   end;
-                   
+
 const
   Class_DragDropHook: TGUID = '{93A6090E-DCD1-4E94-9499-8AB61B3F37E8}';
 
@@ -94,11 +98,11 @@ var
   i: integer;
 begin
   FSourceFileMode := ddmUnknown;
-  
+
   for i := 0 to FSourceFileList.Count - 1 do
     // Check if it's a directory
     if DirectoryExists(FSourceFileList[i]) then
-      // If we already found a file, then we now have both types 
+      // If we already found a file, then we now have both types
       if FSourceFileMode = ddmFile then begin
         FSourceFileMode := ddmFileAndDirectory;
         break;   // Mode can not change anymore now
@@ -121,7 +125,7 @@ var
   Success: boolean;
 begin
   Result := S_OK;
-                                         
+
   try
     // Make sure we are not being called by an application
     if (HiWord(Integer(lpici.lpVerb)) <> 0) then exit;
@@ -165,7 +169,7 @@ var
   mString: string;
   mPos: Integer;
   mBitmap: HBITMAP;
-begin                  
+begin
   // No items created yet
   Result := MakeResult(SEVERITY_SUCCESS, FACILITY_NULL, 0);
 
@@ -177,7 +181,7 @@ begin
       ddmFile:
         if FSourceFileList.Count = 1 then mString := _('Create Hardlink Here')
         else mString := _('Create Hardlinks Here');
-        
+
       ddmDirectory:
         if FSourceFileList.Count = 1 then mString := _('Create Junction Here')
         else mString := _('Create Junctions Here');
@@ -273,7 +277,7 @@ begin
   // storage medium in CF_HDROP format.
   Result := lpdobj.GetData(FormatEtc, StgMedium);
   if Failed(Result) then exit;
-  
+
   // Put all the source files in the StringList
   SrcCount := DragQueryFile(StgMedium.hGlobal, $FFFFFFFF, nil, 0);
   if SrcCount > 0 then

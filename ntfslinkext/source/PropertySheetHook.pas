@@ -11,10 +11,14 @@ the specific language governing rights and limitations under the License.
 The Initial Developer of the Original Code is Michael Elsdörfer.
 All Rights Reserved.
 
-You may retrieve the latest version of this file at the NTFS Link Homepage
-located at http://www.elsdoerfer.net/ntfslink/
+Development of the extended version has been moved from Novell Forge to
+SourceForge by Sebastian Schuberth.
 
-Known Issues:
+You may retrieve the latest extended version at the "NTFS Link Ext" project page
+located at http://sourceforge.net/projects/ntfslinkext/
+
+The original version can still be retrieved from the "NTFS Link" homepage
+located at http://www.elsdoerfer.net/ntfslink/
 -----------------------------------------------------------------------------}
 
 unit PropertySheetHook;
@@ -43,7 +47,7 @@ type
     function AddPages(lpfnAddPage: TFNAddPropSheetPage;
       lParam: LPARAM): HResult; stdcall;
     function ReplacePage(uPageID: UINT; lpfnReplaceWith: TFNAddPropSheetPage;
-      lParam: LPARAM): HResult; stdcall;    
+      lParam: LPARAM): HResult; stdcall;
   end;
 
   TPropertySheetHookFactory = class(TBaseExtensionFactory)
@@ -94,7 +98,7 @@ begin
   // storage medium in CF_HDROP format.
   Result := lpdobj.GetData(FormatEtc, StgMedium);
   if Failed(Result) then exit;
-  
+
   // Get the selected object; note that only *1* is supported;
   SrcCount := DragQueryFile(StgMedium.hGlobal, $FFFFFFFF, nil, 0);
   if SrcCount = 1 then begin

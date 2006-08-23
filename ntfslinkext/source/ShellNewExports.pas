@@ -11,17 +11,21 @@ the specific language governing rights and limitations under the License.
 The Initial Developer of the Original Code is Michael Elsdörfer.
 All Rights Reserved.
 
-You may retrieve the latest version of this file at the NTFS Link Homepage
-located at http://www.elsdoerfer.net/ntfslink/
+Development of the extended version has been moved from Novell Forge to
+SourceForge by Sebastian Schuberth.
 
-Known Issues:
+You may retrieve the latest extended version at the "NTFS Link Ext" project page
+located at http://sourceforge.net/projects/ntfslinkext/
+
+The original version can still be retrieved from the "NTFS Link" homepage
+located at http://www.elsdoerfer.net/ntfslink/
 -----------------------------------------------------------------------------}
 
 unit ShellNewExports;
 
 interface
 
-uses                  
+uses
   Windows, ActiveX, SysUtils;
 
 // Shows an Open Dialog to query the user for the /file/ to link to
@@ -60,13 +64,13 @@ begin
     lpstrFile := PChar(TempFilename);
     FillChar(lpstrFile^, nMaxFile + 2, 0);
     StrLCopy(lpstrFile, '', nMaxFile);
-                                            
+
     // Init other struct members
     lStructSize := SizeOf(TOpenFilename);
     hInstance := SysInit.HInstance;
-    nMaxFile := MAX_PATH;    
+    nMaxFile := MAX_PATH;
     lpstrTitle := PAnsiChar(string(_('Choose the file you want to create a hard link to')));
-    lpstrFilter := PAnsiChar(string(_('All Files') + #0'*.*'#0));        
+    lpstrFilter := PAnsiChar(string(_('All Files') + #0'*.*'#0));
     nFilterIndex := 1;
     lpstrFileTitle := nil;
     nMaxFileTitle := 0;

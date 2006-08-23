@@ -11,10 +11,14 @@ the specific language governing rights and limitations under the License.
 The Initial Developer of the Original Code is Michael Elsdörfer.
 All Rights Reserved.
 
-You may retrieve the latest version of this file at the NTFS Link Homepage
-located at http://www.elsdoerfer.net/ntfslink/
+Development of the extended version has been moved from Novell Forge to
+SourceForge by Sebastian Schuberth.
 
-Known Issues:
+You may retrieve the latest extended version at the "NTFS Link Ext" project page
+located at http://sourceforge.net/projects/ntfslinkext/
+
+The original version can still be retrieved from the "NTFS Link" homepage
+located at http://www.elsdoerfer.net/ntfslink/
 -----------------------------------------------------------------------------}
 
 program ConfigUtil;

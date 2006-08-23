@@ -11,17 +11,21 @@ the specific language governing rights and limitations under the License.
 The Initial Developer of the Original Code is Michael Elsdörfer.
 All Rights Reserved.
 
-You may retrieve the latest version of this file at the NTFS Link Homepage
-located at http://www.elsdoerfer.net/ntfslink/
+Development of the extended version has been moved from Novell Forge to
+SourceForge by Sebastian Schuberth.
 
-Known Issues:
+You may retrieve the latest extended version at the "NTFS Link Ext" project page
+located at http://sourceforge.net/projects/ntfslinkext/
+
+The original version can still be retrieved from the "NTFS Link" homepage
+located at http://www.elsdoerfer.net/ntfslink/
 -----------------------------------------------------------------------------}
 
 unit IconOverlayHook;
 
 interface
 
-uses          
+uses
   Windows, SysUtils, ComObj, ShlObj, BaseExtensionFactory;
 
 type
@@ -61,7 +65,7 @@ type
     function GetPriority(out pIPriority: Integer): HResult; stdcall;
   end;
 
-  // We need this type later to access the static class methods 
+  // We need this type later to access the static class methods
   TIconOverlayHookClass = class of TIconOverlayHook;
 
   // Icon Overlay Hook for JunctionPoints
@@ -82,17 +86,17 @@ type
   public
     { IShellIconOverlayIdentifier }
     function IsMemberOf(pwszPath: PWideChar; dwAttrib: DWORD): HResult; stdcall;
-  end;  
+  end;
 
   /// ComObjectFactory for our IconOverlay objects
   TIconOverlayHookFactory = class(TBaseExtensionFactory)
   protected
     function GetInstallationData: TExtensionRegistryData; override;
-  end;  
+  end;
 
 const
   Class_JunctionOverlayHook: TGUID = '{61702EF5-1B33-487F-995F-6FA23F1D6652}';
-  Class_HardlinkOverlayHook: TGUID = '{0314E3A0-45DB-4D75-BB86-27B8EF28907B}';  
+  Class_HardlinkOverlayHook: TGUID = '{0314E3A0-45DB-4D75-BB86-27B8EF28907B}';
 
 implementation
 
@@ -119,7 +123,7 @@ begin
   // IconOverlays are disabled for some drive types (e.g. remote)
   if not EnableHooksForDrive(pwszPath) then
     exit;
-    
+
   try
     if NtfsFileHasReparsePoint(pwszPath) then
       Result := S_OK;
@@ -184,22 +188,22 @@ begin
 
   // We need the string as a PWideChar
   StringToWideChar(ConfigIconFile, pwszIconFile, cchMax);
-  
-  // Choose pdwFlags value depending on IconIndex config value 
+
+  // Choose pdwFlags value depending on IconIndex config value
   if ConfigIconIndex <> -1 then begin
     pIndex := ConfigIconIndex;
     pdwFlags := ISIOI_ICONFILE or ISIOI_ICONINDEX;
   end
   else
     PdwFlags := ISIOI_ICONFILE;
-    
-  // Return success  
+
+  // Return success
   Result := S_OK;
 end;
 
 function TIconOverlayHook.GetPriority(out pIPriority: Integer): HResult;
 begin
-  pIPriority := ConfigOverlayPriority;  
+  pIPriority := ConfigOverlayPriority;
   Result := S_OK;
 end;
 
@@ -239,7 +243,7 @@ function TIconOverlayHookFactory.GetInstallationData: TExtensionRegistryData;
 begin
   Result.RootKey := HKEY_LOCAL_MACHINE;
   Result.BaseKey := 'Software\Microsoft\Windows\CurrentVersion\Explorer\' +
-                    'ShellIconOverlayIdentifiers\NTFSLink_' + 
+                    'ShellIconOverlayIdentifiers\NTFSLink_' +
                     TIconOverlayHookClass(ComClass).Config_Prefix;
   Result.UseGUIDAsKeyName := False;
 end;
@@ -249,7 +253,7 @@ initialization
       Class_HardlinkOverlayHook, '',
       'NTFSLink OverlayIcon Shell Extension for Hardlinks',
       ciMultiInstance, tmApartment);
-      
+
   TIconOverlayHookFactory.Create(ComServer, TJunctionOverlayHook,
       Class_JunctionOverlayHook, '',
       'NTFSLink OverlayIcon Shell Extension for JunctionPoints',

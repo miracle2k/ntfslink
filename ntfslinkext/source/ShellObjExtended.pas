@@ -11,9 +11,16 @@ the specific language governing rights and limitations under the License.
 The Initial Developer of the Original Code is Michael Elsdörfer.
 All Rights Reserved.
 
-You may retrieve the latest version of this file at the NTFS Link Homepage
+Development of the extended version has been moved from Novell Forge to
+SourceForge by Sebastian Schuberth.
+
+You may retrieve the latest extended version at the "NTFS Link Ext" project page
+located at http://sourceforge.net/projects/ntfslinkext/
+
+The original version can still be retrieved from the "NTFS Link" homepage
 located at http://www.elsdoerfer.net/ntfslink/
 
+PLEASE NOTE:
 Contains declarations which are not included in the ShlObj.pas version that
 ships with Delphi 7.
 -----------------------------------------------------------------------------}
@@ -32,7 +39,7 @@ const
   SID_IColumnProvider = '{E8025004-1C42-11D2-BE2C-00A0C9A83DA1}';
 
   FILE_FLAG_OPEN_REPARSE_POINT = $00200000;
-                                  
+
 const
   MAX_COLUMN_NAME_LEN = 80;
   MAX_COLUMN_DESC_LEN = 128;

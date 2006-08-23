@@ -11,10 +11,14 @@ the specific language governing rights and limitations under the License.
 The Initial Developer of the Original Code is Michael Elsdörfer.
 All Rights Reserved.
 
-You may retrieve the latest version of this file at the NTFS Link Homepage
-located at http://www.elsdoerfer.net/ntfslink/
+Development of the extended version has been moved from Novell Forge to
+SourceForge by Sebastian Schuberth.
 
-Known Issues:
+You may retrieve the latest extended version at the "NTFS Link Ext" project page
+located at http://sourceforge.net/projects/ntfslinkext/
+
+The original version can still be retrieved from the "NTFS Link" homepage
+located at http://www.elsdoerfer.net/ntfslink/
 -----------------------------------------------------------------------------}
 
 unit CopyHook;
@@ -24,7 +28,7 @@ unit CopyHook;
 
 interface
 
-uses          
+uses
   Windows, SysUtils, ComObj, ShlObj, BaseExtensionFactory;
 
 type
@@ -114,7 +118,7 @@ begin
     // deleted, as the folder is still existing *at the moment*,  This is kind
     // of a flaw, but it's not a big deal, and I'm too lazy now to change it.
     if tempResult <> ID_NO then
-      CleanRegistryTrackingInformation;      
+      CleanRegistryTrackingInformation;
 
     // "Retry" is returned, if the user clicked "Yes + delete/change links".
     // So this is what we have to to now: Either delete all the links, or
@@ -248,7 +252,7 @@ begin
       // Interception of copy operations can be configured; check if activated:
       if RegReadBoolDef(HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
                          'InterceptJunctionCopying', True) then
-                         
+
         // Check if the target file system supports junctions; if not, we have
         // nothing to do, because the only option left is to copy the contents
         // of the linked directory.
@@ -261,7 +265,7 @@ begin
                'including all it''s content, click "No". If you choose ' +
                '"Cancel", nothing will happen.'), [pszSrcFile])))),
                PAnsiChar('NTFS Link'), MB_YESNOCANCEL + MB_ICONINFORMATION);
-             
+
           case tempResult of
             // User wants to copy the contents of the linked directory; this can
             // be better done by the Explorer.
@@ -288,7 +292,7 @@ begin
         end;
     end;
   end
-  
+
   // Before we let explorer delete a (non junction) folder, search for
   // junctions within subfolders, and make sure they are all unlinked
   else

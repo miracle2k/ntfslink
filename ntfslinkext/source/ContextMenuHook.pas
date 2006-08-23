@@ -11,10 +11,14 @@ the specific language governing rights and limitations under the License.
 The Initial Developer of the Original Code is Michael Elsdörfer.
 All Rights Reserved.
 
-You may retrieve the latest version of this file at the NTFS Link Homepage
-located at http://www.elsdoerfer.net/ntfslink/
+Development of the extended version has been moved from Novell Forge to
+SourceForge by Sebastian Schuberth.
 
-Known Issues:
+You may retrieve the latest extended version at the "NTFS Link Ext" project page
+located at http://sourceforge.net/projects/ntfslinkext/
+
+The original version can still be retrieved from the "NTFS Link" homepage
+located at http://www.elsdoerfer.net/ntfslink/
 -----------------------------------------------------------------------------}
 
 unit ContextMenuHook;
@@ -47,7 +51,7 @@ type
       uFlags: UINT): HResult; stdcall;
     function InvokeCommand(var lpici: TCMInvokeCommandInfo): HResult; stdcall;
     function GetCommandString(idCmd, uType: UINT; pwReserved: PUINT;
-      pszName: LPSTR; cchMax: UINT): HResult; stdcall; 
+      pszName: LPSTR; cchMax: UINT): HResult; stdcall;
   end;
 
   TContextMenuHookFactory = class(TBaseExtensionFactory)
@@ -108,7 +112,7 @@ begin
         // Notify the explorer, so that our icon overlay will be displayed
         SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PAnsiChar(FDirectory), nil);
       end;
-      
+
     1:
       begin
         // Delete the junction point
@@ -147,7 +151,7 @@ begin
         // Execute explorer
         ShellExecute(0, 'explore', PAnsiChar(FJunctionTarget), nil, nil, SW_NORMAL);
       end;
-      
+
     else
       begin
         Result := E_INVALIDARG;
@@ -176,7 +180,7 @@ var
       fMask := MIIM_STRING or MIIM_ID;
       // Initialize this standard members
       wID := ItemID;
-      dwTypeData := PAnsiChar(Caption);            
+      dwTypeData := PAnsiChar(Caption);
       // If a submenu handle is specified, use it + include SUBMENU flag
       if SubMenu <> 0 then begin
         fMask := fMask or MIIM_SUBMENU;
@@ -203,7 +207,7 @@ begin
     // Create submenu
     SubMenu := CreatePopupMenu;
     CreateMenuItem(Menu, 'NTFS Link', GLYPH_HANDLE_STD, 0, indexMenu, SubMenu);
-                                                         
+
       // Add items to the submenu, depending on mode
       if FSourceDirMode = cmmEmptyFolder then
         CreateMenuItem(SubMenu, _('Link Folder...'), GLYPH_HANDLE_JUNCTION, idCmdFirst)
@@ -238,7 +242,7 @@ var
     SearchData: TSearchRec;
   begin
     Result := True;
-    
+
     if FindFirst(CheckBackslash(ADir) + '*', faAnyFile or faDirectory, SearchData) = 0 then
       try
         while FindNext(SearchData) = 0 do
@@ -274,7 +278,7 @@ begin
   // storage medium in CF_HDROP format.
   Result := lpdobj.GetData(FormatEtc, StgMedium);
   if Failed(Result) then exit;
-  
+
   // Get the selected object; note that only *1* is supported;
   SrcCount := DragQueryFile(StgMedium.hGlobal, $FFFFFFFF, nil, 0);
   if SrcCount = 1 then begin

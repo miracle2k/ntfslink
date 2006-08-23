@@ -11,10 +11,14 @@ the specific language governing rights and limitations under the License.
 The Initial Developer of the Original Code is Michael Elsdörfer.
 All Rights Reserved.
 
-You may retrieve the latest version of this file at the NTFS Link Homepage
-located at http://www.elsdoerfer.net/ntfslink/
+Development of the extended version has been moved from Novell Forge to
+SourceForge by Sebastian Schuberth.
 
-Known Issues:
+You may retrieve the latest extended version at the "NTFS Link Ext" project page
+located at http://sourceforge.net/projects/ntfslinkext/
+
+The original version can still be retrieved from the "NTFS Link" homepage
+located at http://www.elsdoerfer.net/ntfslink/
 -----------------------------------------------------------------------------}
 
 unit Global;
@@ -30,7 +34,7 @@ var
   GLYPH_HANDLE_JUNCTION: HBITMAP;
   GLYPH_HANDLE_HARDLINK: HBITMAP;
   GLYPH_HANDLE_LINKDEL: HBITMAP;
-  GLYPH_HANDLE_EXPLORER: HBITMAP;  
+  GLYPH_HANDLE_EXPLORER: HBITMAP;
 
 // Make certain registry entries to make sure the extension also works for
 // non-Admin accounts with restricted rights.
@@ -67,7 +71,7 @@ function InternalCreateJunction(LinkTarget, Junction: string;
 // Wrapper around NtfsGetJunctionPointDestination(), passing the
 // destination as the result, not as a var parameter; In addition, fix some
 // issues with the result value of the JCL function, e.g. remove \\?\ prefix.
-function GetJPDestination(Folder: string): string;  
+function GetJPDestination(Folder: string): string;
 
 implementation
 
@@ -123,7 +127,7 @@ begin
       LinkStr := LINK_NO_PREFIX_TEMPLATE
     else
       LinkStr := _(PrefixTemplate);
-      
+
     // The very first link does not get a number
     if x > 1 then NumStr := ' (' + IntToStr(x) + ')' else NumStr := '';
 

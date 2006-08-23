@@ -11,7 +11,13 @@
   The Initial Developer of the Original Code is Michael Elsdörfer.
   All Rights Reserved.
 
-  You may retrieve the latest version of this file at the NTFS Link Homepage
+  Development of the extended version has been moved from Novell Forge to
+  SourceForge by Sebastian Schuberth.
+
+  You may retrieve the latest extended version at the "NTFS Link Ext" project page
+  located at http://sourceforge.net/projects/ntfslinkext/
+
+  The original version can still be retrieved from the "NTFS Link" homepage
   located at http://www.elsdoerfer.net/ntfslink/
 
   ****************************************************************************
@@ -60,7 +66,7 @@
       <arg value="-o ${target.dir}/default.po" />
     </exec>
   </target>
-  
+
   <!-- delete all files except final output po-file -->
   <target name="clean">
     <delete>
@@ -78,7 +84,7 @@
   <target name="update_cvs">
      <!--<cvs dest="${localization.dir}/german/" command="update" />-->
   </target>
-  
+
   <!-- merge changes from default template into language files AND *commit* -->
   <target name="merge" depends="update_cvs">
      <!-- german translation -->
@@ -89,7 +95,7 @@
      </exec>
     <!--<cvs dest="${localization.dir}/german/" command="commit" />-->
   </target>
-  
+
   <!-- compile each .po language file to it's correspondend .mo binary -->
   <target name="compile">
     <!-- german translation -->
@@ -98,5 +104,5 @@
        <arg value="${localization.dir}/german/default.po" />
      </exec>
   </target>
-  
+
 </project>

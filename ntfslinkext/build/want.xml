@@ -11,11 +11,17 @@
   The Initial Developer of the Original Code is Michael Elsdörfer.
   All Rights Reserved.
 
-  You may retrieve the latest version of this file at the NTFS Link Homepage
+  Development of the extended version has been moved from Novell Forge to
+  SourceForge by Sebastian Schuberth.
+
+  You may retrieve the latest extended version at the "NTFS Link Ext" project page
+  located at http://sourceforge.net/projects/ntfslinkext/
+
+  The original version can still be retrieved from the "NTFS Link" homepage
   located at http://www.elsdoerfer.net/ntfslink/
 
   ****************************************************************************
-  
+
   How To Use:
   -----------
   Basicly this build script can do 4 things for you:
@@ -23,14 +29,14 @@
     b) compile the source code
     c) distribute: create a zip file and a inno setup wizard
     d) publish: upload the files
-    
+
   For every step above there is a main target (sub-targets / dependencies are
   possible), which you should use to accomplish that step. These targets are:
     a) [ clean   ]
     b) [ build   ]
     c) [ dist    ]
     d) [ publish ]
-    
+
   If you want to do everything in a single step, use the target [ complete ]
   ****************************************************************************
 -->
@@ -46,17 +52,17 @@
   <property name="working.dir" value="${basedir}/ntfslink-temp" />
   <property name="dist.dir" value="${basedir}/dist" />
   <property name="iscc.path" value="C:\Programme\Inno Setup 5\" />
-  
+
   <!-- build the filename of the zip-file -->
   <tstamp>
     <format property="date" pattern="yyyy-mm-dd" />
   </tstamp>
   <property name="dist.zip.filename" value="${dist.dir}/cvs-${date}.zip" />
-  
+
 <!----------------------------------------------------------------------------->
 <!-- Patternsets -------------------------------------------------------------->
 <!----------------------------------------------------------------------------->
-  
+
   <!-- Some file patternsets -->
   <patternset id="nl.obsolete">
     <!-- Exclude some filetypes (mostly compiled objects) -->
@@ -73,22 +79,22 @@
     <include name="**/*.~*" />
     <include name="**/dummy.txt" />
   </patternset>
-  
+
   <patternset id="nl.source">
     <include name="**/*.pas" />
-    <include name="**/*.rc" />    
+    <include name="**/*.rc" />
     <include name="**/*.dfm" />
     <include name="**/*.cfg" />
-    <include name="**/*.inc" />    
+    <include name="**/*.inc" />
     <include name="**/*.dpr" />
     <include name="**/*.dof" />
-    <include name="**/*.res" />    
+    <include name="**/*.res" />
   </patternset>
-  
+
 <!----------------------------------------------------------------------------->
 <!-- Clean -------------------------------------------------------------------->
 <!----------------------------------------------------------------------------->
-  
+
   <!-- Clean up everything -->
   <target name="clean">
     <delete>
@@ -102,11 +108,11 @@
       </fileset>
     </delete>
   </target>
-	
+
 <!----------------------------------------------------------------------------->
 <!-- Get files and prepare ---------------------------------------------------->
-<!----------------------------------------------------------------------------->	
-	
+<!----------------------------------------------------------------------------->
+
   <!-- Copies the files from the local disk assuming the cvs hierachy -->
   <target name="cvscopy" depends="clean">
     <!-- Copy the files -->
@@ -118,7 +124,7 @@
       </fileset>
     </copy>
   </target>
-	
+
 <!----------------------------------------------------------------------------->
 <!-- Build -------------------------------------------------------------------->
 <!----------------------------------------------------------------------------->
@@ -128,8 +134,8 @@
     <!-- ntfslink.res is as a binary in cvs! (managed by Delphi IDE) -->
     <brcc file="${working.dir}/Icons.rc" output="${working.dir}/Icons.res" />
     <brcc file="${working.dir}/DialogLinksExisting.rc" output="${working.dir}/DialogLinksExisting.res" />
-  </target>  	
-	
+  </target>
+
   <!-- Compiles NTFSLink (DLL and Config) -->
   <target name="build" depends="resources">
     <!-- Build DLL -->
@@ -156,7 +162,7 @@
     </dcc>
 
   </target>
-  
+
 <!----------------------------------------------------------------------------->
 <!-- Distribution ------------------------------------------------------------->
 <!----------------------------------------------------------------------------->
@@ -171,7 +177,7 @@
         <include name="ConfigUtil\" />
       </fileset>
     </delete>
-  
+
     <!-- Copy files from distribution directory -->
     <copy todir="${working.dir}">
       <fileset dir="${bin.dir}">
@@ -180,11 +186,11 @@
           <include name="**" />
           <!-- Exclude filetypes -->
           <exclude name="**.exe" />
-          <exclude name="**.dll" />          
+          <exclude name="**.dll" />
         </patternset>
       </fileset>
     </copy>
-  
+
     <!--
       Delete all sourcecode and all files which will not ship. This probably
       includes a couple of files already deleted (we removed all files except
@@ -203,22 +209,22 @@
 
   <!-- Compiles the InnoSetup -->
   <target name="dist-setup" depends="prepare-dist">
-         <iscc source="Setup\NTFSLink.iss" /> 
+         <iscc source="Setup\NTFSLink.iss" />
   </target>
 
 <!----------------------------------------------------------------------------->
 <!-- Full Targets ------------------------------------------------------------->
 <!----------------------------------------------------------------------------->
-  
+
   <target name="complete-copy">
     <want target="cvscopy" />
     <want target="build" />
-    <want target="dist-setup" />   
+    <want target="dist-setup" />
     <want target="clean" />
   </target>
-  
+
   <target name="complete" depends="complete-copy" />  <!-- defaults to copy -->
-  
+
 <!----------------------------------------------------------------------------->
 <!-- Localization ------------------------------------------------------------->
 <!----------------------------------------------------------------------------->
@@ -227,5 +233,5 @@
   <target name="localization">
     <want buildfile="localization.xml" target="default" />
   </target>
-  
+
 </project>

@@ -11,10 +11,14 @@ the specific language governing rights and limitations under the License.
 The Initial Developer of the Original Code is Michael Elsdörfer.
 All Rights Reserved.
 
-You may retrieve the latest version of this file at the NTFS Link Homepage
-located at http://www.elsdoerfer.net/ntfslink/
+Development of the extended version has been moved from Novell Forge to
+SourceForge by Sebastian Schuberth.
 
-Known Issues:
+You may retrieve the latest extended version at the "NTFS Link Ext" project page
+located at http://sourceforge.net/projects/ntfslinkext/
+
+The original version can still be retrieved from the "NTFS Link" homepage
+located at http://www.elsdoerfer.net/ntfslink/
 -----------------------------------------------------------------------------}
 
 library ntfslink;
@@ -25,8 +29,8 @@ library ntfslink;
 
 
 // TODO [v2.1] Implement a logging mechanism
-// TODO [v2.1] Enable WinXP visual styles 
-// TODO [v2.1] Support for target.lnk style links?       
+// TODO [v2.1] Enable WinXP visual styles
+// TODO [v2.1] Support for target.lnk style links?
 // TODO [v2.1] Create hardlinks automatically for each file in directory and
 //             subdirectories [by Gunthar Müller]
 
@@ -54,7 +58,7 @@ exports
   DllCanUnloadNow,
   DllRegisterServer,
   DllUnregisterServer,
-  
+
   // Used to integrate into the Shell New menu: Explorer later will use
   // rundll32.exe to call these function
   NewHardlinkDlg,
