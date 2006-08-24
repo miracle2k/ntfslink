@@ -30,8 +30,12 @@ library ntfslink;
 // TODO [v2.1] Create hardlinks automatically for each file in directory and
 //             subdirectories [by Gunthar Müller]
 
+{$R 'DialogLinksExisting.res' 'DialogLinksExisting.rc'}
+{$R 'Icons.res' 'Icons.rc'}
+
 uses
-  ComServ,Windows,
+  ComServ,
+  Windows,
   JclRegistry,
   Global in 'Global.pas',
   BaseExtensionFactory in 'BaseExtensionFactory.pas',
