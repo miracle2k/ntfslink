@@ -1,7 +1,11 @@
 How To Compile NTFS Link Ext
 ****************************
 
-We are currently using Delphi 6 Update Pack #2 to compile "NTFS Link Ext".
+We are currently using Delphi 6 (incl. Runtime Library Update 3) to compile
+"NTFS Link Ext". As a registered user, you may get the required updates from
+Borland here:
+
+  http://www.borland.com/devsupport/delphi/downloads/ds_registeredusers.html
 
 For building the shell extension, the following components are required:
 
