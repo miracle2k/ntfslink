@@ -1,0 +1,25 @@
+How To Compile NTFS Link Ext
+****************************
+
+We are currently using Delphi 6 Update Pack #2 to compile "NTFS Link Ext".
+
+For building the shell extension, the following components are required:
+
+- Jedi Code Library (JCL), http://jcl.sf.net/
+  Download the "Source pack" version 1.95 build 1848 (as of writing, this is the
+  most recent version that properly works for us), unpack the archive and follow
+  the instructions in "Install.txt" to register the components with Delphi. No
+  changes are necessary in the installer, just accept all defaults.
+
+For building the configuration utility, the following components are required:
+
+- Jedi Visual Component Library (JVCL), http://jvcl.sf.net/
+  Download the "CompleteNoJCL" version 3.00, which is the most recent version
+  that properly works for us with the above version of JCL. Again, unpack the
+  archive and follow the instructions in "Install.txt" to register the
+  components with Delphi. No changes are necessary in the installer, just accept
+  all defaults.
+
+-- 
+Sebastian Schuberth
+2006-aug-24
