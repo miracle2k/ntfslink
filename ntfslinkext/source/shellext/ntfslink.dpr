@@ -33,9 +33,18 @@ library ntfslink;
 uses
   ComServ,Windows,
   JclRegistry,
-  Global,BaseExtensionFactory,DragDropHook,IconOverlayHook,CopyHook,
-  ContextMenuHook,PropertySheetHook,ShellNewDummyHook,ShellNewExports,
-  ShellObjExtended,JunctionMonitor,DialogLinksExisting,
+  Global in 'Global.pas',
+  BaseExtensionFactory in 'BaseExtensionFactory.pas',
+  DragDropHook in 'DragDropHook.pas',
+  IconOverlayHook in 'IconOverlayHook.pas',
+  CopyHook in 'CopyHook.pas',
+  ContextMenuHook in 'ContextMenuHook.pas',
+  PropertySheetHook in 'PropertySheetHook.pas',
+  ShellNewDummyHook in 'ShellNewDummyHook.pas',
+  ShellNewExports in 'ShellNewExports.pas',
+  ShellObjExtended in 'ShellObjExtended.pas',
+  JunctionMonitor in 'JunctionMonitor.pas',
+  DialogLinksExisting in 'DialogLinksExisting.pas',
   Constants in '..\common\Constants.pas',
   GNUGetText in '..\common\GNUGetText.pas';
 
