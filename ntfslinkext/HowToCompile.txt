@@ -20,6 +20,12 @@ For building the configuration utility, the following components are required:
   components with Delphi. No changes are necessary in the installer, just accept
   all defaults.
 
--- 
+After installing the components either load the project group from the "source"
+directory into the IDE, or load the projects separately from the respective
+sub-directories. They should compile fine by hitting Ctrl-F9.
+
+Have fun!
+
+--
 Sebastian Schuberth
 2006-aug-24
