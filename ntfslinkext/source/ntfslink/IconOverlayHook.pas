@@ -144,6 +144,28 @@ begin
   Result := 'Hardlink';
 end;
 
+// TODO: This function should be removed from here as soon it is part of JCL.
+function NtfsGetHardLinkInfoW(const FileName: WideString; var Info: TNtfsHardLinkInfo): Boolean;
+var
+  F: THandle;
+  FileInfo: TByHandleFileInformation;
+begin
+  Result := False;
+  F := CreateFileW(PWideChar(FileName), GENERIC_READ, FILE_SHARE_READ or FILE_SHARE_WRITE, nil, OPEN_EXISTING, 0, 0);
+  if F <> INVALID_HANDLE_VALUE then
+  try
+    if GetFileInformationByHandle(F, FileInfo) then
+    begin
+      Info.LinkCount := FileInfo.nNumberOfLinks;
+      Info.FileIndexHigh := FileInfo.nFileIndexHigh;
+      Info.FileIndexLow := FileInfo.nFileIndexLow;
+      Result := True;
+    end;
+  finally
+    CloseHandle(F);
+  end
+end;
+
 function THardlinkOverlayHook.IsMemberOf(pwszPath: PWideChar;
   dwAttrib: DWORD): HResult;
 var
@@ -158,7 +180,7 @@ begin
   try
     // Retrieve file information, and look if there are links existing; if no,
     // than this file is *not* a link, and we skip
-    if NtfsGetHardLinkInfo(pwszPath, LinkInfo) then
+    if NtfsGetHardLinkInfoW(pwszPath, LinkInfo) then
       if LinkInfo.LinkCount > 1 then
         Result := S_OK;
   except
