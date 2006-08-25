@@ -31,5 +31,5 @@ sub-directories. They should compile fine by hitting Ctrl-F9.
 Have fun!
 
 --
-Sebastian Schuberth
-2006-aug-24
+Sebastian Schuberth <eyebex@users.sourceforge.net>
+2006-aug-25
