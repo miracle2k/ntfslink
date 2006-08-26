@@ -53,33 +53,32 @@ uses
 procedure NewHardlinkDlg(hwnd: HWND; hinst: Cardinal;
   lpCmdLine: LPTSTR; nCmdShow: Integer); stdcall;
 var
-  OpenFileName: TOpenFileName;
-  TempFileName, ErrorMsg: string;
+  OpenFileName: TOpenFileNameW;
+  TempFileName, ErrorMsg: WideString;
 begin
   FillChar(OpenFileName, SizeOf(OpenFileName), 0);
   with OpenFileName do
   begin
     // Init the filename buffer
     SetLength(TempFilename, nMaxFile + 2);
-    lpstrFile := PChar(TempFilename);
+    lpstrFile := PWideChar(TempFilename);
     FillChar(lpstrFile^, nMaxFile + 2, 0);
-    StrLCopy(lpstrFile, '', nMaxFile);
 
     // Init other struct members
     lStructSize := SizeOf(TOpenFilename);
     hInstance := SysInit.HInstance;
     nMaxFile := MAX_PATH;
-    lpstrTitle := PAnsiChar(string(_('Choose the file you want to create a hard link to')));
-    lpstrFilter := PAnsiChar(string(_('All Files') + #0'*.*'#0));
+    lpstrTitle := PWideChar(_('Choose the file you want to create a hard link to'));
+    lpstrFilter := PWideChar(_('All Files') + #0'*.*'#0);
     nFilterIndex := 1;
     lpstrFileTitle := nil;
     nMaxFileTitle := 0;
-    lpstrInitialDir := PAnsiChar(CheckBackslash(lpCmdLine));
+    lpstrInitialDir := PWideChar(CheckBackslash(lpCmdLine));
     Flags := OFN_PATHMUSTEXIST or OFN_FILEMUSTEXIST or OFN_HIDEREADONLY;
   end;
 
   // Execute the dialog
-  if GetOpenFileName(OpenFileName) then
+  if GetOpenFileNameW(OpenFileName) then
     // If positive result, then try to create hardlink
     try
       InternalCreateHardlink(OpenFileName.lpstrFile, ExtractFilePath(lpCmdLine));
@@ -87,8 +86,8 @@ begin
       ErrorMsg := _('Failed to create link. Most likely the target file ' +
                     'system does not support this feature, or you tried ' +
                     'to create a hard link across different partitions.');
-      MessageBox(hwnd, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'),
-                 MB_OK + MB_ICONERROR)
+      MessageBoxW(hwnd, PWideChar(ErrorMsg), 'NTFS Link',
+                 MB_OK or MB_ICONERROR)
     end;
 end;
 

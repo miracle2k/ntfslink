@@ -29,21 +29,21 @@ uses
   SysUtils, Windows, JclRegistry, Constants;
 
 var
-  // Handles to various glyphs used in shell menus; initialized at startup;
+  // Handles to various glyphs used in shell menus; initialized at startup.
   GLYPH_HANDLE_STD: HBITMAP;
   GLYPH_HANDLE_JUNCTION: HBITMAP;
   GLYPH_HANDLE_HARDLINK: HBITMAP;
   GLYPH_HANDLE_LINKDEL: HBITMAP;
   GLYPH_HANDLE_EXPLORER: HBITMAP;
 
-// Make certain registry entries to make sure the extension also works for
+// Creates certain registry entries to make sure the extension also works for
 // non-Admin accounts with restricted rights.
-procedure ApproveExtension(ClassIDStr, Description: string);
+procedure ApproveExtension(ClassIDStr, Description: WideString);
 
-// Will add a backslash to the end of the passed string, if not yet existing
-function CheckBackslash(AFileName: string): string;
-// Exactly the opposite: removes the backslash, if it is there
-function RemoveBackslash(AFileName: string): string;
+// Will add a backslash to the end of the passed string, if not yet existing.
+function CheckBackslash(AFileName: WideString): WideString;
+// Exactly the opposite: removes the backslash, if it is there.
+function RemoveBackslash(AFileName: WideString): WideString;
 
 // Result depends on configuration - whether to add a "Link to" prefix or not.
 function IsLinkPrefixTemplateDisabled: boolean;
@@ -51,46 +51,54 @@ function IsLinkPrefixTemplateDisabled: boolean;
 // Return the name of the file/directory to create. This depends on the
 // existing files/directories, i.e. if the user creates multiple links
 // of the same file, we will enumerate them: Copy(1), Copy(2), etc..
-function GetLinkFileName(Source, TargetDir: string; Directory: boolean;
-  PrefixTemplate: string = LINK_PREFIX_TEMPLATE_DEFAULT): string;
+function GetLinkFileName(Source, TargetDir: WideString; Directory: boolean;
+  PrefixTemplate: WideString = LINK_PREFIX_TEMPLATE_DEFAULT): WideString;
 
 // Internal function used to create hardlinks
-procedure InternalCreateHardlink(Source, Destination: string);
+procedure InternalCreateHardlink(Source, Destination: WideString);
 // Calls the one above, but catches all exceptions and returns a boolean
-function InternalCreateHardlinkSafe(Source, Destination: string): boolean;
+function InternalCreateHardlinkSafe(Source, Destination: WideString): boolean;
 
 // Interal functions used to create junctions; The Base-function actually creates
 // the junctions using a final directory name, the other one first generates
 // the directory name based on a template and a base name (e.g. does the
 // "Link (x) of..."), and then calls InternalCreateJunctionBase()
-function InternalCreateJunctionBase(LinkTarget, Junction: string): boolean;
-function InternalCreateJunction(LinkTarget, Junction: string;
-  TargetDirName: string = '';
-  PrefixTemplate: string = LINK_PREFIX_TEMPLATE_DEFAULT): boolean;
+function InternalCreateJunctionBase(LinkTarget, Junction: WideString): boolean;
+function InternalCreateJunction(LinkTarget, Junction: WideString;
+  TargetDirName: WideString = '';
+  PrefixTemplate: WideString = LINK_PREFIX_TEMPLATE_DEFAULT): boolean;
 
-// Wrapper around NtfsGetJunctionPointDestination(), passing the
+// Wrapper around NtfsGetJunctionPointDestinationW(), passing the
 // destination as the result, not as a var parameter; In addition, fix some
 // issues with the result value of the JCL function, e.g. remove \\?\ prefix.
-function GetJPDestination(Folder: string): string;
+function GetJPDestination(Folder: WideString): WideString;
 
 implementation
 
 uses
-  ShlObj, JclNTFS, GNUGetText, JunctionMonitor;
+  ShlObj, JclNTFS, JclWin32, GNUGetText, JunctionMonitor;
+
+{$I JclNTFSUnicode.inc}
 
 // ************************************************************************** //
 
-function CheckBackslash(AFileName: string): string;
+function CheckBackslash(AFileName: WideString): WideString;
+var
+  l: integer;
 begin
-  if (AFileName <> '') and (AFileName[length(AFileName)] <> '\') then
+  l := Length(AFileName);
+  if (l > 0) and (AFileName[l] <> '\') then
     Result := AFileName + '\'
   else Result := AFileName;
 end;
 
-function RemoveBackslash(AFileName: string): string;
+function RemoveBackslash(AFileName: WideString): WideString;
+var
+  l: integer;
 begin
-  if (AFileName <> '') and (AFileName[length(AFileName)] = '\') then
-    Result := Copy(AFileName, 1, length(AFileName) - 1)
+  l := Length(AFileName);
+  if (l > 0) and (AFileName[l] = '\') then
+    Result := Copy(AFileName, 1, l - 1)
   else Result := AFileName;
 end;
 
@@ -104,12 +112,12 @@ end;
 
 // ************************************************************************** //
 
-function GetLinkFileName(Source, TargetDir: string; Directory: boolean;
-  PrefixTemplate: string = LINK_PREFIX_TEMPLATE_DEFAULT): string;
+function GetLinkFileName(Source, TargetDir: WideString; Directory: boolean;
+  PrefixTemplate: WideString = LINK_PREFIX_TEMPLATE_DEFAULT): WideString;
 var
   x: integer;
-  SrcFile: string;
-  LinkStr, NumStr: string;
+  SrcFile: WideString;
+  LinkStr, NumStr: WideString;
 begin
   // Get the filename part of the source path. If the source path is a drive,
   // then use the drive letter.
@@ -150,29 +158,29 @@ end;
 
 // ************************************************************************** //
 
-procedure ApproveExtension(ClassIDStr, Description: string);
+procedure ApproveExtension(ClassIDStr, Description: WideString);
 begin
   if (Win32Platform = VER_PLATFORM_WIN32_NT) then
-    RegWriteString(HKEY_LOCAL_MACHINE,
+    RegWriteWideString(HKEY_LOCAL_MACHINE,
        'SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved',
        ClassIDStr, Description);
 end;
 
 // ************************************************************************** //
 
-procedure InternalCreateHardlink(Source, Destination: string);
+procedure InternalCreateHardlink(Source, Destination: WideString);
 var
-  NewFileName: string;
+  NewFileName: WideString;
 begin
   NewFileName := GetLinkFileName(Source, Destination, False);
-  if not NtfsCreateHardLink(NewFileName, PAnsiChar(Source)) then
-    raise Exception.Create('NtfsCreateHardLink() failed.');
+  if not NtfsCreateHardLinkW(NewFileName, Source) then
+    raise Exception.Create('NtfsCreateHardLinkW() failed.');
 
-  SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PAnsiChar(NewFileName), nil);
-  SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, PAnsiChar(Source), nil);
+  SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileName), nil);
+  SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATHW, PWideChar(Source), nil);
 end;
 
-function InternalCreateHardlinkSafe(Source, Destination: string): boolean;
+function InternalCreateHardlinkSafe(Source, Destination: WideString): boolean;
 begin
   try
     InternalCreateHardlink(Source, Destination);
@@ -184,7 +192,7 @@ end;
 
 // ************************************************************************** //
 
-function InternalCreateJunctionBase(LinkTarget, Junction: string): boolean;
+function InternalCreateJunctionBase(LinkTarget, Junction: WideString): boolean;
 begin
   // Create an empty directory first; note that we continue, if the directory
   // already exists, because this is required when the ContextMenu hook wants
@@ -196,10 +204,10 @@ begin
     // Allow to easily override existing junction points with a new target
     // folder: If there is already a junction point, just delete it.
     if GetJPDestination(Junction) <> '' then
-      NtfsDeleteJunctionPoint(Junction);
+      NtfsDeleteJunctionPointW(Junction);
 
     // Create the junction
-    Result := NtfsCreateJunctionPoint(CheckBackslash(Junction), LinkTarget);
+    Result := NtfsCreateJunctionPointW(CheckBackslash(Junction), LinkTarget);
     // if junction creation was unsuccessful, delete created directory
 
     if not Result then
@@ -211,15 +219,15 @@ begin
       TrackJunctionCreate(Junction, LinkTarget);
 
     // Notify explorer of the change
-    SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PAnsiChar(Junction), nil);
+    SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(Junction), nil);
   end;
 end;
 
-function InternalCreateJunction(LinkTarget, Junction: string;
-  TargetDirName: string = '';  // see inline comment
-  PrefixTemplate: string = LINK_PREFIX_TEMPLATE_DEFAULT): boolean;
+function InternalCreateJunction(LinkTarget, Junction: WideString;
+  TargetDirName: WideString = '';  // see inline comment
+  PrefixTemplate: WideString = LINK_PREFIX_TEMPLATE_DEFAULT): boolean;
 var
-  NewDir: string;
+  NewDir: WideString;
 begin
   // Calculate name of directory to create
   if TargetDirName <> '' then
@@ -245,17 +253,21 @@ end;
 
 // ************************************************************************** //
 
-function GetJPDestination(Folder: string): string;
+function GetJPDestination(Folder: WideString): WideString;
+var
+  l: integer;
 begin
   // Use JCL utility function to get the target folder
-  NtfsGetJunctionPointDestination(Folder, Result);
+  NtfsGetJunctionPointDestinationW(Folder, Result);
+
+  l := Length(Result);
 
   // If a path was returned, make some corrections
-  if (Result <> '') then
+  if (l > 0) then
   begin
     // Bug in JCL? There is always a #0 appended..
-    if (Result[Length(Result)]) = #0 then
-      Delete(Result, Length(Result), 1);
+    if (Result[l]) = #0 then
+      Delete(Result, l, 1);
     Result := CheckBackslash(Result);
     // Remove the \\?\ if existing
     if Pos('\??\', Result) = 1 then
