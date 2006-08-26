@@ -103,6 +103,8 @@ implementation
 uses
   ComServ, JclNTFS, JclRegistry, Constants;
 
+{$I JclNTFSUnicode.inc}
+
 { TJunctionOverlayHook }
 
 class function TJunctionOverlayHook.Config_IconIndex_Default: Integer;
@@ -142,28 +144,6 @@ end;
 class function THardlinkOverlayHook.Config_Prefix: string;
 begin
   Result := 'Hardlink';
-end;
-
-// TODO: This function should be removed from here as soon it is part of JCL.
-function NtfsGetHardLinkInfoW(const FileName: WideString; var Info: TNtfsHardLinkInfo): Boolean;
-var
-  F: THandle;
-  FileInfo: TByHandleFileInformation;
-begin
-  Result := False;
-  F := CreateFileW(PWideChar(FileName), GENERIC_READ, FILE_SHARE_READ or FILE_SHARE_WRITE, nil, OPEN_EXISTING, 0, 0);
-  if F <> INVALID_HANDLE_VALUE then
-  try
-    if GetFileInformationByHandle(F, FileInfo) then
-    begin
-      Info.LinkCount := FileInfo.nNumberOfLinks;
-      Info.FileIndexHigh := FileInfo.nFileIndexHigh;
-      Info.FileIndexLow := FileInfo.nFileIndexLow;
-      Result := True;
-    end;
-  finally
-    CloseHandle(F);
-  end
 end;
 
 function THardlinkOverlayHook.IsMemberOf(pwszPath: PWideChar;

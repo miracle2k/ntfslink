@@ -32,6 +32,7 @@ library ntfslink;
 
 {$R 'DialogLinksExisting.res' 'DialogLinksExisting.rc'}
 {$R 'Icons.res' 'Icons.rc'}
+{%File 'JclNTFSUnicode.inc'}
 
 uses
   ComServ,
