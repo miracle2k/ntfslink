@@ -47,6 +47,8 @@ implementation
 uses
   JclNTFS, JclRegistry, Global, Constants, ShellObjExtended, ComObj;
 
+{$I JclNTFSUnicode.inc}
+
 function GetFolderLinkCount(Folder: string; var LinksAsString: string): Integer;
 
   procedure RemoveInvalidTrackingEntries(Links: TStrings); overload;
@@ -73,7 +75,7 @@ function GetFolderLinkCount(Folder: string; var LinksAsString: string): Integer;
     Result := 0;
 
     // Open the stream
-    Handle := CreateFile(PChar(RemoveBackslash(Folder) + ':' + NTFSLINK_TRACKING_STREAM),
+    Handle := CreateFileW(PWideChar(RemoveBackslash(Folder) + ':' + NTFSLINK_TRACKING_STREAM),
                          {FILE_READ_DATA, not defined in Windows.pas}$1,
                          0, nil, OPEN_EXISTING,
                          FILE_FLAG_BACKUP_SEMANTICS or FILE_FLAG_OPEN_REPARSE_POINT,
@@ -163,18 +165,6 @@ begin
 end;
 
 procedure TrackJunctionCreate(Junction, Target: string);
-
-  function NtfsStreamsSupported(const Volume: string): Boolean;
-  var
-    MCL, Flags: Cardinal;
-  const
-    FILE_NAMED_STREAMS = $00040000;
-  begin
-    Result := GetVolumeInformation(PChar(Volume), nil, 0, nil, MCL, Flags, nil, 0);
-    if Result then
-      Result := (Flags and FILE_NAMED_STREAMS) <> 0;
-  end;
-
 var
   Handle: THandle;
   {BytesWritten: Cardinal;}
@@ -196,7 +186,7 @@ begin
      ((TrackingMode = 0(*Prefer Streams*)) or (TrackingMode = 2(*Always Streams*))) then
   begin
     // Open the file, append the new junction path, close
-    Handle := CreateFile(PChar(RemoveBackslash(Target) + ':' + NTFSLINK_TRACKING_STREAM),
+    Handle := CreateFileW(PWideChar(RemoveBackslash(Target) + ':' + NTFSLINK_TRACKING_STREAM),
                          {FILE_WRITE_DATA, not defined in Windows.pas}$2,
                          0, nil, OPEN_ALWAYS,
                          FILE_FLAG_BACKUP_SEMANTICS or FILE_FLAG_OPEN_REPARSE_POINT,

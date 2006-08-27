@@ -36,9 +36,14 @@ var
   GLYPH_HANDLE_LINKDEL: HBITMAP;
   GLYPH_HANDLE_EXPLORER: HBITMAP;
 
-// Creates certain registry entries to make sure the extension also works for
-// non-Admin accounts with restricted rights.
-procedure ApproveExtension(ClassIDStr, Description: WideString);
+// WideString versions of the corresponding SysUtils functions.
+function LastDelimiterW(const Delimiters, S: WideString): Integer;
+function ExtractFileNameW(const FileName: WideString): WideString;
+function ExtractFileDriveW(const FileName: WideString): WideString;
+
+function DirectoryExistsW(const Name: WideString): Boolean;
+function FileExistsW(const FileName: WideString): Boolean;
+function CreateDirW(const Dir: WideString): Boolean;
 
 // Will add a backslash to the end of the passed string, if not yet existing.
 function CheckBackslash(AFileName: WideString): WideString;
@@ -50,26 +55,30 @@ function IsLinkPrefixTemplateDisabled: boolean;
 
 // Return the name of the file/directory to create. This depends on the
 // existing files/directories, i.e. if the user creates multiple links
-// of the same file, we will enumerate them: Copy(1), Copy(2), etc..
+// of the same file, we will enumerate them: Copy(1), Copy(2), etc.
 function GetLinkFileName(Source, TargetDir: WideString; Directory: boolean;
   PrefixTemplate: WideString = LINK_PREFIX_TEMPLATE_DEFAULT): WideString;
 
-// Internal function used to create hardlinks
+// Creates certain registry entries to make sure the extension also works for
+// non-Admin accounts with restricted rights.
+procedure ApproveExtension(ClassIDStr, Description: WideString);
+
+// Internal function used to create hardlinks.
 procedure InternalCreateHardlink(Source, Destination: WideString);
-// Calls the one above, but catches all exceptions and returns a boolean
+// Calls the one above, but catches all exceptions and returns a boolean.
 function InternalCreateHardlinkSafe(Source, Destination: WideString): boolean;
 
-// Interal functions used to create junctions; The Base-function actually creates
+// Interal functions used to create junctions; the Base-function actually creates
 // the junctions using a final directory name, the other one first generates
 // the directory name based on a template and a base name (e.g. does the
-// "Link (x) of..."), and then calls InternalCreateJunctionBase()
+// "Link (x) of ..."), and then calls InternalCreateJunctionBase().
 function InternalCreateJunctionBase(LinkTarget, Junction: WideString): boolean;
 function InternalCreateJunction(LinkTarget, Junction: WideString;
   TargetDirName: WideString = '';
   PrefixTemplate: WideString = LINK_PREFIX_TEMPLATE_DEFAULT): boolean;
 
 // Wrapper around NtfsGetJunctionPointDestinationW(), passing the
-// destination as the result, not as a var parameter; In addition, fix some
+// destination as the result, not as a var parameter; in addition, fix some
 // issues with the result value of the JCL function, e.g. remove \\?\ prefix.
 function GetJPDestination(Folder: WideString): WideString;
 
@@ -82,24 +91,94 @@ uses
 
 // ************************************************************************** //
 
+function LastDelimiterW(const Delimiters, S: WideString): Integer;
+var
+  l, i: Integer;
+begin
+  Result := Length(S);
+  l := Length(Delimiters);
+  while Result > 0 do
+  begin
+    for i := 1 to l do
+    begin
+      if S[Result] = Delimiters[l] then
+        Exit;
+    end;
+    Dec(Result);
+  end;
+end;
+
+function ExtractFileNameW(const FileName: WideString): WideString;
+var
+  i: Integer;
+begin
+  i := LastDelimiter(PathDelim + DriveDelim, FileName);
+  Result := Copy(FileName, i + 1, MaxInt);
+end;
+
+function ExtractFileDriveW(const FileName: WideString): WideString;
+var
+  i, j: Integer;
+begin
+  if (Length(FileName) >= 2) and (FileName[2] = DriveDelim) then
+    Result := Copy(FileName, 1, 2)
+  else if (Length(FileName) >= 2) and (FileName[1] = PathDelim) and
+    (FileName[2] = PathDelim) then
+  begin
+    j := 0;
+    i := 3;
+    while (i < Length(FileName)) and (j < 2) do
+    begin
+      if FileName[i] = PathDelim then Inc(j);
+      if j < 2 then Inc(i);
+    end;
+    if FileName[i] = PathDelim then Dec(i);
+    Result := Copy(FileName, 1, i);
+  end else Result := '';
+end;
+
+function DirectoryExistsW(const Name: WideString): Boolean;
+var
+  r: DWORD;
+begin
+  r := GetFileAttributesW(PWideChar(Name));
+  Result := (R <> DWORD(-1)) and ((R and FILE_ATTRIBUTE_DIRECTORY) <> 0);
+end;
+
+function FileExistsW(const FileName: WideString): Boolean;
+var
+  Attr: Cardinal;
+begin
+  // FileGetSize is very slow, GetFileAttributes is much faster.
+  Attr := GetFileAttributesW(PWideChar(Filename));
+  Result := (Attr <> $FFFFFFFF) and (Attr and FILE_ATTRIBUTE_DIRECTORY = 0);
+end;
+
+function CreateDirW(const Dir: WideString): Boolean;
+begin
+  Result := CreateDirectoryW(PWideChar(Dir), nil);
+end;
+
+// ************************************************************************** //
+
 function CheckBackslash(AFileName: WideString): WideString;
 var
-  l: integer;
+  l: Integer;
 begin
+  Result := AFileName;
   l := Length(AFileName);
-  if (l > 0) and (AFileName[l] <> '\') then
-    Result := AFileName + '\'
-  else Result := AFileName;
+  if (l > 0) and (AFileName[l] <> PathDelim) then
+    Result := AFileName + PathDelim;
 end;
 
 function RemoveBackslash(AFileName: WideString): WideString;
 var
-  l: integer;
+  l: Integer;
 begin
+  Result := AFileName;
   l := Length(AFileName);
-  if (l > 0) and (AFileName[l] = '\') then
-    Result := Copy(AFileName, 1, l - 1)
-  else Result := AFileName;
+  if (l > 0) and (AFileName[l] = PathDelim) then
+    Result := Copy(AFileName, 1, l - 1);
 end;
 
 // ************************************************************************** //
@@ -121,10 +200,10 @@ var
 begin
   // Get the filename part of the source path. If the source path is a drive,
   // then use the drive letter.
-  SrcFile := ExtractFileName(RemoveBackslash(Source));
-  if SrcFile = '' then SrcFile := 'Drive ' + ExtractFileDrive(Source)[1];
+  SrcFile := ExtractFileNameW(RemoveBackslash(Source));
+  if SrcFile = '' then SrcFile := 'Drive ' + ExtractFileDriveW(Source)[1];
 
-  // Loop until we finally find a filename not yet in use
+  // Loop until we finally find a filename not yet in use.
   x := 0;
   repeat
     Inc(x);
@@ -136,7 +215,7 @@ begin
     else
       LinkStr := _(PrefixTemplate);
 
-    // The very first link does not get a number
+    // The very first link does not get a number.
     if x > 1 then NumStr := ' (' + IntToStr(x) + ')' else NumStr := '';
 
     // Format the template and use the result as our filename. As the
@@ -144,14 +223,14 @@ begin
     // fail. If this is the case, we catch the exception and use
     // the default template.
     try
-      Result := CheckBackslash(TargetDir) + Format(LinkStr, [NumStr, SrcFile]);
+      Result := CheckBackslash(TargetDir) + WideFormat(LinkStr, [NumStr, SrcFile]);
     except
-      Result := CheckBackslash(TargetDir) + Format(PrefixTemplate, [NumStr, SrcFile]);
+      Result := CheckBackslash(TargetDir) + WideFormat(PrefixTemplate, [NumStr, SrcFile]);
     end;
-  until ((Directory) and (not DirectoryExists(Result))) or
-        ((not Directory) and (not FileExists(Result)));
+  until ((Directory) and (not DirectoryExistsW(Result))) or
+        ((not Directory) and (not FileExistsW(Result)));
 
-  // Directories/Junctions require a trailing backslash
+  // Directories/Junctions require a trailing backslash.
   if Directory then
     Result := CheckBackslash(Result);
 end;
@@ -197,8 +276,9 @@ begin
   // Create an empty directory first; note that we continue, if the directory
   // already exists, because this is required when the ContextMenu hook wants
   // to make a junction based on an existing, empty folder.
-  Result := CreateDir(Junction) or DirectoryExists(Junction);
-  // If successful, then try to make a junction
+  Result := CreateDirW(Junction) or DirectoryExistsW(Junction);
+
+  // If successful, then try to create a junction.
   if Result then
   begin
     // Allow to easily override existing junction points with a new target
@@ -206,30 +286,30 @@ begin
     if GetJPDestination(Junction) <> '' then
       NtfsDeleteJunctionPointW(Junction);
 
-    // Create the junction
+    // Create the junction.
     Result := NtfsCreateJunctionPointW(CheckBackslash(Junction), LinkTarget);
-    // if junction creation was unsuccessful, delete created directory
 
     if not Result then
+      // If junction creation was unsuccessful, delete created directory.
       RemoveDir(Junction)
-    // otherwise (junction successful created): store the information about the
-    // new junction, so that we can later find out about how many junctions are
-    // pointing to a certain directory.
     else
+      // Otherwise (junction successful created): store the information about the
+      // new junction, so that we can later find out about how many junctions are
+      // pointing to a certain directory.
       TrackJunctionCreate(Junction, LinkTarget);
 
-    // Notify explorer of the change
+    // Notify explorer of the change.
     SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(Junction), nil);
   end;
 end;
 
 function InternalCreateJunction(LinkTarget, Junction: WideString;
-  TargetDirName: WideString = '';  // see inline comment
+  TargetDirName: WideString = '';  // See inline comment.
   PrefixTemplate: WideString = LINK_PREFIX_TEMPLATE_DEFAULT): boolean;
 var
   NewDir: WideString;
 begin
-  // Calculate name of directory to create
+  // Calculate name of directory to create.
   if TargetDirName <> '' then
     // The TargetFileName parameter was added, because this function is
     // called in two different situations. For one, from the DragDrop Hook,
@@ -247,7 +327,7 @@ begin
     NewDir := GetLinkFileName(LinkTarget, Junction, True, PrefixTemplate);
 
   // Call the sibling function which creates the hardlink, but which takes
-  // the final filename of the junction as a parameter
+  // the final filename of the junction as a parameter.
   Result := InternalCreateJunctionBase(LinkTarget, NewDir);
 end;
 
@@ -257,19 +337,19 @@ function GetJPDestination(Folder: WideString): WideString;
 var
   l: integer;
 begin
-  // Use JCL utility function to get the target folder
+  // Use JCL utility function to get the target folder.
   NtfsGetJunctionPointDestinationW(Folder, Result);
 
   l := Length(Result);
 
-  // If a path was returned, make some corrections
+  // If a path was returned, make some corrections.
   if (l > 0) then
   begin
-    // Bug in JCL? There is always a #0 appended..
+    // Bug in JCL? There seems to be always a #0 appended.
     if (Result[l]) = #0 then
       Delete(Result, l, 1);
     Result := CheckBackslash(Result);
-    // Remove the \\?\ if existing
+    // Remove the \\?\ if it exists.
     if Pos('\??\', Result) = 1 then
       Delete(Result, 1, 4);
   end;
