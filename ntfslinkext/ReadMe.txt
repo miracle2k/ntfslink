@@ -19,4 +19,4 @@ Have fun!
 
 --
 Sebastian Schuberth <eyebex@users.sourceforge.net>
-2006-aug-25
+2006.aug.25
