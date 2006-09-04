@@ -19,219 +19,184 @@
 
   The original version can still be retrieved from the "NTFS Link" homepage
   located at http://www.elsdoerfer.net/ntfslink/
-
-  ****************************************************************************
-
-  How To Use:
-  -----------
-  Basicly this build script can do 4 things for you:
-    a) prepare the files for the steps following next
-    b) compile the source code
-    c) distribute: create a zip file and a inno setup wizard
-    d) publish: upload the files
-
-  For every step above there is a main target (sub-targets / dependencies are
-  possible), which you should use to accomplish that step. These targets are:
-    a) [ clean   ]
-    b) [ build   ]
-    c) [ dist    ]
-    d) [ publish ]
-
-  If you want to do everything in a single step, use the target [ complete ]
-  ****************************************************************************
 -->
 
-<project name="NTFSLink" basedir="." default="complete">
+<project name="NTFSLinkExt" basedir=".." default="complete">
+  <!--------------------------------------------------------------------------->
+  <!-- Build related                                                         -->
+  <!--------------------------------------------------------------------------->
 
-<!----------------------------------------------------------------------------->
-<!-- Properties --------------------------------------------------------------->
-<!----------------------------------------------------------------------------->
+  <property name="dist" value="${basedir}\dist" />
 
-  <property name="bin.dir" value="${basedir}/../bin" />
-  <property name="source.dir" value="${basedir}/../source" />
-  <property name="working.dir" value="${basedir}/ntfslink-temp" />
-  <property name="dist.dir" value="${basedir}/dist" />
-  <property name="iscc.path" value="C:\Programme\Inno Setup 5\" />
+  <property name="configutil" value="${basedir}\source\configutil" />
 
-  <!-- build the filename of the zip-file -->
-  <tstamp>
-    <format property="date" pattern="yyyy-mm-dd" />
-  </tstamp>
-  <property name="dist.zip.filename" value="${dist.dir}/cvs-${date}.zip" />
-
-<!----------------------------------------------------------------------------->
-<!-- Patternsets -------------------------------------------------------------->
-<!----------------------------------------------------------------------------->
-
-  <!-- Some file patternsets -->
-  <patternset id="nl.obsolete">
-    <!-- Exclude some filetypes (mostly compiled objects) -->
-    <include name="**/*.dcu" />
-    <include name="**/*.res" />
-    <include name="**/*.ddp" />
-    <include name="**/*.map" />
-    <include name="**/*.drc" />
-    <include name="**/dxgettext.ini" />
-    <include name="NTFSLink.drc" />
-    <!-- include non mergable files created by CVS, like .#uMain.dfm.1.19 -->
-    <include name="**/.#*.*.*" />
-    <!-- include Backup and Dummy files -->
-    <include name="**/*.~*" />
-    <include name="**/dummy.txt" />
-  </patternset>
-
-  <patternset id="nl.source">
-    <include name="**/*.pas" />
-    <include name="**/*.rc" />
-    <include name="**/*.dfm" />
-    <include name="**/*.cfg" />
-    <include name="**/*.inc" />
-    <include name="**/*.dpr" />
-    <include name="**/*.dof" />
-    <include name="**/*.res" />
-  </patternset>
-
-<!----------------------------------------------------------------------------->
-<!-- Clean -------------------------------------------------------------------->
-<!----------------------------------------------------------------------------->
-
-  <!-- Clean up everything -->
-  <target name="clean">
-    <delete>
-      <!-- Delete ALL existing files -->
-      <fileset dir="${working.dir}">
-        <patternset><include name="**" /></patternset>
-      </fileset>
-      <!-- Delete the directory itself -->
-      <fileset dir=".">
-        <patternset><include name="${working.dir}" /></patternset>
-      </fileset>
-    </delete>
-  </target>
-
-<!----------------------------------------------------------------------------->
-<!-- Get files and prepare ---------------------------------------------------->
-<!----------------------------------------------------------------------------->
-
-  <!-- Copies the files from the local disk assuming the cvs hierachy -->
-  <target name="cvscopy" depends="clean">
-    <!-- Copy the files -->
-    <copy todir="${working.dir}">
-      <fileset dir="${source.dir}">
-        <patternset>
-          <patternset refid="nl.source" />
-        </patternset>
+  <target name="configutil">
+    <echo message="Building the configuration utility." />
+    <dcc basedir="${configutil}" source="ConfigUtil.dpr"
+         uselibrarypath="true"
+         usecfg="true">
+      <optimize value="true" />
+      <build value="true" />
+      <console value="false" />
+    </dcc>
+    <copy todir="${dist}">
+      <fileset dir="${configutil}">
+        <include name="ConfigUtil.exe" />
       </fileset>
     </copy>
   </target>
 
-<!----------------------------------------------------------------------------->
-<!-- Build -------------------------------------------------------------------->
-<!----------------------------------------------------------------------------->
+  <property name="ntfslink" value="${basedir}\source\ntfslink" />
 
-  <!-- Compiles the ressources -->
+  <!-- NTFSLinkExt's resources need to be compiled by BRCC explicitly. -->
   <target name="resources">
-    <!-- ntfslink.res is as a binary in cvs! (managed by Delphi IDE) -->
-    <brcc file="${working.dir}/Icons.rc" output="${working.dir}/Icons.res" />
-    <brcc file="${working.dir}/DialogLinksExisting.rc" output="${working.dir}/DialogLinksExisting.res" />
+    <brcc file="${ntfslink}\DialogLinksExisting.rc" output="${ntfslink}\DialogLinksExisting.res" />
+    <brcc file="${ntfslink}\Icons.rc" output="${ntfslink}\Icons.res" />
   </target>
 
-  <!-- Compiles NTFSLink (DLL and Config) -->
-  <target name="build" depends="resources">
-    <!-- Build DLL -->
-    <dcc basedir="${working.dir}" source="ntfslink.dpr"
+  <target name="ntfslink" depends="resources">
+    <echo message="Building the NTFSLink shell extension." />
+    <dcc basedir="${ntfslink}" source="NTFSLink.dpr"
          uselibrarypath="true"
          usecfg="true">
-      <exeoutput path="." />
       <optimize value="true" />
       <build value="true" />
-      <resourcepath path="${working.dir}" />
-      <map value="detailed" />
       <console value="false" />
     </dcc>
-    <!-- Build Config -->
-    <dcc basedir="${working.dir}\ConfigUtil" source="ConfigUtil.dpr"
-         uselibrarypath="true"
-         usecfg="true">
-      <exeoutput path="../" />
-      <optimize value="true" />
-      <build value="true" />
-      <resourcepath path="${working.dir}" />
-      <map value="detailed" />
-      <console value="false" />
-    </dcc>
-
-  </target>
-
-<!----------------------------------------------------------------------------->
-<!-- Distribution ------------------------------------------------------------->
-<!----------------------------------------------------------------------------->
-
-  <!-- Prepare distribution -->
-  <target name="prepare-dist">
-    <!-- delete all files -->
-    <delete>
-      <fileset dir="${working.dir}">
-        <patternset refid="nl.source" />
-        <patternset refid="nl.obsolete" />
-        <include name="ConfigUtil\" />
-      </fileset>
-    </delete>
-
-    <!-- Copy files from distribution directory -->
-    <copy todir="${working.dir}">
-      <fileset dir="${bin.dir}">
-        <patternset>
-          <!-- By default, include everything in all sub diectories -->
-          <include name="**" />
-          <!-- Exclude filetypes -->
-          <exclude name="**.exe" />
-          <exclude name="**.dll" />
-        </patternset>
+    <copy todir="${dist}">
+      <fileset dir="${ntfslink}">
+        <include name="NTFSLink.dll" />
       </fileset>
     </copy>
+  </target>
 
-    <!--
-      Delete all sourcecode and all files which will not ship. This probably
-      includes a couple of files already deleted (we removed all files except
-      the bin-Directory above), but I leave it here, because perhaps we will
-      need it in the future.
-      However, we still need it to remove obsolete files from the
-      bin-Module.
-    -->
+  <target name="ntfslinkext" depends="ntfslink,configutil">
+    <echo message="'ntfslinkext' meta-build finished." />
+  </target>
+
+  <!--------------------------------------------------------------------------->
+  <!-- Localization related                                                  -->
+  <!--------------------------------------------------------------------------->
+
+  <property name="tools" value="${basedir}\build\tools" />
+
+  <target name="dxgettext">
+    <echo message="Extracting text to be translated from the given files." />
+    <exec executable="${tools}\dxgettext.exe">
+      <!-- Using the --delphi argument will wrongly include Icons.rc, too. -->
+      <arg value="*.pas *.inc DialogLinksExisting.rc *.dpr *.xfm *.dfm" />
+      <arg value="-r" />
+      <arg value="-b source" />
+    </exec>
+  </target>
+
+  <target name="msgmkignore" depends="dxgettext">
+    <echo message="Determining strings that should not be translated." />
+    <exec executable="${tools}\msgmkignore.exe">
+      <arg value="source\default.po" />
+      <arg value="-o source\ignore.po" />
+    </exec>
+  </target>
+
+  <target name="msgremove" depends="msgmkignore">
+    <echo message="Removing the determined strings to ignore." />
+    <exec executable="${tools}\msgremove.exe">
+      <arg value="source\default.po" />
+      <arg value="-i source\ignore.po" />
+      <arg value="-o localization\default\default.po" />
+    </exec>
+  </target>
+
+  <target name="msgmerge">
+     <echo message="Merging existing German translations into template." />
+     <exec executable="${tools}\msgmerge.exe">
+       <arg value="-o localization\german\default.po" />
+       <arg value="--no-wrap" />
+       <arg value="localization\german\default.po" />
+       <arg value="localization\default\default.po" />
+     </exec>
+
+     <echo message="Merging existing Hungarian translations into template." />
+     <exec executable="${tools}\msgmerge.exe">
+       <arg value="-o localization\hungarian\default.po" />
+       <arg value="--no-wrap" />
+       <arg value="localization\hungarian\default.po" />
+       <arg value="localization\default\default.po" />
+     </exec>
+  </target>
+
+  <target name="msgfmt">
+    <echo message="Generating German binary message catalog." />
+    <mkdir dir="dist\locale\de\LC_MESSAGES" />
+    <exec executable="${tools}\msgfmt.exe">
+       <arg value="-o dist\locale\de\LC_MESSAGES\default.mo" />
+       <arg value="localization\german\default.po" />
+    </exec>
+
+    <echo message="Generating Hungarian binary message catalog." />
+    <mkdir dir="dist\locale\hu\LC_MESSAGES" />
+    <exec executable="${tools}\msgfmt.exe">
+       <arg value="-o dist\locale\hu\LC_MESSAGES\default.mo" />
+       <arg value="localization\hungarian\default.po" />
+    </exec>
+  </target>
+
+  <target name="translate" depends="msgremove,msgmerge,msgfmt">
+    <echo message="'translate' meta-build finished." />
+  </target>
+
+  <!--------------------------------------------------------------------------->
+  <!-- Clean related                                                         -->
+  <!--------------------------------------------------------------------------->
+
+  <!-- Define Delphi intermediate files by extension. -->
+  <patternset id="intermediate">
+    <include name="**\*.dcu" />
+    <include name="**\*.drc" />
+    <include name="**\*.exe" />
+    <include name="**\*.map" />
+
+    <include name="**\*.dll" />
+    <include name="**\*.res" />
+
+    <exclude name="**\WinXP.res" />
+    <exclude name="**\ConfigUtil.res" />
+    <exclude name="**\NTFSLink.res" />
+
+    <!-- Additional files created by Delphi 2005 PE. -->
+    <include name="**\*.bdsproj" />
+    <include name="**\*.bdsproj.local" />
+    <include name="**\*.cfg" />
+    <include name="**\*.identcache" />
+  </patternset>
+
+  <target name="clean">
+    <echo message="Cleaning GNU gettext intermediate files." />
+    <delete file="source\default.po" />
+    <delete file="source\ignore.po" />
+
+    <echo message="Cleaning Delphi intermediate files." />
     <delete>
-      <fileset dir="${working.dir}">
-        <patternset refid="nl.obsolete" />
-        <patternset refid="nl.source" />
-       </fileset>
+      <fileset dir="source\configutil">
+        <patternset refid="intermediate" />
+      </fileset>
+
+      <fileset dir="source\ntfslink">
+        <patternset refid="intermediate" />
+      </fileset>
     </delete>
+
+    <!-- Additional directories created by Delphi 2005 PE. -->
+    <delete dir="source\configutil\__history" />
+    <delete dir="source\ntfslink\__history" />
   </target>
 
-  <!-- Compiles the InnoSetup -->
-  <target name="dist-setup" depends="prepare-dist">
-         <iscc source="Setup\NTFSLink.iss" />
+  <target name="clean-all" depends="clean">
+    <echo message="Cleaning GNU gettext distribution files." />
+    <delete dir="dist\locale" />
+
+    <echo message="Cleaning Delphi distribution files." />
+    <delete file="dist\ConfigUtil.exe" />
+    <delete file="dist\NTFSLink.dll" />
   </target>
-
-<!----------------------------------------------------------------------------->
-<!-- Full Targets ------------------------------------------------------------->
-<!----------------------------------------------------------------------------->
-
-  <target name="complete-copy">
-    <want target="cvscopy" />
-    <want target="build" />
-    <want target="dist-setup" />
-    <want target="clean" />
-  </target>
-
-  <target name="complete" depends="complete-copy" />  <!-- defaults to copy -->
-
-<!----------------------------------------------------------------------------->
-<!-- Localization ------------------------------------------------------------->
-<!----------------------------------------------------------------------------->
-
-  <!-- this is just a shortcut to the localization.xml build file -->
-  <target name="localization">
-    <want buildfile="localization.xml" target="default" />
-  </target>
-
 </project>

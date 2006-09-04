@@ -1,1 +1,0 @@
-want clean cvscopy build dist-setup clean
