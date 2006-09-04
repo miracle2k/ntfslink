@@ -1,33 +1,31 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-msgid ""
-msgstr "Project-Id-Version: NTFS Link\n"
+# Gwyll Gwyllin <gwyll@gwyll.mine.nu>, 2004.
+#
 "POT-Creation-Date: 2004-08-28 14:40\n"
 "PO-Revision-Date: 2004-10-19 13:20\n"
-"Last-Translator:  <>\n"
-"Language-Team: Gwyll Gwyllin <gwyll@gwyll.mine.nu>\n"
+"Last-Translator: Gwyll Gwyllin <gwyll@gwyll.mine.nu>\n"
+"Language-Team: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Language-English: Hungarian\n"
 "X-Language-Local: Magyar\n"
 "X-Language-Flag: Qk22AQAAAAAAAHYAAAAoAAAAIAAAABQAAAABAAQAAAAAAEABAAATCwAAEwsAABAAAAAQAAAAAIQAAAAA/wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIRERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERER\n"
-"X-Generator: dxgettext 1.1.1\n"
 
 #. fConfig..Caption
 #: ConfigUtil/uConfig.dfm:6
 msgid "NTFS Link Configuration"
-msgstr "NTFS link konfigur·ciÛ"
+msgstr "NTFS link konfigur√°ci√≥"
 
 #. fConfig..Font.Name
 #: ConfigUtil/uConfig.dfm:13
 #. Programmer's name: FONT 8
 #: DialogLinksExisting.rc:13
 msgid "MS Shell Dlg 2"
-msgstr "MS Shell dialÛgablak 2"
+msgstr "MS Shell dial√≥gablak 2"
 
 #. fConfig..Label1..Caption
 #: ConfigUtil/uConfig.dfm:30
@@ -39,47 +37,47 @@ msgstr "Ikon:"
 #. fConfig..Label3..Caption
 #: ConfigUtil/uConfig.dfm:69
 msgid "Tracking of Junction Creation:"
-msgstr "÷sszekapcsol·s lÈtrehoz·s·nak nyomonkˆvetÈse:"
+msgstr "√ñsszekapcsol√°s l√©trehoz√°s√°nak nyomonk√∂vet√©se:"
 
 #. fConfig..IntegrateIntoDragDropMenu..Hint
 #: ConfigUtil/uConfig.dfm:76
 msgid "Allows creation of hardlinks and junctions using Drag&Drop"
-msgstr "Hardlinkek Ès ˆsszekapcsol·sok kˆvetÈsÈnek engedÈlyezÈse egÈr haszn·lat·val"
+msgstr "Hardlinkek √©s √∂sszekapcsol√°sok k√∂vet√©s√©nek enged√©lyez√©se eg√©r haszn√°lat√°val"
 
 #. fConfig..IntegrateIntoDragDropMenu..Caption
 #: ConfigUtil/uConfig.dfm:78
 msgid "Integrate into Explorer Drag&&Drop menu"
-msgstr "Integr·l·s az IntÈzˆ Drag&&Drop men¸jÈbe"
+msgstr "Integr√°l√°s az Int√©z√∂ Drag&&Drop men√ºj√©be"
 
 #. fConfig..EnableJunctionIconOverlays..Hint
 #: ConfigUtil/uConfig.dfm:86
 msgid "Helps differing junction points between other directories"
-msgstr "÷sszekapcsol·si pontok megk¸lˆnbˆztetÈsi m·s kˆnyvt·raktÛl"
+msgstr "√ñsszekapcsol√°si pontok megk√ºl√∂nb√∂ztet√©si m√°s k√∂nyvt√°rakt√≥l"
 
 #. fConfig..EnableJunctionIconOverlays..Caption
 #: ConfigUtil/uConfig.dfm:88
 msgid "Enable Icon Overlays for Junction Points (requires restart)"
-msgstr "Ikon ·tfedÈsek engedÈlyezÈse ˆsszekapcsol·si pontokra (˙jraindÌt·st igÈnyel)"
+msgstr "Ikon √°tfed√©sek enged√©lyez√©se √∂sszekapcsol√°si pontokra (√∫jraind√≠t√°st ig√©nyel)"
 
 #. fConfig..EnableHardlinkIconOverlays..Hint
 #: ConfigUtil/uConfig.dfm:97
 msgid "Helps differing hard links between other files"
-msgstr "Hardlinkek megk¸lˆnbˆztetÈse m·s f·jloktÛl"
+msgstr "Hardlinkek megk√ºl√∂nb√∂ztet√©se m√°s f√°jlokt√≥l"
 
 #. fConfig..EnableHardlinkIconOverlays..Caption
 #: ConfigUtil/uConfig.dfm:99
 msgid "Enable Icon Overlays for Hardlinks (requires restart)"
-msgstr "Ikon-·tfedÈs engedÈlyezÈse hardlinkeken (˙jraindÌt·st igÈnyel)"
+msgstr "Ikon-√°tfed√©s enged√©lyez√©se hardlinkeken (√∫jraind√≠t√°st ig√©nyel)"
 
 #. fConfig..InterceptJunctionCopying....Height
 #: ConfigUtil/uConfig.dfm:111
 msgid "Whenever you try to copy a junction point in Explorer, NTFS Link will ask whether you want to copy the junction only, or all the contents of the target folder"
-msgstr "÷sszekapcsol·s m·sol·sakor kÈrdezzen r·, hogy csak az ˆsszekapcsol·si pontrÛl vagy a teljes tartalomrÛl kÈszÌtsen-e m·solatot"
+msgstr "√ñsszekapcsol√°s m√°sol√°sakor k√©rdezzen r√°, hogy csak az √∂sszekapcsol√°si pontr√≥l vagy a teljes tartalomr√≥l k√©sz√≠tsen-e m√°solatot"
 
 #. fConfig..InterceptJunctionCopying..Caption
 #: ConfigUtil/uConfig.dfm:113
 msgid "Intercept Copying of Junction Points"
-msgstr "÷sszekapcsol·si pontok m·sol·s·nak ÈszlelÈse"
+msgstr "√ñsszekapcsol√°si pontok m√°sol√°s√°nak √©szlel√©se"
 
 #. fConfig..bOK..Caption
 #: ConfigUtil/uConfig.dfm:122
@@ -89,165 +87,165 @@ msgstr "OK"
 #. fConfig..bCancel..Caption
 #: ConfigUtil/uConfig.dfm:134
 msgid "Cancel"
-msgstr "MÈgse"
+msgstr "M√©gse"
 
 #. fConfig..JunctionTrackingMode....Height
 #: ConfigUtil/uConfig.dfm:146
 msgid "NTFS Link can save information about the junctions you created, and warn you, if you attempt to delete a folder with junctions pointing to"
-msgstr "A program kÈpes inform·ciÛkat elmenteni az ˆsszekapcsol·si pontokrÛl Ès figyelmeztetÈst k¸ldeni, amikor az egyik cÈlmapp·t tˆrˆlnÈ a felhaszn·lÛ"
+msgstr "A program k√©pes inform√°ci√≥kat elmenteni az √∂sszekapcsol√°si pontokr√≥l √©s figyelmeztet√©st k√ºldeni, amikor az egyik c√©lmapp√°t t√∂r√∂ln√© a felhaszn√°l√≥"
 
 #. fConfig..JunctionTrackingMode..Text
 #: ConfigUtil/uConfig.dfm:152
 #. fConfig..JunctionTrackingMode....Items.Strings
 #: ConfigUtil/uConfig.dfm:154
 msgid "Prefer Streams, if not available Registry"
-msgstr "Adatfolyam haszn·lata, ha a regisztr·ciÛs-adatb·zis nem elÈrhetˆ"
+msgstr "Adatfolyam haszn√°lata, ha a regisztr√°ci√≥s-adatb√°zis nem el√©rhet√∂"
 
 #. fConfig..JunctionTrackingMode....Items.Strings
 #: ConfigUtil/uConfig.dfm:155
 msgid "Always in Registry"
-msgstr "Mindig a regisztr·ciÛs adatb·zisban"
+msgstr "Mindig a regisztr√°ci√≥s adatb√°zisban"
 
 #. fConfig..JunctionTrackingMode....Items.Strings
 #: ConfigUtil/uConfig.dfm:156
 msgid "Always in Streams (does not work on FAT)"
-msgstr "Mindig adatfolyamokban (FAT f·jlrendszeren nem m¸kˆdik)"
+msgstr "Mindig adatfolyamokban (FAT f√°jlrendszeren nem m√ºk√∂dik)"
 
 #. fConfig..JunctionTrackingMode....Items.Strings
 #: ConfigUtil/uConfig.dfm:157
 msgid "Deactivate"
-msgstr "Letilt·s"
+msgstr "Letilt√°s"
 
 #. fConfig..IntegrateIntoContextMenu....Height
 #: ConfigUtil/uConfig.dfm:190
 msgid "Adds a menu item into the context menu of junction points und empty directories"
-msgstr "Elem elhelyezÈse ˆsszekapcsol·si pontok Ès ¸res kˆnyvt·rak almen¸iben"
+msgstr "Elem elhelyez√©se √∂sszekapcsol√°si pontok √©s √ºres k√∂nyvt√°rak almen√ºiben"
 
 #. fConfig..IntegrateIntoContextMenu..Caption
 #: ConfigUtil/uConfig.dfm:192
 msgid "Integrate into Explorer Right-Click menu"
-msgstr "Integr·l·s az IntÈzˆ felbukkanÛ men¸jÈbe"
+msgstr "Integr√°l√°s az Int√©z√∂ felbukkan√≥ men√ºj√©be"
 
 #. fConfig..CreateLinksSuppressPrefix....Height
 #: ConfigUtil/uConfig.dfm:202
 msgid "By default, a \"Link to\" prefix will be added to every link, like the Explorer does with copies"
-msgstr "AlapÈrtelmezÈsben, a \"Parancsikon - \" elˆtag hozz·adÛdik minden linkhez, ahogy az IntÈzˆ teszi m·sol·skor"
+msgstr "Alap√©rtelmez√©sben, a \"Parancsikon - \" el√∂tag hozz√°ad√≥dik minden linkhez, ahogy az Int√©z√∂ teszi m√°sol√°skor"
 
 #. fConfig..CreateLinksSuppressPrefix..Caption
 #: ConfigUtil/uConfig.dfm:204
 msgid "Do not add \"Link to\" prefix when creating links"
-msgstr "A \"Parancsikon - \" elˆtagot ne adja hozz· lÈtrehoz·skor"
+msgstr "A \"Parancsikon - \" el√∂tagot ne adja hozz√° l√©trehoz√°skor"
 
 #. Template used to name the created links; can be overridden by lang file
 #. Programmer's name for it: LINK_PREFIX_TEMPLATE_DEFAULT
 #: Constants.pas:40
 msgid "Link%s to %s"
-msgstr "%s ˆsszekapcsol·sa %s -(al/el)"
+msgstr "%s √∂sszekapcsol√°sa %s -(al/el)"
 
 #. Programmer's name for it: COPY_PREFIX_TEMPLATE_DEFAULT
 #: Constants.pas:41
 msgid "Copy%s of %s"
-msgstr "%s m·sol·sa %s-(ba/be)"
+msgstr "%s m√°sol√°sa %s-(ba/be)"
 
 #: ContextMenuHook.pas:78
 msgid "Link selected folder to another directory or drive"
-msgstr "Kijelˆlt mapp·ra ˆsszekapcsol·si pont lÈtrehoz·sa m·sik mapp·ba vagy m·sik meghajtÛra"
+msgstr "Kijel√∂lt mapp√°ra √∂sszekapcsol√°si pont l√©trehoz√°sa m√°sik mapp√°ba vagy m√°sik meghajt√≥ra"
 
 #: ContextMenuHook.pas:80
 msgid "Remove this folder's junction point"
-msgstr "Aktu·lis mappa ˆsszekapcsol·si pontj·nak elt·volÌt·sa"
+msgstr "Aktu√°lis mappa √∂sszekapcsol√°si pontj√°nak elt√°vol√≠t√°sa"
 
 #: ContextMenuHook.pas:82
 msgid "Open the target of this junction in Windows Explorer"
-msgstr "Aktu·lis ˆsszekapcsol·si pont cÈlj·nak megnyit·sa az IntÈzˆben"
+msgstr "Aktu√°lis √∂sszekapcsol√°si pont c√©lj√°nak megnyit√°sa az Int√©z√∂ben"
 
 #. Add items to the submenu, depending on mode
 #: ContextMenuHook.pas:208
 msgid "Link Folder..."
-msgstr "Mappa ˆsszekapcsol·sa..."
+msgstr "Mappa √∂sszekapcsol√°sa..."
 
 #: ContextMenuHook.pas:210
 msgid "Unlink From \"%s\""
-msgstr "Lev·laszt·s \"%s\"-(rÛl/rˆl)"
+msgstr "Lev√°laszt√°s \"%s\"-(r√≥l/r√∂l)"
 
 #: ContextMenuHook.pas:212
 msgid "Open \"%s\""
-msgstr "\"%s\" megnyit·sa"
+msgstr "\"%s\" megnyit√°sa"
 
 #. If the thing went not smoothly, then show a message
 #: CopyHook.pas:224
 msgid "\"%s\" could not be moved, because there is already a directory \"%s\"."
-msgstr "\"%s\" ·thelyezÈse sikertelen, mert m·r lÈtezik egy ilyen nev¸ mappa \"%s\"."
+msgstr "\"%s\" √°thelyez√©se sikertelen, mert m√°r l√©tezik egy ilyen nev√º mappa \"%s\"."
 
 #: CopyHook.pas:229
 msgid "\"%s\" could not be moved to \"%s\" because of unkown reasons."
-msgstr "\"%s\" ·thelyezÈsi ismeretlen hiba miatt nem lehetsÈges."
+msgstr "\"%s\" √°thelyez√©si ismeretlen hiba miatt nem lehets√©ges."
 
 #. Moving the junction point is not possible
 #: CopyHook.pas:236
 msgid "\"%s\" is a junction point, but the target file system does not support junctions."
-msgstr "\"%s\" egy ˆsszekapcsol·si pont, de a cÈl f·jlrendszer nem t·mogatja az ˆsszekapcsol·si pontok haszn·lat·t."
+msgstr "\"%s\" egy √∂sszekapcsol√°si pont, de a c√©l f√°jlrendszer nem t√°mogatja az √∂sszekapcsol√°si pontok haszn√°lat√°t."
 
 #. Ask user what he wants to do
 #: CopyHook.pas:262
 msgid "\"%s\" is a junction point. If you want to copy the junction only, click \"Yes\", if you want to copy the target directory including all it's content, click \"No\". If you choose \"Cancel\", nothing will happen."
-msgstr "\"%s\" egy ˆsszekapcsol·si pont. M·sol·shoz klikkeljen az \"Igen\"-re, az egÈsz cÈlmappa m·sol·s·hoz klikkeljen a \"Nem\"-re, megszakÌt·shoz klikkeljen a \"MÈgse\"-re."
+msgstr "\"%s\" egy √∂sszekapcsol√°si pont. M√°sol√°shoz klikkeljen az \"Igen\"-re, az eg√©sz c√©lmappa m√°sol√°s√°hoz klikkeljen a \"Nem\"-re, megszak√≠t√°shoz klikkeljen a \"M√©gse\"-re."
 
 #. text of the third option button
 #: DialogLinksExisting.pas:81
 msgid "Yes, and delete links"
-msgstr "Igen,  tˆrˆlje a linkeket is."
+msgstr "Igen,  t√∂r√∂lje a linkeket is."
 
 #: DialogLinksExisting.pas:84
 msgid "Yes, and correct links"
-msgstr "Igen, javÌtsa a linkeket is."
+msgstr "Igen, jav√≠tsa a linkeket is."
 
 #. Tell the user if an error occurred
 #: DragDropHook.pas:150
 #. If positive result, then try to create hardlink
 #: ShellNewExports.pas:85
 msgid "Failed to create link. Most likely the target file system does not support this feature, or you tried to create a hard link across different partitions."
-msgstr "Link lÈtrehoz·sa sikertelen. A cÈl-f·jlrendszer valÛszÌn¸leg nem t·mogatja vagy k¸lˆnbˆzˆ partÌciÛk kˆzˆtt prÛb·lt linket lÈtrehozni."
+msgstr "Link l√©trehoz√°sa sikertelen. A c√©l-f√°jlrendszer val√≥sz√≠n√ºleg nem t√°mogatja vagy k√ºl√∂nb√∂z√∂ part√≠ci√≥k k√∂z√∂tt pr√≥b√°lt linket l√©trehozni."
 
 #. an appropriate menu caption
 #: DragDropHook.pas:178
 msgid "Create Hardlink Here"
-msgstr "Hardlink lÈtrehoz·sa ide."
+msgstr "Hardlink l√©trehoz√°sa ide."
 
 #: DragDropHook.pas:179
 msgid "Create Hardlinks Here"
-msgstr "Hardlinkek lÈtrehoz·sa ide."
+msgstr "Hardlinkek l√©trehoz√°sa ide."
 
 #: DragDropHook.pas:182
 msgid "Create Junction Here"
-msgstr "÷sszekapcsol·si pont lÈtrehoz·sa ide."
+msgstr "√ñsszekapcsol√°si pont l√©trehoz√°sa ide."
 
 #: DragDropHook.pas:183
 msgid "Create Junctions Here"
-msgstr "÷sszekapcsol·si pontok lÈtrehoz·sa ide."
+msgstr "√ñsszekapcsol√°si pontok l√©trehoz√°sa ide."
 
 #: DragDropHook.pas:186
 msgid "Create Links Here"
-msgstr "Link lÈtrehoz·sa ide."
+msgstr "Link l√©trehoz√°sa ide."
 
 #. Init other struct members
 #: ShellNewExports.pas:68
 msgid "Choose the file you want to create a hard link to"
-msgstr "Jelˆlje ki a f·jlt amire a hardlink mutasson"
+msgstr "Jel√∂lje ki a f√°jlt amire a hardlink mutasson"
 
 #: ShellNewExports.pas:69
 msgid "All Files"
-msgstr "Minden f·jl"
+msgstr "Minden f√°jl"
 
 #. Init BrowseInfo struct
 #: ShellNewExports.pas:105
 msgid "Choose the target folder or drive to which you want to create a junction point."
-msgstr "V·lassza ki a cÈlmapp·t vagy a cÈlmeghajtÛt, ahova lÈtre kÌv·nja hozni az ˆsszekapcsol·si pontot."
+msgstr "V√°lassza ki a c√©lmapp√°t vagy a c√©lmeghajt√≥t, ahova l√©tre k√≠v√°nja hozni az √∂sszekapcsol√°si pontot."
 
 #. If junction creation failed, show message box
 #: ShellNewExports.pas:128
 msgid "Failed to create junction. Most likely the target file system does not support this feature."
-msgstr "÷sszekapcsol·si pont lÈtrehoz·sa sikertelen. ValÛszÌn¸leg a cÈl-f·jlrendszer nem t·mogatja ezt a funkciÛt."
+msgstr "√ñsszekapcsol√°si pont l√©trehoz√°sa sikertelen. Val√≥sz√≠n√ºleg a c√©l-f√°jlrendszer nem t√°mogatja ezt a funkci√≥t."
 
 #. Programmer's name: CAPTION
 #: DialogLinksExisting.rc:12
@@ -257,7 +255,7 @@ msgstr "NTFS Link"
 #. Programmer's name: CONTROL
 #: DialogLinksExisting.rc:15
 msgid "There are junctions pointing to this folder or a subfolder (see list below). If you continue the operation, these links will no longer work. Are you sure?"
-msgstr "Vannak erre a mapp·ra mutatÛ ˆsszekapcsol·si pontok (rÈszletesebben a list·ban). Ha folytatja a m¸veletet, ezek a linkek a tov·bbiakban nem fognak m¸kˆdni. Biztos benne ?"
+msgstr "Vannak erre a mapp√°ra mutat√≥ √∂sszekapcsol√°si pontok (r√©szletesebben a list√°ban). Ha folytatja a m√ºveletet, ezek a linkek a tov√°bbiakban nem fognak m√ºk√∂dni. Biztos benne ?"
 
 #. Programmer's name: CONTROL
 #: DialogLinksExisting.rc:18
@@ -268,4 +266,3 @@ msgstr "Igen"
 #: DialogLinksExisting.rc:19
 msgid "No"
 msgstr "Nem"
-
