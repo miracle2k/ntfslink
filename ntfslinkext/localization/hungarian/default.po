@@ -3,6 +3,8 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Gwyll Gwyllin <gwyll@gwyll.mine.nu>, 2004.
 #
+msgid ""
+msgstr "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2004-08-28 14:40\n"
 "PO-Revision-Date: 2004-10-19 13:20\n"
 "Last-Translator: Gwyll Gwyllin <gwyll@gwyll.mine.nu>\n"
