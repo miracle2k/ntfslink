@@ -103,11 +103,19 @@
     <exec executable="${gettext}\msgremove.exe">
       <arg value="source\default.po" />
       <arg value="-i source\ignore.po" />
-      <arg value="-o localization\default\default.po" />
+      <arg value="-o source\default-ignore.po" />
     </exec>
   </target>
 
   <target name="msgmerge">
+     <echo message="Merging existing default translations into template." />
+     <exec executable="${gettext}\msgmerge.exe">
+       <arg value="-o localization\default\default.po" />
+       <arg value="--no-wrap" />
+       <arg value="localization\default\default.po" />
+       <arg value="source\default-ignore.po" />
+     </exec>
+
      <echo message="Merging existing German translations into template." />
      <exec executable="${gettext}\msgmerge.exe">
        <arg value="-o localization\german\default.po" />
@@ -121,6 +129,14 @@
        <arg value="-o localization\hungarian\default.po" />
        <arg value="--no-wrap" />
        <arg value="localization\hungarian\default.po" />
+       <arg value="localization\default\default.po" />
+     </exec>
+
+     <echo message="Merging existing Spanish translations into template." />
+     <exec executable="${gettext}\msgmerge.exe">
+       <arg value="-o localization\spanish\default.po" />
+       <arg value="--no-wrap" />
+       <arg value="localization\spanish\default.po" />
        <arg value="localization\default\default.po" />
      </exec>
   </target>
@@ -174,6 +190,7 @@
     <echo message="Cleaning GNU gettext intermediate files." />
     <delete file="source\default.po" />
     <delete file="source\ignore.po" />
+    <delete file="source\default-ignore.po" />
 
     <echo message="Cleaning Delphi intermediate files." />
     <delete>
