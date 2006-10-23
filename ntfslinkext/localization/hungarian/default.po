@@ -4,267 +4,264 @@
 # Gwyll Gwyllin <gwyll@gwyll.mine.nu>, 2004.
 #
 msgid ""
-msgstr "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-08-28 14:40\n"
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2006-10-24 01:28\n"
 "PO-Revision-Date: 2004-10-19 13:20\n"
 "Last-Translator: Gwyll Gwyllin <gwyll@gwyll.mine.nu>\n"
 "Language-Team: \n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Language-English: Hungarian\n"
 "X-Language-Local: Magyar\n"
 "X-Language-Flag: Qk22AQAAAAAAAHYAAAAoAAAAIAAAABQAAAABAAQAAAAAAEABAAATCwAAEwsAABAAAAAQAAAAAIQAAAAA/wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIRERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERER\n"
 
 #. fConfig..Caption
-#: ConfigUtil/uConfig.dfm:6
+#: configutil/uConfig.dfm:6
 msgid "NTFS Link Configuration"
 msgstr "NTFS link konfiguráció"
 
 #. fConfig..Font.Name
-#: ConfigUtil/uConfig.dfm:13
 #. Programmer's name: FONT 8
-#: DialogLinksExisting.rc:13
+#: configutil/uConfig.dfm:13 ntfslink/DialogLinksExisting.rc:13
 msgid "MS Shell Dlg 2"
 msgstr "MS Shell dialógablak 2"
 
 #. fConfig..Label1..Caption
-#: ConfigUtil/uConfig.dfm:30
 #. fConfig..Label2..Caption
-#: ConfigUtil/uConfig.dfm:38
+#: configutil/uConfig.dfm:30 configutil/uConfig.dfm:38
 msgid "Icon:"
 msgstr "Ikon:"
 
 #. fConfig..Label3..Caption
-#: ConfigUtil/uConfig.dfm:69
+#: configutil/uConfig.dfm:69
 msgid "Tracking of Junction Creation:"
 msgstr "Összekapcsolás létrehozásának nyomonkövetése:"
 
 #. fConfig..IntegrateIntoDragDropMenu..Hint
-#: ConfigUtil/uConfig.dfm:76
+#: configutil/uConfig.dfm:76
 msgid "Allows creation of hardlinks and junctions using Drag&Drop"
 msgstr "Hardlinkek és összekapcsolások követésének engedélyezése egér használatával"
 
 #. fConfig..IntegrateIntoDragDropMenu..Caption
-#: ConfigUtil/uConfig.dfm:78
+#: configutil/uConfig.dfm:78
 msgid "Integrate into Explorer Drag&&Drop menu"
 msgstr "Integrálás az Intézö Drag&&Drop menüjébe"
 
 #. fConfig..EnableJunctionIconOverlays..Hint
-#: ConfigUtil/uConfig.dfm:86
+#: configutil/uConfig.dfm:86
 msgid "Helps differing junction points between other directories"
 msgstr "Összekapcsolási pontok megkülönböztetési más könyvtáraktól"
 
 #. fConfig..EnableJunctionIconOverlays..Caption
-#: ConfigUtil/uConfig.dfm:88
+#: configutil/uConfig.dfm:88
 msgid "Enable Icon Overlays for Junction Points (requires restart)"
 msgstr "Ikon átfedések engedélyezése összekapcsolási pontokra (újraindítást igényel)"
 
 #. fConfig..EnableHardlinkIconOverlays..Hint
-#: ConfigUtil/uConfig.dfm:97
+#: configutil/uConfig.dfm:97
 msgid "Helps differing hard links between other files"
 msgstr "Hardlinkek megkülönböztetése más fájloktól"
 
 #. fConfig..EnableHardlinkIconOverlays..Caption
-#: ConfigUtil/uConfig.dfm:99
+#: configutil/uConfig.dfm:99
 msgid "Enable Icon Overlays for Hardlinks (requires restart)"
 msgstr "Ikon-átfedés engedélyezése hardlinkeken (újraindítást igényel)"
 
 #. fConfig..InterceptJunctionCopying....Height
-#: ConfigUtil/uConfig.dfm:111
+#: configutil/uConfig.dfm:111
 msgid "Whenever you try to copy a junction point in Explorer, NTFS Link will ask whether you want to copy the junction only, or all the contents of the target folder"
 msgstr "Összekapcsolás másolásakor kérdezzen rá, hogy csak az összekapcsolási pontról vagy a teljes tartalomról készítsen-e másolatot"
 
 #. fConfig..InterceptJunctionCopying..Caption
-#: ConfigUtil/uConfig.dfm:113
+#: configutil/uConfig.dfm:113
 msgid "Intercept Copying of Junction Points"
 msgstr "Összekapcsolási pontok másolásának észlelése"
 
 #. fConfig..bOK..Caption
-#: ConfigUtil/uConfig.dfm:122
+#: configutil/uConfig.dfm:122
 msgid "OK"
 msgstr "OK"
 
 #. fConfig..bCancel..Caption
-#: ConfigUtil/uConfig.dfm:134
+#: configutil/uConfig.dfm:134
 msgid "Cancel"
 msgstr "Mégse"
 
 #. fConfig..JunctionTrackingMode....Height
-#: ConfigUtil/uConfig.dfm:146
+#: configutil/uConfig.dfm:146
 msgid "NTFS Link can save information about the junctions you created, and warn you, if you attempt to delete a folder with junctions pointing to"
 msgstr "A program képes információkat elmenteni az összekapcsolási pontokról és figyelmeztetést küldeni, amikor az egyik célmappát törölné a felhasználó"
 
 #. fConfig..JunctionTrackingMode..Text
-#: ConfigUtil/uConfig.dfm:152
 #. fConfig..JunctionTrackingMode....Items.Strings
-#: ConfigUtil/uConfig.dfm:154
+#: configutil/uConfig.dfm:152 configutil/uConfig.dfm:154
 msgid "Prefer Streams, if not available Registry"
 msgstr "Adatfolyam használata, ha a regisztrációs-adatbázis nem elérhetö"
 
 #. fConfig..JunctionTrackingMode....Items.Strings
-#: ConfigUtil/uConfig.dfm:155
+#: configutil/uConfig.dfm:155
 msgid "Always in Registry"
 msgstr "Mindig a regisztrációs adatbázisban"
 
 #. fConfig..JunctionTrackingMode....Items.Strings
-#: ConfigUtil/uConfig.dfm:156
+#: configutil/uConfig.dfm:156
 msgid "Always in Streams (does not work on FAT)"
 msgstr "Mindig adatfolyamokban (FAT fájlrendszeren nem müködik)"
 
 #. fConfig..JunctionTrackingMode....Items.Strings
-#: ConfigUtil/uConfig.dfm:157
+#: configutil/uConfig.dfm:157
 msgid "Deactivate"
 msgstr "Letiltás"
 
 #. fConfig..IntegrateIntoContextMenu....Height
-#: ConfigUtil/uConfig.dfm:190
+#: configutil/uConfig.dfm:188
 msgid "Adds a menu item into the context menu of junction points und empty directories"
 msgstr "Elem elhelyezése összekapcsolási pontok és üres könyvtárak almenüiben"
 
 #. fConfig..IntegrateIntoContextMenu..Caption
-#: ConfigUtil/uConfig.dfm:192
+#: configutil/uConfig.dfm:190
 msgid "Integrate into Explorer Right-Click menu"
 msgstr "Integrálás az Intézö felbukkanó menüjébe"
 
 #. fConfig..CreateLinksSuppressPrefix....Height
-#: ConfigUtil/uConfig.dfm:202
+#: configutil/uConfig.dfm:200
 msgid "By default, a \"Link to\" prefix will be added to every link, like the Explorer does with copies"
 msgstr "Alapértelmezésben, a \"Parancsikon - \" elötag hozzáadódik minden linkhez, ahogy az Intézö teszi másoláskor"
 
 #. fConfig..CreateLinksSuppressPrefix..Caption
-#: ConfigUtil/uConfig.dfm:204
+#: configutil/uConfig.dfm:202
 msgid "Do not add \"Link to\" prefix when creating links"
 msgstr "A \"Parancsikon - \" elötagot ne adja hozzá létrehozáskor"
 
 #. Template used to name the created links; can be overridden by lang file
 #. Programmer's name for it: LINK_PREFIX_TEMPLATE_DEFAULT
-#: Constants.pas:40
+#: common/Constants.pas:44
 msgid "Link%s to %s"
 msgstr "%s összekapcsolása %s -(al/el)"
 
 #. Programmer's name for it: COPY_PREFIX_TEMPLATE_DEFAULT
-#: Constants.pas:41
+#: common/Constants.pas:45
 msgid "Copy%s of %s"
 msgstr "%s másolása %s-(ba/be)"
 
-#: ContextMenuHook.pas:78
+#: ntfslink/ContextMenuHook.pas:82
 msgid "Link selected folder to another directory or drive"
 msgstr "Kijelölt mappára összekapcsolási pont létrehozása másik mappába vagy másik meghajtóra"
 
-#: ContextMenuHook.pas:80
+#: ntfslink/ContextMenuHook.pas:84
 msgid "Remove this folder's junction point"
 msgstr "Aktuális mappa összekapcsolási pontjának eltávolítása"
 
-#: ContextMenuHook.pas:82
+#: ntfslink/ContextMenuHook.pas:86
 msgid "Open the target of this junction in Windows Explorer"
 msgstr "Aktuális összekapcsolási pont céljának megnyitása az Intézöben"
 
 #. Add items to the submenu, depending on mode
-#: ContextMenuHook.pas:208
+#: ntfslink/ContextMenuHook.pas:213
 msgid "Link Folder..."
 msgstr "Mappa összekapcsolása..."
 
-#: ContextMenuHook.pas:210
+#: ntfslink/ContextMenuHook.pas:215
 msgid "Unlink From \"%s\""
 msgstr "Leválasztás \"%s\"-(ról/röl)"
 
-#: ContextMenuHook.pas:212
+#: ntfslink/ContextMenuHook.pas:217
 msgid "Open \"%s\""
 msgstr "\"%s\" megnyitása"
 
 #. If the thing went not smoothly, then show a message
-#: CopyHook.pas:224
+#: ntfslink/CopyHook.pas:228
 msgid "\"%s\" could not be moved, because there is already a directory \"%s\"."
 msgstr "\"%s\" áthelyezése sikertelen, mert már létezik egy ilyen nevü mappa \"%s\"."
 
-#: CopyHook.pas:229
+#: ntfslink/CopyHook.pas:233
 msgid "\"%s\" could not be moved to \"%s\" because of unkown reasons."
 msgstr "\"%s\" áthelyezési ismeretlen hiba miatt nem lehetséges."
 
 #. Moving the junction point is not possible
-#: CopyHook.pas:236
+#: ntfslink/CopyHook.pas:240
 msgid "\"%s\" is a junction point, but the target file system does not support junctions."
 msgstr "\"%s\" egy összekapcsolási pont, de a cél fájlrendszer nem támogatja az összekapcsolási pontok használatát."
 
 #. Ask user what he wants to do
-#: CopyHook.pas:262
+#: ntfslink/CopyHook.pas:266
 msgid "\"%s\" is a junction point. If you want to copy the junction only, click \"Yes\", if you want to copy the target directory including all it's content, click \"No\". If you choose \"Cancel\", nothing will happen."
 msgstr "\"%s\" egy összekapcsolási pont. Másoláshoz klikkeljen az \"Igen\"-re, az egész célmappa másolásához klikkeljen a \"Nem\"-re, megszakításhoz klikkeljen a \"Mégse\"-re."
 
 #. text of the third option button
-#: DialogLinksExisting.pas:81
+#: ntfslink/DialogLinksExisting.pas:85
 msgid "Yes, and delete links"
 msgstr "Igen,  törölje a linkeket is."
 
-#: DialogLinksExisting.pas:84
+#: ntfslink/DialogLinksExisting.pas:88
 msgid "Yes, and correct links"
 msgstr "Igen, javítsa a linkeket is."
 
 #. Tell the user if an error occurred
-#: DragDropHook.pas:150
 #. If positive result, then try to create hardlink
-#: ShellNewExports.pas:85
+#: ntfslink/DragDropHook.pas:154 ntfslink/ShellNewExports.pas:88
 msgid "Failed to create link. Most likely the target file system does not support this feature, or you tried to create a hard link across different partitions."
 msgstr "Link létrehozása sikertelen. A cél-fájlrendszer valószínüleg nem támogatja vagy különbözö partíciók között próbált linket létrehozni."
 
 #. an appropriate menu caption
-#: DragDropHook.pas:178
+#: ntfslink/DragDropHook.pas:182
 msgid "Create Hardlink Here"
 msgstr "Hardlink létrehozása ide."
 
-#: DragDropHook.pas:179
+#: ntfslink/DragDropHook.pas:183
 msgid "Create Hardlinks Here"
 msgstr "Hardlinkek létrehozása ide."
 
-#: DragDropHook.pas:182
+#: ntfslink/DragDropHook.pas:186
 msgid "Create Junction Here"
 msgstr "Összekapcsolási pont létrehozása ide."
 
-#: DragDropHook.pas:183
+#: ntfslink/DragDropHook.pas:187
 msgid "Create Junctions Here"
 msgstr "Összekapcsolási pontok létrehozása ide."
 
-#: DragDropHook.pas:186
+#: ntfslink/DragDropHook.pas:190
 msgid "Create Links Here"
 msgstr "Link létrehozása ide."
 
 #. Init other struct members
-#: ShellNewExports.pas:68
+#: ntfslink/ShellNewExports.pas:71
 msgid "Choose the file you want to create a hard link to"
 msgstr "Jelölje ki a fájlt amire a hardlink mutasson"
 
-#: ShellNewExports.pas:69
+#: ntfslink/ShellNewExports.pas:72
 msgid "All Files"
 msgstr "Minden fájl"
 
 #. Init BrowseInfo struct
-#: ShellNewExports.pas:105
+#: ntfslink/ShellNewExports.pas:111
 msgid "Choose the target folder or drive to which you want to create a junction point."
 msgstr "Válassza ki a célmappát vagy a célmeghajtót, ahova létre kívánja hozni az összekapcsolási pontot."
 
 #. If junction creation failed, show message box
-#: ShellNewExports.pas:128
+#: ntfslink/ShellNewExports.pas:134
 msgid "Failed to create junction. Most likely the target file system does not support this feature."
 msgstr "Összekapcsolási pont létrehozása sikertelen. Valószínüleg a cél-fájlrendszer nem támogatja ezt a funkciót."
 
 #. Programmer's name: CAPTION
-#: DialogLinksExisting.rc:12
+#: ntfslink/DialogLinksExisting.rc:12
 msgid "NTFS Link"
 msgstr "NTFS Link"
 
 #. Programmer's name: CONTROL
-#: DialogLinksExisting.rc:15
+#: ntfslink/DialogLinksExisting.rc:15
 msgid "There are junctions pointing to this folder or a subfolder (see list below). If you continue the operation, these links will no longer work. Are you sure?"
 msgstr "Vannak erre a mappára mutató összekapcsolási pontok (részletesebben a listában). Ha folytatja a müveletet, ezek a linkek a továbbiakban nem fognak müködni. Biztos benne ?"
 
 #. Programmer's name: CONTROL
-#: DialogLinksExisting.rc:18
+#: ntfslink/DialogLinksExisting.rc:18
 msgid "Yes"
 msgstr "Igen"
 
 #. Programmer's name: CONTROL
-#: DialogLinksExisting.rc:19
+#: ntfslink/DialogLinksExisting.rc:19
 msgid "No"
 msgstr "Nem"
