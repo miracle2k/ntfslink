@@ -78,11 +78,11 @@
   <!-- Localization related                                                  -->
   <!--------------------------------------------------------------------------->
 
-  <property name="tools" value="${basedir}\build\tools" />
+  <property name="gettext" value="${basedir}\build\gettext" />
 
   <target name="dxgettext">
     <echo message="Extracting text to be translated from the given files." />
-    <exec executable="${tools}\dxgettext.exe">
+    <exec executable="${gettext}\dxgettext.exe">
       <!-- Using the --delphi argument will wrongly include Icons.rc, too. -->
       <arg value="*.pas *.inc DialogLinksExisting.rc *.dpr *.xfm *.dfm" />
       <arg value="-r" />
@@ -92,7 +92,7 @@
 
   <target name="msgmkignore" depends="dxgettext">
     <echo message="Determining strings that should not be translated." />
-    <exec executable="${tools}\msgmkignore.exe">
+    <exec executable="${gettext}\msgmkignore.exe">
       <arg value="source\default.po" />
       <arg value="-o source\ignore.po" />
     </exec>
@@ -100,7 +100,7 @@
 
   <target name="msgremove" depends="msgmkignore">
     <echo message="Removing the determined strings to ignore." />
-    <exec executable="${tools}\msgremove.exe">
+    <exec executable="${gettext}\msgremove.exe">
       <arg value="source\default.po" />
       <arg value="-i source\ignore.po" />
       <arg value="-o localization\default\default.po" />
@@ -109,7 +109,7 @@
 
   <target name="msgmerge">
      <echo message="Merging existing German translations into template." />
-     <exec executable="${tools}\msgmerge.exe">
+     <exec executable="${gettext}\msgmerge.exe">
        <arg value="-o localization\german\default.po" />
        <arg value="--no-wrap" />
        <arg value="localization\german\default.po" />
@@ -117,7 +117,7 @@
      </exec>
 
      <echo message="Merging existing Hungarian translations into template." />
-     <exec executable="${tools}\msgmerge.exe">
+     <exec executable="${gettext}\msgmerge.exe">
        <arg value="-o localization\hungarian\default.po" />
        <arg value="--no-wrap" />
        <arg value="localization\hungarian\default.po" />
@@ -128,14 +128,14 @@
   <target name="msgfmt">
     <echo message="Generating German binary message catalog." />
     <mkdir dir="dist\locale\de\LC_MESSAGES" />
-    <exec executable="${tools}\msgfmt.exe">
+    <exec executable="${gettext}\msgfmt.exe">
        <arg value="-o dist\locale\de\LC_MESSAGES\default.mo" />
        <arg value="localization\german\default.po" />
     </exec>
 
     <echo message="Generating Hungarian binary message catalog." />
     <mkdir dir="dist\locale\hu\LC_MESSAGES" />
-    <exec executable="${tools}\msgfmt.exe">
+    <exec executable="${gettext}\msgfmt.exe">
        <arg value="-o dist\locale\hu\LC_MESSAGES\default.mo" />
        <arg value="localization\hungarian\default.po" />
     </exec>
