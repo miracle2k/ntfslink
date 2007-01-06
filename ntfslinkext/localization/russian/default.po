@@ -1,0 +1,221 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2004-08-28 14:40\n"
+"PO-Revision-Date: 2006-11-17 14:46\n"
+"Last-Translator: <>\n"
+"Language-Team: <>\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Language-English: Russian\n"
+"X-Language-Local: Russian*\n"
+"X-Language-Flag: "
+"Qk22AQAAAAAAAHYAAAAoAAAAIAAAABQAAAABAAQAAAAAAEABAAATCwAAEwsAABAAAAAQAAAAAAAAAP8AAAAAAP8A////"
+"AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////"
+"AAAAAAAAAAAAAAAAAAAAAAACIiIiIiIiIiIiIiIiIiIgAiIiIiIiIiIiIiIiIiIiIAIiIiIiIiIiIiIiIiIiIiACIiIiIiIiIiIiIiIiIiIgAiIiIiIiIiIiIiIiIiIiIAIiIiIiIiIiIiIiIiIiIiABEREREREREREREREREREQAREREREREREREREREREREAERERERERERERERERERERABEREREREREREREREREREQAREREREREREREREREREREAERERERERERERERERERERADMzMzMzMzMzMzMzMzMzMwAzMzMzMzMzMzMzMzMzMzMAMzMzMzMzMzMzMzMzMzMzADMzMzMzMzMzMzMzMzMzMwAzMzMzMzMzMzMzMzMzMzMAMzMzMzMzMzMzMzMzMzMzAAAAAAAAAAAAAAAAAAAAAA\n"
+"X-Generator: poTranslator\n"
+
+msgid ""
+"\\\\\\\"%s\\\\\\\" could not be moved to \\\\\\\"%s\\\\\\\" because of "
+"unkown reasons."
+msgstr ""
+"\\\\\\\"%s\\\\\\\" не может быть перемещен в \\\\\\\"%s\\\\\\\" по "
+"неизвестной причине."
+
+msgid ""
+"\\\\\\\"%s\\\\\\\" could not be moved, because there is already a directory "
+"\\\\\\\"%s\\\\\\\"."
+msgstr ""
+"\\\\\\\"%s\\\\\\\" не может быть перемещен в \\\\\\\"%s\\\\\\\", т.к. папка "
+"с таким именем уже существует."
+
+msgid ""
+"\\\\\\\"%s\\\\\\\" is a junction point, but the target file system does not "
+"support junctions."
+msgstr ""
+"\\\\\\\"%s\\\\\\\"  является узловой точкой, но файловая система места "
+"назначения не поддерживает узлы (junctions)."
+
+msgid ""
+"\\\\\\\"%s\\\\\\\" is a junction point. If you want to copy the junction "
+"only, click \\\\\\\"Yes\\\\\\\", if you want to copy the target directory "
+"including all it's content, click \\\\\\\"No\\\\\\\". If you choose \\\\\\"
+"\"Cancel\\\\\\\", nothing will happen."
+msgstr ""
+"\\\\\\\"%s\\\\\\\" является узловой точкой. Если вы хотите скопировать "
+"только узловую точку, нажмите \\\\\\\"Да\\\\\\\", а если же вы хотите "
+"скопировать папку со всем ее содержимым, нажмите,\\\\\\\"Нет\\\\\\\". Для "
+"отмены операции выберите \\\\\\\"Отмена\\\\\\\"."
+
+msgid ""
+"Adds a menu item into the context menu of junction points und empty "
+"directories"
+msgstr "Добаить пункт в контекстное меню для узловых точек и пустых папок"
+
+msgid "All Files"
+msgstr "Все файлы"
+
+msgid "Allows creation of hardlinks and junctions using Drag&Drop"
+msgstr "Разрешить создание ссылок и узлов используя перетаскивание мышкой"
+
+msgid "Always in Registry"
+msgstr "Всегда в реестре"
+
+msgid "Always in Streams (does not work on FAT)"
+msgstr "Всегда в потоках (не для FAT)"
+
+msgid ""
+"By default, a \\\\\\\"Link to\\\\\\\" prefix will be added to every link, "
+"like the Explorer does with copies"
+msgstr ""
+"По умолчанию к каждой ссылке добавляется \\\\\\\"Ссылается на\\\\\\\", на "
+"манер Проводнику"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Choose the file you want to create a hard link to"
+msgstr "Выберите файл, на который вы хотите создать ссылку"
+
+msgid ""
+"Choose the target folder or drive to which you want to create a junction "
+"point."
+msgstr "Выберите папку или диск, на который вы хотите создать узловую точку"
+
+msgid "Copy%s of %s"
+msgstr "Копируется %s из %s"
+
+msgid "Create Hardlink Here"
+msgstr "Создать ссылку здесь"
+
+msgid "Create Hardlinks Here"
+msgstr "Создать ссылки здесь"
+
+msgid "Create Junction Here"
+msgstr "Создать узловую точку здесь"
+
+msgid "Create Junctions Here"
+msgstr "Создать узловые точки здесь"
+
+msgid "Create Links Here"
+msgstr "Создать ссылки здесь"
+
+msgid "Deactivate"
+msgstr "Отключить"
+
+msgid "Do not add \\\\\\\"Link to\\\\\\\" prefix when creating links"
+msgstr ""
+"Не добавлять приставку \\\\\\\"Ссылается на\\\\\\\" для создаваемых ссылок"
+
+msgid "Enable Icon Overlays for Hardlinks (requires restart)"
+msgstr "Включить дополнительный значок для ссылок (требует перезагрузки)"
+
+msgid "Enable Icon Overlays for Junction Points (requires restart)"
+msgstr ""
+"Включить дополнительный значок для узловых точек (требует перезагрузки)"
+
+msgid ""
+"Failed to create junction. Most likely the target file system does not "
+"support this feature."
+msgstr ""
+"Не удолось создать узловую точку. Скорее всего файловая система не "
+"поддерживает такую возможность."
+
+msgid ""
+"Failed to create link. Most likely the target file system does not support "
+"this feature, or you tried to create a hard link across different partitions."
+msgstr ""
+"Не удолось создать ссылку. Скорее всего файловая система не поддерживает "
+"такую возможность или вы пытаетесь создать ссылку на другом разделе."
+
+msgid "Helps differing hard links between other files"
+msgstr "Помогает отличить ссылки друг от других файлов"
+
+msgid "Helps differing junction points between other directories"
+msgstr "Помогает отличить узлы от других папок"
+
+msgid "Icon:"
+msgstr "Значок:"
+
+msgid "Integrate into Explorer Drag&&Drop menu"
+msgstr "Добавить пункт в меню при перетаскивании мышкой"
+
+msgid "Integrate into Explorer Right-Click menu"
+msgstr "Добавить пункт в контекстное меню Проводника"
+
+msgid "Intercept Copying of Junction Points"
+msgstr "Перехватить копирование узловых точек"
+
+msgid "Link Folder..."
+msgstr "Создание ссылок на папку..."
+
+msgid "Link selected folder to another directory or drive"
+msgstr "Создать ссылку на выделенную папку в другой папке или на другом диске"
+
+msgid "Link%s to %s"
+msgstr "Создание ссылок %s из %s"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "NTFS Link"
+msgstr "Ссылки NTFS"
+
+msgid ""
+"NTFS Link can save information about the junctions you created, and warn "
+"you, if you attempt to delete a folder with junctions pointing to"
+msgstr ""
+"NTFS Link может хранить информацию о созданных ссылках и предупреждать вас, "
+"когда вы пытаетесь удалить папку с узловыми точками"
+
+msgid "NTFS Link Configuration"
+msgstr "Настройка NTFS Link"
+
+msgid "OK"
+msgstr "ОК"
+
+msgid "Open \\\\\\\"%s\\\\\\\""
+msgstr "Открыть \\\\\\\"%s\\\\\\\""
+
+msgid "Open the target of this junction in Windows Explorer"
+msgstr "Открыть исходную папку в Проводнике"
+
+msgid "Prefer Streams, if not available Registry"
+msgstr "Сперва в потокиах, затем в реестре"
+
+msgid "Remove this folder's junction point"
+msgstr "Удалить узловое соединение на этой папке"
+
+msgid ""
+"There are junctions pointing to this folder or a subfolder (see list below). "
+"If you continue the operation, these links will no longer work. Are you sure?"
+msgstr ""
+"Обнаружены узловые связи на эту папку или вложенную папку (см. список ниже). "
+"Если вы продолжите операцию, то эти узлы больше не будут работать. "
+"Продолжить?"
+
+msgid "Tracking of Junction Creation:"
+msgstr "Отслеживание ссылок:"
+
+msgid "Unlink From \\\\\\\"%s\\\\\\\""
+msgstr "Открепиться от \\\\\\\"%s\\\\\\\""
+
+msgid ""
+"Whenever you try to copy a junction point in Explorer, NTFS Link will ask "
+"whether you want to copy the junction only, or all the contents of the "
+"target folder"
+msgstr ""
+"Когда вы попытаетесь скопировать узловую точку в Проводнике, NTFS Link "
+"спросит вас о том, что вы хотите скопировать: узловое соединение или "
+"содержимое папки"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "Yes, and correct links"
+msgstr "Да, исправить ссылки"
+
+msgid "Yes, and delete links"
+msgstr "Да, удалить ссылки"
