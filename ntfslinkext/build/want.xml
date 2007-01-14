@@ -46,17 +46,17 @@
     </copy>
   </target>
 
-  <property name="ntfslink" value="${basedir}\source\ntfslink" />
+  <property name="ntfslinkext" value="${basedir}\source\ntfslinkext" />
 
   <!-- NTFSLinkExt's resources need to be compiled by BRCC explicitly. -->
   <target name="resources">
-    <brcc file="${ntfslink}\DialogLinksExisting.rc" output="${ntfslink}\DialogLinksExisting.res" />
-    <brcc file="${ntfslink}\Icons.rc" output="${ntfslink}\Icons.res" />
+    <brcc file="${ntfslinkext}\DialogLinksExisting.rc" output="${ntfslinkext}\DialogLinksExisting.res" />
+    <brcc file="${ntfslinkext}\Icons.rc" output="${ntfslinkext}\Icons.res" />
   </target>
 
-  <target name="ntfslink" depends="resources">
-    <echo message="Building the NTFSLink shell extension." />
-    <dcc basedir="${ntfslink}" source="NTFSLink.dpr"
+  <target name="ntfslinkext" depends="resources">
+    <echo message="Building the NTFS Link Ext shell extension." />
+    <dcc basedir="${ntfslinkext}" source="NTFSLinkExt.dpr"
          uselibrarypath="true"
          usecfg="true">
       <optimize value="true" />
@@ -64,13 +64,13 @@
       <console value="false" />
     </dcc>
     <copy todir="${dist}">
-      <fileset dir="${ntfslink}">
-        <include name="NTFSLink.dll" />
+      <fileset dir="${ntfslinkext}">
+        <include name="NTFSLinkExt.dll" />
       </fileset>
     </copy>
   </target>
 
-  <target name="ntfslinkext" depends="ntfslink,configutil">
+  <target name="ntfslinkext" depends="ntfslinkext,configutil">
     <echo message="'ntfslinkext' meta-build finished." />
   </target>
 
@@ -177,7 +177,7 @@
 
     <exclude name="**\WinXP.res" />
     <exclude name="**\ConfigUtil.res" />
-    <exclude name="**\NTFSLink.res" />
+    <exclude name="**\NTFSLinkExt.res" />
 
     <!-- Additional files created by Delphi 2005 PE. -->
     <include name="**\*.bdsproj" />
@@ -194,18 +194,22 @@
 
     <echo message="Cleaning Delphi intermediate files." />
     <delete>
+      <fileset dir="source\common">
+        <patternset refid="intermediate" />
+      </fileset>
+
       <fileset dir="source\configutil">
         <patternset refid="intermediate" />
       </fileset>
 
-      <fileset dir="source\ntfslink">
+      <fileset dir="source\ntfslinkext">
         <patternset refid="intermediate" />
       </fileset>
     </delete>
 
     <!-- Additional directories created by Delphi 2005 PE. -->
     <delete dir="source\configutil\__history" />
-    <delete dir="source\ntfslink\__history" />
+    <delete dir="source\ntfslinkext\__history" />
   </target>
 
   <target name="clean-all" depends="clean">
@@ -214,6 +218,6 @@
 
     <echo message="Cleaning Delphi distribution files." />
     <delete file="dist\ConfigUtil.exe" />
-    <delete file="dist\NTFSLink.dll" />
+    <delete file="dist\NTFSLinkExt.dll" />
   </target>
 </project>
