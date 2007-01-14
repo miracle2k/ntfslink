@@ -1,3 +1,5 @@
+; TODO: Rewrite
+
 [Setup]
 ; Changing the AppID requires changes in code section!
 AppID=ntfslink

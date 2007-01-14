@@ -3,7 +3,7 @@ object fConfig: TfConfig
   Top = 109
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
-  Caption = 'NTFS Link Configuration'
+  Caption = 'NTFS Link Ext Configuration'
   ClientHeight = 333
   ClientWidth = 440
   Color = clBtnFace
@@ -105,7 +105,7 @@ object fConfig: TfConfig
     Top = 232
     Width = 395
     Height = 17
-    Hint = 
+    Hint =
       'Whenever you try to copy a junction point in Explorer, NTFS Link' +
       ' will ask whether you want to copy the junction only, or all the' +
       ' contents of the target folder'
@@ -140,7 +140,7 @@ object fConfig: TfConfig
     Top = 257
     Width = 234
     Height = 21
-    Hint = 
+    Hint =
       'NTFS Link can save information about the junctions you created, ' +
       'and warn you, if you attempt to delete a folder with junctions p' +
       'ointing to'
@@ -183,7 +183,7 @@ object fConfig: TfConfig
     Top = 40
     Width = 395
     Height = 17
-    Hint = 
+    Hint =
       'Adds a menu item into the context menu of junction points und em' +
       'pty directories'
     Anchors = [akLeft, akTop, akRight]
@@ -195,7 +195,7 @@ object fConfig: TfConfig
     Top = 64
     Width = 395
     Height = 17
-    Hint = 
+    Hint =
       'By default, a "Link to" prefix will be added to every link, like' +
       ' the Explorer does with copies'
     Anchors = [akLeft, akTop, akRight]

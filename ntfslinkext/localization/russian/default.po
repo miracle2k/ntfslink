@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: NTFS Link Ext\n"
 "POT-Creation-Date: 2004-08-28 14:40\n"
 "PO-Revision-Date: 2006-11-17 14:46\n"
 "Last-Translator: <>\n"
@@ -170,8 +170,8 @@ msgstr ""
 "NTFS Link может хранить информацию о созданных ссылках и предупреждать вас, "
 "когда вы пытаетесь удалить папку с узловыми точками"
 
-msgid "NTFS Link Configuration"
-msgstr "Настройка NTFS Link"
+msgid "NTFS Link Ext Configuration"
+msgstr "Настройка NTFS Link Ext"
 
 msgid "OK"
 msgstr "ОК"

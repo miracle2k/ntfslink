@@ -1,11 +1,6 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# Michael Elsdörfer <michael@elsdoerfer.net>, 2004.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: NTFS Link Ext\n"
 "POT-Creation-Date: 2006-10-24 01:28\n"
 "PO-Revision-Date: 2004-08-28 14:40\n"
 "Last-Translator: Michael Elsdörfer <michael@elsdoerfer.net>\n"
@@ -17,12 +12,12 @@ msgstr ""
 
 #. fConfig..Caption
 #: configutil/uConfig.dfm:6
-msgid "NTFS Link Configuration"
+msgid "NTFS Link Ext Configuration"
 msgstr ""
 
 #. fConfig..Font.Name
 #. Programmer's name: FONT 8
-#: configutil/uConfig.dfm:13 ntfslink/DialogLinksExisting.rc:13
+#: configutil/uConfig.dfm:13 ntfslinkext/DialogLinksExisting.rc:13
 msgid "MS Shell Dlg 2"
 msgstr ""
 
@@ -144,121 +139,121 @@ msgstr ""
 msgid "Copy%s of %s"
 msgstr ""
 
-#: ntfslink/ContextMenuHook.pas:82
+#: ntfslinkext/ContextMenuHook.pas:82
 msgid "Link selected folder to another directory or drive"
 msgstr ""
 
-#: ntfslink/ContextMenuHook.pas:84
+#: ntfslinkext/ContextMenuHook.pas:84
 msgid "Remove this folder's junction point"
 msgstr ""
 
-#: ntfslink/ContextMenuHook.pas:86
+#: ntfslinkext/ContextMenuHook.pas:86
 msgid "Open the target of this junction in Windows Explorer"
 msgstr ""
 
 #. Add items to the submenu, depending on mode
-#: ntfslink/ContextMenuHook.pas:213
+#: ntfslinkext/ContextMenuHook.pas:213
 msgid "Link Folder..."
 msgstr ""
 
-#: ntfslink/ContextMenuHook.pas:215
+#: ntfslinkext/ContextMenuHook.pas:215
 msgid "Unlink From \"%s\""
 msgstr ""
 
-#: ntfslink/ContextMenuHook.pas:217
+#: ntfslinkext/ContextMenuHook.pas:217
 msgid "Open \"%s\""
 msgstr ""
 
 #. If the thing went not smoothly, then show a message
-#: ntfslink/CopyHook.pas:228
+#: ntfslinkext/CopyHook.pas:228
 msgid "\"%s\" could not be moved, because there is already a directory \"%s\"."
 msgstr ""
 
-#: ntfslink/CopyHook.pas:233
+#: ntfslinkext/CopyHook.pas:233
 msgid "\"%s\" could not be moved to \"%s\" because of unkown reasons."
 msgstr ""
 
 #. Moving the junction point is not possible
-#: ntfslink/CopyHook.pas:240
+#: ntfslinkext/CopyHook.pas:240
 msgid "\"%s\" is a junction point, but the target file system does not support junctions."
 msgstr ""
 
 #. Ask user what he wants to do
-#: ntfslink/CopyHook.pas:266
+#: ntfslinkext/CopyHook.pas:266
 msgid "\"%s\" is a junction point. If you want to copy the junction only, click \"Yes\", if you want to copy the target directory including all it's content, click \"No\". If you choose \"Cancel\", nothing will happen."
 msgstr ""
 
 #. text of the third option button
-#: ntfslink/DialogLinksExisting.pas:85
+#: ntfslinkext/DialogLinksExisting.pas:85
 msgid "Yes, and delete links"
 msgstr ""
 
-#: ntfslink/DialogLinksExisting.pas:88
+#: ntfslinkext/DialogLinksExisting.pas:88
 msgid "Yes, and correct links"
 msgstr ""
 
 #. Tell the user if an error occurred
 #. If positive result, then try to create hardlink
-#: ntfslink/DragDropHook.pas:154 ntfslink/ShellNewExports.pas:88
+#: ntfslinkext/DragDropHook.pas:154 ntfslinkext/ShellNewExports.pas:88
 msgid "Failed to create link. Most likely the target file system does not support this feature, or you tried to create a hard link across different partitions."
 msgstr ""
 
 #. an appropriate menu caption
-#: ntfslink/DragDropHook.pas:182
+#: ntfslinkext/DragDropHook.pas:182
 msgid "Create Hardlink Here"
 msgstr ""
 
-#: ntfslink/DragDropHook.pas:183
+#: ntfslinkext/DragDropHook.pas:183
 msgid "Create Hardlinks Here"
 msgstr ""
 
-#: ntfslink/DragDropHook.pas:186
+#: ntfslinkext/DragDropHook.pas:186
 msgid "Create Junction Here"
 msgstr ""
 
-#: ntfslink/DragDropHook.pas:187
+#: ntfslinkext/DragDropHook.pas:187
 msgid "Create Junctions Here"
 msgstr ""
 
-#: ntfslink/DragDropHook.pas:190
+#: ntfslinkext/DragDropHook.pas:190
 msgid "Create Links Here"
 msgstr ""
 
 #. Init other struct members
-#: ntfslink/ShellNewExports.pas:71
+#: ntfslinkext/ShellNewExports.pas:71
 msgid "Choose the file you want to create a hard link to"
 msgstr ""
 
-#: ntfslink/ShellNewExports.pas:72
+#: ntfslinkext/ShellNewExports.pas:72
 msgid "All Files"
 msgstr ""
 
 #. Init BrowseInfo struct
-#: ntfslink/ShellNewExports.pas:111
+#: ntfslinkext/ShellNewExports.pas:111
 msgid "Choose the target folder or drive to which you want to create a junction point."
 msgstr ""
 
 #. If junction creation failed, show message box
-#: ntfslink/ShellNewExports.pas:134
+#: ntfslinkext/ShellNewExports.pas:134
 msgid "Failed to create junction. Most likely the target file system does not support this feature."
 msgstr ""
 
 #. Programmer's name: CAPTION
-#: ntfslink/DialogLinksExisting.rc:12
+#: ntfslinkext/DialogLinksExisting.rc:12
 msgid "NTFS Link"
 msgstr ""
 
 #. Programmer's name: CONTROL
-#: ntfslink/DialogLinksExisting.rc:15
+#: ntfslinkext/DialogLinksExisting.rc:15
 msgid "There are junctions pointing to this folder or a subfolder (see list below). If you continue the operation, these links will no longer work. Are you sure?"
 msgstr ""
 
 #. Programmer's name: CONTROL
-#: ntfslink/DialogLinksExisting.rc:18
+#: ntfslinkext/DialogLinksExisting.rc:18
 msgid "Yes"
 msgstr ""
 
 #. Programmer's name: CONTROL
-#: ntfslink/DialogLinksExisting.rc:19
+#: ntfslinkext/DialogLinksExisting.rc:19
 msgid "No"
 msgstr ""
