@@ -5,7 +5,7 @@ HARDLINK              ICON    DISCARDABLE   IMPURE   "..\..\graphics\hardlink.ic
 JUNCTION              ICON    DISCARDABLE   IMPURE   "..\..\graphics\junction.ico"
 
 // Icons used for various of menu items of NTFS Link
-MENU_GLYPH_STD        BITMAP  DISCARDABLE   IMPURE   "..\..\graphics\menu_glyph_ntfslink.bmp"
+MENU_GLYPH_STD        BITMAP  DISCARDABLE   IMPURE   "..\..\graphics\menu_glyph_ntfslinkext.bmp"
 MENU_GLYPH_JUNCTION   BITMAP  DISCARDABLE   IMPURE   "..\..\graphics\menu_glyph_junction.bmp"
 MENU_GLYPH_HARDLINK   BITMAP  DISCARDABLE   IMPURE   "..\..\graphics\menu_glyph_hardlink.bmp"
 MENU_GLYPH_LINKDEL    BITMAP  DISCARDABLE   IMPURE   "..\..\graphics\menu_glyph_linkdel.bmp"

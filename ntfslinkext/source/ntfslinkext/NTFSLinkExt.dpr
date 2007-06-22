@@ -23,8 +23,6 @@ located at http://www.elsdoerfer.net/ntfslink/
 
 library ntfslink;
 
-{$R *.res}
-
 // TODO [v2.1] Implement a logging mechanism
 // TODO [v2.1] Support for target.lnk style links?
 // TODO [v2.1] Create hardlinks automatically for each file in directory and
@@ -32,6 +30,7 @@ library ntfslink;
 
 {$R 'DialogLinksExisting.res' 'DialogLinksExisting.rc'}
 {$R 'Icons.res' 'Icons.rc'}
+{$R 'NtfslinkExt.res'}
 {%File 'JclNTFSUnicode.inc'}
 
 uses

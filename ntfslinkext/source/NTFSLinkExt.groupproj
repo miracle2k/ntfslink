@@ -1,0 +1,40 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{7aa51581-e908-4267-b21b-3d2cfdeed382}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup />
+  <ItemGroup />
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+  <BorlandProject xmlns=""> <Default.Personality> </Default.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="ConfigUtil">
+    <MSBuild Projects="configutil\ConfigUtil.dproj" Targets="" />
+  </Target>
+  <Target Name="ConfigUtil:Clean">
+    <MSBuild Projects="configutil\ConfigUtil.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="ConfigUtil:Make">
+    <MSBuild Projects="configutil\ConfigUtil.dproj" Targets="Make" />
+  </Target>
+  <Target Name="NTFSLinkExt">
+    <MSBuild Projects="ntfslinkext\NTFSLinkExt.dproj" Targets="" />
+  </Target>
+  <Target Name="NTFSLinkExt:Clean">
+    <MSBuild Projects="ntfslinkext\NTFSLinkExt.dproj" Targets="Clean" />
+  </Target>
+  <Target Name="NTFSLinkExt:Make">
+    <MSBuild Projects="ntfslinkext\NTFSLinkExt.dproj" Targets="Make" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="ConfigUtil;NTFSLinkExt" />
+  </Target>
+  <Target Name="Clean">
+    <CallTarget Targets="ConfigUtil:Clean;NTFSLinkExt:Clean" />
+  </Target>
+  <Target Name="Make">
+    <CallTarget Targets="ConfigUtil:Make;NTFSLinkExt:Make" />
+  </Target>
+</Project>
