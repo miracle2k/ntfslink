@@ -30,6 +30,7 @@ library ntfslink;
 
 {$R 'DialogLinksExisting.res' 'DialogLinksExisting.rc'}
 {$R 'Icons.res' 'Icons.rc'}
+{$R 'XPManifest.res'}
 {%File 'JclNTFSUnicode.inc'}
 
 uses
@@ -49,7 +50,8 @@ uses
   JunctionMonitor in 'JunctionMonitor.pas',
   DialogLinksExisting in 'DialogLinksExisting.pas',
   Constants in '..\common\Constants.pas',
-  GNUGetText in '..\common\GNUGetText.pas';
+  GNUGetText in '..\common\GNUGetText.pas',
+  ActivationContext in 'ActivationContext.pas';
 
 exports
   DllGetClassObject,

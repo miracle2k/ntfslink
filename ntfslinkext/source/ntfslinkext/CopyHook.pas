@@ -51,7 +51,8 @@ implementation
 
 uses
   Global, JunctionMonitor, JclNTFS, JclWin32, JclRegistry, ShellAPI, JclShell,
-  ComServ, Classes, DialogLinksExisting, GNUGetText, Constants;
+  ComServ, Classes, DialogLinksExisting, GNUGetText, Constants,
+  ActivationContext;
 
 { TCopyHook }
 
@@ -105,7 +106,7 @@ begin
     // Set a global flag, to tell the dialog what texts to display
     Dialog_IsDeleteOperation := (wFunc = FO_DELETE); // otherwise it's MOVE or RENAME
     // Show the dialog and ask user what do to
-    tempResult := DialogBox(HInstance, MakeIntResource(1000),
+    tempResult := DialogBoxWithContext(HInstance, MakeIntResource(1000),
                             Wnd, @DialogCallback);
 
     // Depending on the result, let explorer continue with the operation or not
@@ -223,19 +224,19 @@ begin
         // If the thing went not smoothly, then show a message
         if not Success then
           if DirectoryExists(pszDestFile) then
-            MessageBox(Wnd, PAnsiChar(string(Format(_('' + (* dxgettext hack *)
+            MessageBoxWithContext(Wnd, PAnsiChar(string(Format(_('' + (* dxgettext hack *)
                '"%s" could not be moved, because there ' +
                'is already a directory "%s".'), [ExtractFileName(pszSrcFile), pszDestFile]))),
                PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR)
           else
-            MessageBox(Wnd, PAnsiChar(string(Format(_('' + (* dxgettext hack *)
+            MessageBoxWithContext(Wnd, PAnsiChar(string(Format(_('' + (* dxgettext hack *)
                '"%s" could not be moved to "%s" because of ' +
                'unkown reasons.'), [ExtractFileName(pszSrcFile), pszDestFile]))),
              PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR);
       end
       else
         // Moving the junction point is not possible
-        MessageBox(Wnd, PAnsiChar(string(Format(_('' + (* dxgettext hack *)
+        MessageBoxWithContext(Wnd, PAnsiChar(string(Format(_('' + (* dxgettext hack *)
            '"%s" is a junction point, but the target file system does not ' +
            'support junctions.'), [pszSrcFile]))),
            PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR);
@@ -301,7 +302,7 @@ begin
       // that case, do not delete the folder - Explorer has already an internal
       // list of files it wants to delete, and as the junctions are now unlinked,
       // it might not find all of them and show an error.
-      // Instead, we call SHDeleteFolder to instruct Explorer do start the
+      // Instead, we call SHDeleteFolder to instruct Explorer to start the
       // delete operation again
       if (DeleteJunctionsInDirectory(pszSrcFile)) then
       begin

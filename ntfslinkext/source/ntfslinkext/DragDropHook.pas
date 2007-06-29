@@ -70,7 +70,7 @@ implementation
 
 uses
   ComServ, ShellAPI, SysUtils, JclNTFS, JclRegistry, GNUGetText, Global,
-  Constants;
+  Constants, ActivationContext;
 
 { TDragDropHook }
 
@@ -154,7 +154,7 @@ begin
                       'to create a hard link across different partitions.');
         if (GetLastError <> 0) then
           ErrorMsg := ErrorMsg + ': ' + SysErrorMessage(GetLastError);
-        MessageBox(lpici.hwnd, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'),
+        MessageBoxWithContext(lpici.hwnd, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'),
                    MB_OK + MB_ICONERROR)
       end
     end;

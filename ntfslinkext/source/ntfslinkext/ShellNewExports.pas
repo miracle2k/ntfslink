@@ -47,14 +47,15 @@ procedure NewJunctionDlgInternal(hwnd: HWND; Directory: string;
 implementation
 
 uses
-  ShlObj, CommDlg, Global, GNUGetText;
+  ShlObj, CommDlg, Global, GNUGetText, ActivationContext;
 
 // Parts of the following code were taken from Delphi's Dialogs.pas
 procedure NewHardlinkDlg(hwnd: HWND; hinst: Cardinal;
   lpCmdLine: LPTSTR; nCmdShow: Integer); stdcall;
 var
   OpenFileName: TOpenFileNameW;
-  TempFileName, ErrorMsg: WideString;
+  TempFileName: WideString;
+  ErrorMsg: string;
 begin
   FillChar(OpenFileName, SizeOf(OpenFileName), 0);
   with OpenFileName do
@@ -86,7 +87,7 @@ begin
       ErrorMsg := _('Failed to create link. Most likely the target file ' +
                     'system does not support this feature, or you tried ' +
                     'to create a hard link across different partitions.');
-      MessageBoxW(hwnd, PWideChar(ErrorMsg), 'NTFS Link',
+      MessageBoxWithContext(hwnd, PAnsiChar(ErrorMsg), 'NTFS Link',
                  MB_OK or MB_ICONERROR)
     end;
 end;
@@ -132,7 +133,7 @@ begin
     if not Success then begin
       ErrorMsg := _('Failed to create junction. Most likely the target file ' +
                     'system does not support this feature.');
-      MessageBox(hwnd, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'),
+      MessageBoxWithContext(hwnd, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'),
                  MB_OK + MB_ICONERROR);
     end;
   end;
