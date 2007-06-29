@@ -158,7 +158,11 @@ begin
       begin
         if BytesReturned >= ReparseData.Reparse.SubstituteNameLength + SizeOf(WideChar) then
         begin
-          Destination := ReparseData.Reparse.PathBuffer;
+          // Copy into Destination buffer; A simple assign does not work,
+          // because of the way ReparseData.Reparse.PathBuffer is typed. 
+          SetLength(Destination, (ReparseData.Reparse.SubstituteNameLength) div SizeOf(WideChar) + 1);
+          Move(ReparseData.Reparse.PathBuffer, Destination[1],
+            ReparseData.Reparse.SubstituteNameLength+SizeOf(WCHAR));
           Result := True;
         end;
       end;

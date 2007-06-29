@@ -273,7 +273,7 @@ end;
 
 function InternalCreateJunctionBase(LinkTarget, Junction: WideString): boolean;
 begin
-  // Create an empty directory first; note that we continue, if the directory
+  // Create an empty directory first; note that we continue if the directory
   // already exists, because this is required when the ContextMenu hook wants
   // to make a junction based on an existing, empty folder.
   Result := CreateDirW(Junction) or DirectoryExistsW(Junction);
@@ -340,9 +340,8 @@ begin
   // Use JCL utility function to get the target folder.
   NtfsGetJunctionPointDestinationW(Folder, Result);
 
-  l := Length(Result);
-
   // If a path was returned, make some corrections.
+  l := Length(Result);  
   if (l > 0) then
   begin
     // Bug in JCL? There seems to be always a #0 appended.
