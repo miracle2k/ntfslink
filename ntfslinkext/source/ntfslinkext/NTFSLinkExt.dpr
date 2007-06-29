@@ -30,7 +30,6 @@ library ntfslink;
 
 {$R 'DialogLinksExisting.res' 'DialogLinksExisting.rc'}
 {$R 'Icons.res' 'Icons.rc'}
-{$R 'NtfslinkExt.res'}
 {%File 'JclNTFSUnicode.inc'}
 
 uses
