@@ -1,3 +1,8 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Michael Elsdörfer <michael@elsdoerfer.net>, 2004.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: NTFS Link PT-BR\n"
@@ -12,195 +17,255 @@ msgstr ""
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-Country: BRAZIL\n"
 
-msgid "\"%s\" could not be moved to \"%s\" because of unkown reasons."
-msgstr "\"%s\" não pode ser movido para \"%s\" por razões desconhecidas."
-
-msgid "\"%s\" could not be moved, because there is already a directory \"%s\"."
-msgstr "\"%s\" não pode ser movido, porque já existe uma pasta \"%s\"."
-
-msgid ""
-"\"%s\" is a junction point, but the target file system does not support "
-"junctions."
-msgstr ""
-"\"%s\" é um junction point, mas o sistema de arquivos de destino não suporta "
-"juntions."
-
-msgid ""
-"\"%s\" is a junction point. If you want to copy the junction only, click "
-"\"Yes\", if you want to copy the target directory including all it's "
-"content, click \"No\". If you choose \"Cancel\", nothing will happen."
-msgstr ""
-"\"%s\" é um junction point. Se você quiser copiar apenas o junction, clique "
-"\"Sim\", se você quiser copiar a pasta destino incluindo o conteúdo, clique "
-"\"Não\". Se você escolher \"Cancela\", nada irá acontecer."
-
-msgid ""
-"Adds a menu item into the context menu of junction points und empty "
-"directories"
-msgstr ""
-"Adiciona um item no menu de contexto para junction points e pastas vazias"
-
-msgid "All Files"
-msgstr "Todos os arquivos"
-
-msgid "Allows creation of hardlinks and junctions using Drag&Drop"
-msgstr "Permite criação de hard links e junctions usando Arrastar&Soltar"
-
-msgid "Always in Registry"
-msgstr "Sempre no Registro"
-
-msgid "Always in Streams (does not work on FAT)"
-msgstr "Sempre em Streams (não funciona com FAT)"
-
-msgid ""
-"By default, a \"Link to\" prefix will be added to every link, like the "
-"Explorer does with copies"
-msgstr "Por padrão, um prefixo \"Link to\" será adicionado à cada link"
-
-msgid "Cancel"
-msgstr "Cancela"
-
-msgid "Choose the file you want to create a hard link to"
-msgstr "Escolha o arquivo para o qual você quer criar um hard link"
-
-msgid ""
-"Choose the target folder or drive to which you want to create a junction "
-"point."
-msgstr ""
-"Escolher a pasta destino ou disco para o qual você quer criar um junction "
-"point."
-
-msgid "Copy%s of %s"
-msgstr "Copia%s para %s"
-
-msgid "Create Hardlink Here"
-msgstr "Criar hard link aqui"
-
-msgid "Create Hardlinks Here"
-msgstr "Criar hard links aqui"
-
-msgid "Create Junction Here"
-msgstr "Criar junction aqui"
-
-msgid "Create Junctions Here"
-msgstr "Criar junctions aqui"
-
-msgid "Create Links Here"
-msgstr "Criar ligações aqui"
-
-msgid "Deactivate"
-msgstr "Desativar"
-
-msgid "Do not add \"Link to\" prefix when creating links"
-msgstr "Não adicionar o prefixo \"Link to\" quando criar links"
-
-msgid "Enable Icon Overlays for Hardlinks (requires restart)"
-msgstr "Abilita Ícone Sobreposto para Hard Links (requer reinicio)"
-
-msgid "Enable Icon Overlays for Junction Points (requires restart)"
-msgstr "Abilita Ícone Sobreposto para Junction Points (requer reinício)"
-
-msgid ""
-"Failed to create junction. Most likely the target file system does not "
-"support this feature."
-msgstr ""
-"Falha ao criar junction. Provávelmente o sistema de arquivos do destino não "
-"suporta este recurso."
-
-msgid ""
-"Failed to create link. Most likely the target file system does not support "
-"this feature, or you tried to create a hard link across different partitions."
-msgstr ""
-"Falha ao criar ligação. Provávelmente o sistema de arquivos do destino não "
-"suporta este recurso, ou você tentou criar um hard link entre partições "
-"diferentes."
-
-msgid "Helps differing hard links between other files"
-msgstr "Ajuda a diferênciar hard links de outros arquivos"
-
-msgid "Helps differing junction points between other directories"
-msgstr "Ajuda a diferênciar juntions points de outras pastas"
-
-msgid "Icon:"
-msgstr "Ícone:"
-
-msgid "Integrate into Explorer Drag&&Drop menu"
-msgstr "Intergrar Com o Menu de Arrastar&Soltar do Explorer"
-
-msgid "Integrate into Explorer Right-Click menu"
-msgstr "Integrar com o menu de contexto do Explorer"
-
-msgid "Intercept Copying of Junction Points"
-msgstr "Interceptar Cópia de Junction Points"
-
-msgid "Link Folder..."
-msgstr "Ligar pasta..."
-
-msgid "Link selected folder to another directory or drive"
-msgstr "Ligar pasta selecionada para outra pasta ou disco"
-
-msgid "Link%s to %s"
-msgstr "Link%s para %s"
-
-msgid "NTFS Link"
-msgstr "NTFS Link"
-
+#. fConfig..Caption
+#: configutil/uConfig.dfm:6
 msgid "NTFS Link Configuration"
 msgstr "Configuração do NTFS Link"
 
-msgid ""
-"NTFS Link can save information about the junctions you created, and warn "
-"you, if you attempt to delete a folder with junctions pointing to"
+#. fConfig..Font.Name
+#. Programmer's name: FONT 8
+#: configutil/uConfig.dfm:13
+#: ntfslink/DialogLinksExisting.rc:13
+msgid "MS Shell Dlg 2"
 msgstr ""
-"NTFS Link pode salvar informações sobre os junction points que você criar, e "
-"avisar quando você tentar apagar uma pasta com junctions apontando para ela"
 
-msgid "No"
-msgstr "Não"
+#. fConfig..Label1..Caption
+#. fConfig..Label2..Caption
+#: configutil/uConfig.dfm:30
+#: configutil/uConfig.dfm:38
+msgid "Icon:"
+msgstr "Ícone:"
 
-msgid "OK"
-msgstr "OK"
-
-msgid "Open \"%s\""
-msgstr "Abrir \"%S\""
-
-msgid "Open the target of this junction in Windows Explorer"
-msgstr "Abrir o destino deste junction point no Windows Explorer"
-
-msgid "Prefer Streams, if not available Registry"
-msgstr "Prefere Streams, se não, Registro"
-
-msgid "Remove this folder's junction point"
-msgstr "Remover o junction point desta pasta"
-
-msgid ""
-"There are junctions pointing to this folder or a subfolder (see list below). "
-"If you continue the operation, these links will no longer work. Are you sure?"
-msgstr ""
-"Existem junction points apontando para esta pasta ou subpastas (veja lista "
-"abaixo). Se você continuar esta operação estes junctions não irão mais "
-"funcionar. Você tem certeza?"
-
+#. fConfig..Label3..Caption
+#: configutil/uConfig.dfm:69
 msgid "Tracking of Junction Creation:"
 msgstr "Monitoração da Criação de Junctions:"
 
+#. fConfig..IntegrateIntoDragDropMenu..Hint
+#: configutil/uConfig.dfm:76
+msgid "Allows creation of hardlinks and junctions using Drag&Drop"
+msgstr "Permite criação de hard links e junctions usando Arrastar&Soltar"
+
+#. fConfig..IntegrateIntoDragDropMenu..Caption
+#: configutil/uConfig.dfm:78
+msgid "Integrate into Explorer Drag&&Drop menu"
+msgstr "Intergrar Com o Menu de Arrastar&Soltar do Explorer"
+
+#. fConfig..EnableJunctionIconOverlays..Hint
+#: configutil/uConfig.dfm:86
+msgid "Helps differing junction points between other directories"
+msgstr "Ajuda a diferênciar juntions points de outras pastas"
+
+#. fConfig..EnableJunctionIconOverlays..Caption
+#: configutil/uConfig.dfm:88
+msgid "Enable Icon Overlays for Junction Points (requires restart)"
+msgstr "Abilita Ícone Sobreposto para Junction Points (requer reinício)"
+
+#. fConfig..EnableHardlinkIconOverlays..Hint
+#: configutil/uConfig.dfm:97
+msgid "Helps differing hard links between other files"
+msgstr "Ajuda a diferênciar hard links de outros arquivos"
+
+#. fConfig..EnableHardlinkIconOverlays..Caption
+#: configutil/uConfig.dfm:99
+msgid "Enable Icon Overlays for Hardlinks (requires restart)"
+msgstr "Abilita Ícone Sobreposto para Hard Links (requer reinicio)"
+
+#. fConfig..InterceptJunctionCopying....Height
+#: configutil/uConfig.dfm:111
+msgid "Whenever you try to copy a junction point in Explorer, NTFS Link will ask whether you want to copy the junction only, or all the contents of the target folder"
+msgstr "Quando você tentar copiar um junction point no Explorer, NTFS Link irá perguntar se você quer copiar apenas o junction, ou todo o conteúdo da pasta apontada por ele."
+
+#. fConfig..InterceptJunctionCopying..Caption
+#: configutil/uConfig.dfm:113
+msgid "Intercept Copying of Junction Points"
+msgstr "Interceptar Cópia de Junction Points"
+
+#. fConfig..bOK..Caption
+#: configutil/uConfig.dfm:122
+msgid "OK"
+msgstr "OK"
+
+#. fConfig..bCancel..Caption
+#: configutil/uConfig.dfm:134
+msgid "Cancel"
+msgstr "Cancela"
+
+#. fConfig..JunctionTrackingMode....Height
+#: configutil/uConfig.dfm:146
+msgid "NTFS Link can save information about the junctions you created, and warn you, if you attempt to delete a folder with junctions pointing to"
+msgstr "NTFS Link pode salvar informações sobre os junction points que você criar, e avisar quando você tentar apagar uma pasta com junctions apontando para ela"
+
+#. fConfig..JunctionTrackingMode..Text
+#. fConfig..JunctionTrackingMode....Items.Strings
+#: configutil/uConfig.dfm:152
+#: configutil/uConfig.dfm:154
+msgid "Prefer Streams, if not available Registry"
+msgstr "Prefere Streams, se não, Registro"
+
+#. fConfig..JunctionTrackingMode....Items.Strings
+#: configutil/uConfig.dfm:155
+msgid "Always in Registry"
+msgstr "Sempre no Registro"
+
+#. fConfig..JunctionTrackingMode....Items.Strings
+#: configutil/uConfig.dfm:156
+msgid "Always in Streams (does not work on FAT)"
+msgstr "Sempre em Streams (não funciona com FAT)"
+
+#. fConfig..JunctionTrackingMode....Items.Strings
+#: configutil/uConfig.dfm:157
+msgid "Deactivate"
+msgstr "Desativar"
+
+#. fConfig..IntegrateIntoContextMenu....Height
+#: configutil/uConfig.dfm:188
+msgid "Adds a menu item into the context menu of junction points und empty directories"
+msgstr "Adiciona um item no menu de contexto para junction points e pastas vazias"
+
+#. fConfig..IntegrateIntoContextMenu..Caption
+#: configutil/uConfig.dfm:190
+msgid "Integrate into Explorer Right-Click menu"
+msgstr "Integrar com o menu de contexto do Explorer"
+
+#. fConfig..CreateLinksSuppressPrefix....Height
+#: configutil/uConfig.dfm:200
+msgid "By default, a \"Link to\" prefix will be added to every link, like the Explorer does with copies"
+msgstr "Por padrão, um prefixo \"Link to\" será adicionado à cada link"
+
+#. fConfig..CreateLinksSuppressPrefix..Caption
+#: configutil/uConfig.dfm:202
+msgid "Do not add \"Link to\" prefix when creating links"
+msgstr "Não adicionar o prefixo \"Link to\" quando criar links"
+
+#. Template used to name the created links; can be overridden by lang file
+#. Programmer's name for it: LINK_PREFIX_TEMPLATE_DEFAULT
+#: common/Constants.pas:44
+msgid "Link%s to %s"
+msgstr "Link%s para %s"
+
+#. Programmer's name for it: COPY_PREFIX_TEMPLATE_DEFAULT
+#: common/Constants.pas:45
+msgid "Copy%s of %s"
+msgstr "Copia%s para %s"
+
+#: ntfslink/ContextMenuHook.pas:82
+msgid "Link selected folder to another directory or drive"
+msgstr "Ligar pasta selecionada para outra pasta ou disco"
+
+#: ntfslink/ContextMenuHook.pas:84
+msgid "Remove this folder's junction point"
+msgstr "Remover o junction point desta pasta"
+
+#: ntfslink/ContextMenuHook.pas:86
+msgid "Open the target of this junction in Windows Explorer"
+msgstr "Abrir o destino deste junction point no Windows Explorer"
+
+#. Add items to the submenu, depending on mode
+#: ntfslink/ContextMenuHook.pas:213
+msgid "Link Folder..."
+msgstr "Ligar pasta..."
+
+#: ntfslink/ContextMenuHook.pas:215
 msgid "Unlink From \"%s\""
 msgstr "Desligar pasta de \"%s\""
 
-msgid ""
-"Whenever you try to copy a junction point in Explorer, NTFS Link will ask "
-"whether you want to copy the junction only, or all the contents of the "
-"target folder"
-msgstr ""
-"Quando você tentar copiar um junction point no Explorer, NTFS Link irá "
-"perguntar se você quer copiar apenas o junction, ou todo o conteúdo da pasta "
-"apontada por ele."
+#: ntfslink/ContextMenuHook.pas:217
+msgid "Open \"%s\""
+msgstr "Abrir \"%S\""
 
-msgid "Yes"
-msgstr "Sim"
+#. If the thing went not smoothly, then show a message
+#: ntfslink/CopyHook.pas:228
+msgid "\"%s\" could not be moved, because there is already a directory \"%s\"."
+msgstr "\"%s\" não pode ser movido, porque já existe uma pasta \"%s\"."
 
+#: ntfslink/CopyHook.pas:233
+msgid "\"%s\" could not be moved to \"%s\" because of unkown reasons."
+msgstr "\"%s\" não pode ser movido para \"%s\" por razões desconhecidas."
+
+#. Moving the junction point is not possible
+#: ntfslink/CopyHook.pas:240
+msgid "\"%s\" is a junction point, but the target file system does not support junctions."
+msgstr "\"%s\" é um junction point, mas o sistema de arquivos de destino não suporta juntions."
+
+#. Ask user what he wants to do
+#: ntfslink/CopyHook.pas:266
+msgid "\"%s\" is a junction point. If you want to copy the junction only, click \"Yes\", if you want to copy the target directory including all it's content, click \"No\". If you choose \"Cancel\", nothing will happen."
+msgstr "\"%s\" é um junction point. Se você quiser copiar apenas o junction, clique \"Sim\", se você quiser copiar a pasta destino incluindo o conteúdo, clique \"Não\". Se você escolher \"Cancela\", nada irá acontecer."
+
+#. text of the third option button
+#: ntfslink/DialogLinksExisting.pas:85
+msgid "Yes, and delete links"
+msgstr "Sim, e apaga ligação"
+
+#: ntfslink/DialogLinksExisting.pas:88
 msgid "Yes, and correct links"
 msgstr "Sim, e conserta ligação"
 
-msgid "Yes, and delete links"
-msgstr "Sim, e apaga ligação"
+#. Tell the user if an error occurred
+#. If positive result, then try to create hardlink
+#: ntfslink/DragDropHook.pas:154
+#: ntfslink/ShellNewExports.pas:88
+msgid "Failed to create link. Most likely the target file system does not support this feature, or you tried to create a hard link across different partitions."
+msgstr "Falha ao criar ligação. Provávelmente o sistema de arquivos do destino não suporta este recurso, ou você tentou criar um hard link entre partições diferentes."
+
+#. an appropriate menu caption
+#: ntfslink/DragDropHook.pas:182
+msgid "Create Hardlink Here"
+msgstr "Criar hard link aqui"
+
+#: ntfslink/DragDropHook.pas:183
+msgid "Create Hardlinks Here"
+msgstr "Criar hard links aqui"
+
+#: ntfslink/DragDropHook.pas:186
+msgid "Create Junction Here"
+msgstr "Criar junction aqui"
+
+#: ntfslink/DragDropHook.pas:187
+msgid "Create Junctions Here"
+msgstr "Criar junctions aqui"
+
+#: ntfslink/DragDropHook.pas:190
+msgid "Create Links Here"
+msgstr "Criar ligações aqui"
+
+#. Init other struct members
+#: ntfslink/ShellNewExports.pas:71
+msgid "Choose the file you want to create a hard link to"
+msgstr "Escolha o arquivo para o qual você quer criar um hard link"
+
+#: ntfslink/ShellNewExports.pas:72
+msgid "All Files"
+msgstr "Todos os arquivos"
+
+#. Init BrowseInfo struct
+#: ntfslink/ShellNewExports.pas:111
+msgid "Choose the target folder or drive to which you want to create a junction point."
+msgstr "Escolher a pasta destino ou disco para o qual você quer criar um junction point."
+
+#. If junction creation failed, show message box
+#: ntfslink/ShellNewExports.pas:134
+msgid "Failed to create junction. Most likely the target file system does not support this feature."
+msgstr "Falha ao criar junction. Provávelmente o sistema de arquivos do destino não suporta este recurso."
+
+#. Programmer's name: CAPTION
+#: ntfslink/DialogLinksExisting.rc:12
+msgid "NTFS Link"
+msgstr "NTFS Link"
+
+#. Programmer's name: CONTROL
+#: ntfslink/DialogLinksExisting.rc:15
+msgid "There are junctions pointing to this folder or a subfolder (see list below). If you continue the operation, these links will no longer work. Are you sure?"
+msgstr "Existem junction points apontando para esta pasta ou subpastas (veja lista abaixo). Se você continuar esta operação estes junctions não irão mais funcionar. Você tem certeza?"
+
+#. Programmer's name: CONTROL
+#: ntfslink/DialogLinksExisting.rc:18
+msgid "Yes"
+msgstr "Sim"
+
+#. Programmer's name: CONTROL
+#: ntfslink/DialogLinksExisting.rc:19
+msgid "No"
+msgstr "Não"
+
