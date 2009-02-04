@@ -1,78 +1,84 @@
+# Michael Elsdörfer <michael@elsdoerfer.net>, 2004.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: NTFS Link Ext\n"
 "POT-Creation-Date: 2006-10-24 01:28\n"
-"PO-Revision-Date: 2006-10-20 15:07-0600\n"
-"Last-Translator: Alberto Martinez <amarcruz@yahoo.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2009-01-21 04:59-0600\n"
+"Last-Translator: Alberto Martínez <amarcruz@yahoo.com>\n"
+"Language-Team:  <amarcruz@yahoo.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: dxgettext 1.1.1\n"
-"X-Poedit-Country: MEXICO\n"
 "X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: MEXICO\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: D:\\CDROM2\\System\\NTFS-Link\n"
 
 #. fConfig..Caption
 #: configutil/uConfig.dfm:6
-msgid "NTFS Link Ext Configuration"
+msgid "NTFS Link Configuration"
 msgstr "Configuración de NTFS Link Ext"
 
 #. fConfig..Font.Name
 #. Programmer's name: FONT 8
-#: configutil/uConfig.dfm:13 ntfslinkext/DialogLinksExisting.rc:13
+#: configutil/uConfig.dfm:13
+#: ntfslink/DialogLinksExisting.rc:13
 msgid "MS Shell Dlg 2"
 msgstr "MS Shell Dlg 2"
 
 #. fConfig..Label1..Caption
 #. fConfig..Label2..Caption
-#: configutil/uConfig.dfm:30 configutil/uConfig.dfm:38
+#: configutil/uConfig.dfm:30
+#: configutil/uConfig.dfm:38
 msgid "Icon:"
 msgstr "Icono:"
 
 #. fConfig..Label3..Caption
 #: configutil/uConfig.dfm:69
 msgid "Tracking of Junction Creation:"
-msgstr "Rastrear creación de junturas:"
+msgstr "Seguimiento de creación de unión:"
 
 #. fConfig..IntegrateIntoDragDropMenu..Hint
 #: configutil/uConfig.dfm:76
 msgid "Allows creation of hardlinks and junctions using Drag&Drop"
-msgstr "Permite la creación de enlaces duros y junturas usando Arrastrar y Soltar"
+msgstr "Permite la creación de enlaces duros y uniones usando Arrastrar y Soltar"
 
 #. fConfig..IntegrateIntoDragDropMenu..Caption
 #: configutil/uConfig.dfm:78
 msgid "Integrate into Explorer Drag&&Drop menu"
-msgstr "Integrar al menú Arrastrar y Soltar del Explorador"
+msgstr "Integrarse al menú Arrastrar y Soltar del Explorador"
 
 #. fConfig..EnableJunctionIconOverlays..Hint
 #: configutil/uConfig.dfm:86
 msgid "Helps differing junction points between other directories"
-msgstr "Ayuda a diferenciar entre puntos de juntura y otros directorios"
+msgstr "Ayuda a diferenciar los puntos de unión de otros directorios"
 
 #. fConfig..EnableJunctionIconOverlays..Caption
 #: configutil/uConfig.dfm:88
 msgid "Enable Icon Overlays for Junction Points (requires restart)"
-msgstr "Habilitar indicador en iconos de Puntos de juntura (requiere reiniciar)"
+msgstr "Habilitar indicador de iconos para Puntos de unión (requiere reinicio)"
 
 #. fConfig..EnableHardlinkIconOverlays..Hint
 #: configutil/uConfig.dfm:97
 msgid "Helps differing hard links between other files"
-msgstr "Ayuda a diferenciar entre enlaces duros y otros archivos"
+msgstr "Ayuda a diferenciar los enlaces duros de otros archivos"
 
 #. fConfig..EnableHardlinkIconOverlays..Caption
 #: configutil/uConfig.dfm:99
 msgid "Enable Icon Overlays for Hardlinks (requires restart)"
-msgstr "Habilitar indicador en iconos de Enlaces duros (requiere reiniciar)"
+msgstr "Habilitar indicador de iconos para Enlaces duros (requiere reinicio)"
 
 #. fConfig..InterceptJunctionCopying....Height
 #: configutil/uConfig.dfm:111
 msgid "Whenever you try to copy a junction point in Explorer, NTFS Link will ask whether you want to copy the junction only, or all the contents of the target folder"
-msgstr "Siempre que intente copiar un punto de juntura en el Explorador, NTFS Link le preguntará si quiere copiar sólo la juntura, o todo el contenido de la carpeta apuntada"
+msgstr "Siempre que usted intente copiar una unión en el Explorador, NTFS Link le preguntará si desea copiar solo el punto de unión, o todo el contenido de la carpeta destino"
 
 #. fConfig..InterceptJunctionCopying..Caption
 #: configutil/uConfig.dfm:113
 msgid "Intercept Copying of Junction Points"
-msgstr "Interceptar la copia de Puntos de juntura"
+msgstr "Interceptar la copia de Puntos de unión"
 
 #. fConfig..bOK..Caption
 #: configutil/uConfig.dfm:122
@@ -87,23 +93,24 @@ msgstr "Cancelar"
 #. fConfig..JunctionTrackingMode....Height
 #: configutil/uConfig.dfm:146
 msgid "NTFS Link can save information about the junctions you created, and warn you, if you attempt to delete a folder with junctions pointing to"
-msgstr "NTFS Link puede guardar información acerca de las junturas que usted crea, y advertirle si intenta eliminar una carpeta con junturas apuntando a ella"
+msgstr "NTFS Link puede guardar información acerca de las uniones que usted crea y advertirle si intenta eliminar una carpeta con uniones apuntando a ella"
 
 #. fConfig..JunctionTrackingMode..Text
 #. fConfig..JunctionTrackingMode....Items.Strings
-#: configutil/uConfig.dfm:152 configutil/uConfig.dfm:154
+#: configutil/uConfig.dfm:152
+#: configutil/uConfig.dfm:154
 msgid "Prefer Streams, if not available Registry"
-msgstr "En los flujos, si no hay Registry disponible"
+msgstr "En flujos si disponibles, en el Registro si no"
 
 #. fConfig..JunctionTrackingMode....Items.Strings
 #: configutil/uConfig.dfm:155
 msgid "Always in Registry"
-msgstr "Siempre en el Registry"
+msgstr "Siempre en el Registro"
 
 #. fConfig..JunctionTrackingMode....Items.Strings
 #: configutil/uConfig.dfm:156
 msgid "Always in Streams (does not work on FAT)"
-msgstr "Siempre en los flujos (no funciona en FAT)"
+msgstr "Siempre en flujos (no funciona en FAT)"
 
 #. fConfig..JunctionTrackingMode....Items.Strings
 #: configutil/uConfig.dfm:157
@@ -113,22 +120,22 @@ msgstr "Desactivar"
 #. fConfig..IntegrateIntoContextMenu....Height
 #: configutil/uConfig.dfm:188
 msgid "Adds a menu item into the context menu of junction points und empty directories"
-msgstr "Agrega un elemento al menú contextual de Puntos de juntura y directorios vacíos"
+msgstr "Agrega un elemento al menú contextual de los puntos de unión y los directorios vacíos"
 
 #. fConfig..IntegrateIntoContextMenu..Caption
 #: configutil/uConfig.dfm:190
 msgid "Integrate into Explorer Right-Click menu"
-msgstr "Integrar al menú contextual del Explorador"
+msgstr "Integrarse al menú contextual del Explorador"
 
 #. fConfig..CreateLinksSuppressPrefix....Height
 #: configutil/uConfig.dfm:200
 msgid "By default, a \"Link to\" prefix will be added to every link, like the Explorer does with copies"
-msgstr "Por omisión, se agregará un prefijo \"Enlace a\" a cada enlace, como el Explorador lo hace con las copias"
+msgstr "Por omisión, se agregará un prefijo \"Enlace a\" a los enlaces, como el Explorador lo hace con las copias"
 
 #. fConfig..CreateLinksSuppressPrefix..Caption
 #: configutil/uConfig.dfm:202
 msgid "Do not add \"Link to\" prefix when creating links"
-msgstr "No agregar el prefijo \"Enlace a\" al crear enlaces"
+msgstr "No agregar el prefijo \"Enlace a\" a los enlaces creados"
 
 #. Template used to name the created links; can be overridden by lang file
 #. Programmer's name for it: LINK_PREFIX_TEMPLATE_DEFAULT
@@ -141,121 +148,127 @@ msgstr "Enlace%s a %s"
 msgid "Copy%s of %s"
 msgstr "Copia%s de %s"
 
-#: ntfslinkext/ContextMenuHook.pas:82
+#: ntfslink/ContextMenuHook.pas:82
 msgid "Link selected folder to another directory or drive"
 msgstr "Enlazar la carpeta seleccionada a otro directorio o unidad"
 
-#: ntfslinkext/ContextMenuHook.pas:84
+#: ntfslink/ContextMenuHook.pas:84
 msgid "Remove this folder's junction point"
-msgstr "Eliminar este punto de juntura de la carpeta"
+msgstr "Remover este punto de unión de la carpeta destino"
 
-#: ntfslinkext/ContextMenuHook.pas:86
+#: ntfslink/ContextMenuHook.pas:86
 msgid "Open the target of this junction in Windows Explorer"
-msgstr "Abrir el objeto apuntado por esta juntura en el Explorador de Windows"
+msgstr "Abrir el destino de esta unión en el Explorador de Windows"
 
 #. Add items to the submenu, depending on mode
-#: ntfslinkext/ContextMenuHook.pas:213
+#: ntfslink/ContextMenuHook.pas:213
 msgid "Link Folder..."
 msgstr "Enlazar carpeta..."
 
-#: ntfslinkext/ContextMenuHook.pas:215
+#: ntfslink/ContextMenuHook.pas:215
 msgid "Unlink From \"%s\""
 msgstr "Desenlazar de \"%s\""
 
-#: ntfslinkext/ContextMenuHook.pas:217
+#: ntfslink/ContextMenuHook.pas:217
 msgid "Open \"%s\""
-msgstr "Abrir \"%s\""
+msgstr "Explorar \"%s\""
 
 #. If the thing went not smoothly, then show a message
-#: ntfslinkext/CopyHook.pas:228
+#: ntfslink/CopyHook.pas:228
 msgid "\"%s\" could not be moved, because there is already a directory \"%s\"."
-msgstr "\"%s\" no pudo ser movido porque que ya existe un directorio \"%s\"."
+msgstr "\"%s\" no se pudo mover porque ya existe un directorio \"%s\"."
 
-#: ntfslinkext/CopyHook.pas:233
+#: ntfslink/CopyHook.pas:233
 msgid "\"%s\" could not be moved to \"%s\" because of unkown reasons."
-msgstr "\"%s\" no pudo ser movido a \"%s\"  debido a razones desconocidas."
+msgstr "\"%s\" no se pudo mover a \"%s\" por razones desconocidas."
 
 #. Moving the junction point is not possible
-#: ntfslinkext/CopyHook.pas:240
+#: ntfslink/CopyHook.pas:240
 msgid "\"%s\" is a junction point, but the target file system does not support junctions."
-msgstr "\"%s\" es un punto de juntura, pero sistema de archivos destino no soporta junturas."
+msgstr "\"%s\" es un punto de unión, pero el sistema de archivos destino no soporta uniones."
 
 #. Ask user what he wants to do
-#: ntfslinkext/CopyHook.pas:266
+#: ntfslink/CopyHook.pas:266
 msgid "\"%s\" is a junction point. If you want to copy the junction only, click \"Yes\", if you want to copy the target directory including all it's content, click \"No\". If you choose \"Cancel\", nothing will happen."
-msgstr "\"%s\" es un punto de juntura. Si usted quiere copiar la juntura solamente, haga clic en \"Sí\", si quiere copiar el directorio apuntado y todo su contenido, haga clic en \"No\". Si elije \"Cancelar\", no sucederá nada."
+msgstr ""
+"\"%s\" es un punto de unión.\n"
+"Si desea copiar solo la unión, haga clic en \"Sí\".\n"
+"Si desea copiar el directorio destino, incluyendo todo su contenido, haga clic en \"No\".\n"
+"Si elige \"Cancelar\", no sucederá nada."
 
 #. text of the third option button
-#: ntfslinkext/DialogLinksExisting.pas:85
+#: ntfslink/DialogLinksExisting.pas:85
 msgid "Yes, and delete links"
 msgstr "Sí, y eliminar enlaces"
 
-#: ntfslinkext/DialogLinksExisting.pas:88
+#: ntfslink/DialogLinksExisting.pas:88
 msgid "Yes, and correct links"
 msgstr "Sí, y corregir enlaces"
 
 #. Tell the user if an error occurred
 #. If positive result, then try to create hardlink
-#: ntfslinkext/DragDropHook.pas:154 ntfslinkext/ShellNewExports.pas:88
+#: ntfslink/DragDropHook.pas:154
+#: ntfslink/ShellNewExports.pas:88
 msgid "Failed to create link. Most likely the target file system does not support this feature, or you tried to create a hard link across different partitions."
-msgstr "Falla al crear enlace. Es probable que el sistema de archivos destino no soporte esta característica, o que usted haya intendado crear un enlace duro entre diferentes particiones."
+msgstr "Falló la creación del enlace. Es probable que el sistema de archivos destino no soporte esta característica, o que usted haya intentado crear un enlace duro a través de diferentes particiones."
 
 #. an appropriate menu caption
-#: ntfslinkext/DragDropHook.pas:182
+#: ntfslink/DragDropHook.pas:182
 msgid "Create Hardlink Here"
-msgstr "Crear enlace duro aquí"
+msgstr "Crear Enlace duro aquí"
 
-#: ntfslinkext/DragDropHook.pas:183
+#: ntfslink/DragDropHook.pas:183
 msgid "Create Hardlinks Here"
-msgstr "Crear enlaces duros aquí"
+msgstr "Crear Enlaces duros aquí"
 
-#: ntfslinkext/DragDropHook.pas:186
+#: ntfslink/DragDropHook.pas:186
 msgid "Create Junction Here"
-msgstr "Crear juntura aquí"
+msgstr "Crear Unión aquí"
 
-#: ntfslinkext/DragDropHook.pas:187
+#: ntfslink/DragDropHook.pas:187
 msgid "Create Junctions Here"
-msgstr "Crear junturas aquí"
+msgstr "Crear Uniones aquí"
 
-#: ntfslinkext/DragDropHook.pas:190
+#: ntfslink/DragDropHook.pas:190
 msgid "Create Links Here"
 msgstr "Crear enlaces aquí"
 
 #. Init other struct members
-#: ntfslinkext/ShellNewExports.pas:71
+#: ntfslink/ShellNewExports.pas:71
 msgid "Choose the file you want to create a hard link to"
-msgstr "Elija el archivo para el cual desea crear un enlace duro"
+msgstr "Seleccione el archivo para el que desea crear un enlace duro"
 
-#: ntfslinkext/ShellNewExports.pas:72
+#: ntfslink/ShellNewExports.pas:72
 msgid "All Files"
 msgstr "Todos los archivos"
 
 #. Init BrowseInfo struct
-#: ntfslinkext/ShellNewExports.pas:111
+#: ntfslink/ShellNewExports.pas:111
 msgid "Choose the target folder or drive to which you want to create a junction point."
-msgstr "Elija la carpeta o unidad para la que desea crear un punto de juntura."
+msgstr "Seleccione la carpeta o unidad destino para la que desea crear un punto de unión."
 
 #. If junction creation failed, show message box
-#: ntfslinkext/ShellNewExports.pas:134
+#: ntfslink/ShellNewExports.pas:134
 msgid "Failed to create junction. Most likely the target file system does not support this feature."
-msgstr "Falla al crear punto de juntura. Es probable es que el sistema de archivos destino no soporte esta característica."
+msgstr "Error al crear la unión. Es probable que el sistema de archivos no soporte esta característica."
 
 #. Programmer's name: CAPTION
-#: ntfslinkext/DialogLinksExisting.rc:12
+#: ntfslink/DialogLinksExisting.rc:12
 msgid "NTFS Link"
 msgstr "NTFS Link"
 
 #. Programmer's name: CONTROL
-#: ntfslinkext/DialogLinksExisting.rc:15
+#: ntfslink/DialogLinksExisting.rc:15
 msgid "There are junctions pointing to this folder or a subfolder (see list below). If you continue the operation, these links will no longer work. Are you sure?"
-msgstr "Hay junturas apuntando a esta carpeta o a una subcarpeta (vea la lista abajo). Si continúa la operación, estos enlaces ya no funcionarán. ¿Está seguro?"
+msgstr "Hay uniones apuntando a esta carpeta o una de sus subcarpetas (vea la lista inferior). Si continúa la operación, estos enlaces dejarán de funcionar. ¿Está seguro?"
 
 #. Programmer's name: CONTROL
-#: ntfslinkext/DialogLinksExisting.rc:18
+#: ntfslink/DialogLinksExisting.rc:18
 msgid "Yes"
 msgstr "Sí"
 
 #. Programmer's name: CONTROL
-#: ntfslinkext/DialogLinksExisting.rc:19
+#: ntfslink/DialogLinksExisting.rc:19
 msgid "No"
 msgstr "No"
+
