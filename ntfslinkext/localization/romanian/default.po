@@ -1,0 +1,289 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Michael Elsdörfer <michael@elsdoerfer.net>, 2004.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Versiunea Română\n"
+"POT-Creation-Date: 2008-02-03 23:29\n"
+"PO-Revision-Date: 2009-02-04 00:29+0200\n"
+"Last-Translator: Andrei Liutec <andrei.liutec@medlad.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: dxgettext 1.1.1\n"
+"X-Poedit-Language: Romanian\n"
+"X-Poedit-Country: ROMANIA\n"
+
+#. fConfig..Caption
+#: configutil/uConfig.dfm:6
+msgid "NTFS Link Configuration"
+msgstr "Configurare NTFS Link"
+
+#. fConfig..Font.Name
+#. Programmer's name: FONT 8
+#: configutil/uConfig.dfm:13
+#: ntfslink/DialogLinksExisting.rc:13
+msgid "MS Shell Dlg 2"
+msgstr "Dialog 2 MS Shell"
+
+#. fConfig..Label1..Caption
+#. fConfig..Label2..Caption
+#: configutil/uConfig.dfm:30
+#: configutil/uConfig.dfm:38
+msgid "Icon:"
+msgstr "Icoană:"
+
+#. fConfig..Label3..Caption
+#: configutil/uConfig.dfm:69
+msgid "Tracking of Junction Creation:"
+msgstr "Urmărire Joncţiuni Create:"
+
+#. fConfig..IntegrateIntoDragDropMenu..Hint
+#: configutil/uConfig.dfm:76
+msgid "Allows creation of hardlinks and junctions using Drag&Drop"
+msgstr "Permite crearea de hardlink-uri şi joncţiuni folosind Drag&Drop"
+
+#. fConfig..IntegrateIntoDragDropMenu..Caption
+#: configutil/uConfig.dfm:78
+msgid "Integrate into Explorer Drag&&Drop menu"
+msgstr "Integrează în meniul Drag&&Drop al Windows Explorer"
+
+#. fConfig..EnableJunctionIconOverlays..Hint
+#: configutil/uConfig.dfm:86
+msgid "Helps differing junction points between other directories"
+msgstr "Ajută la distingerea Punctelor de Joncţiune de directoarele normale."
+
+#. fConfig..EnableJunctionIconOverlays..Caption
+#: configutil/uConfig.dfm:88
+msgid "Enable Icon Overlays for Junction Points (requires restart)"
+msgstr "Afişează Icoane Suprapuse pentru Puncte de Joncţiune (necesită restart)"
+
+#. fConfig..EnableHardlinkIconOverlays..Hint
+#: configutil/uConfig.dfm:97
+msgid "Helps differing hard links between other files"
+msgstr "Ajută la distingerea Legăturilor Directe de fişierele normale."
+
+#. fConfig..EnableHardlinkIconOverlays..Caption
+#: configutil/uConfig.dfm:99
+msgid "Enable Icon Overlays for Hardlinks (requires restart)"
+msgstr "Afişează Icoane Suprapuse pentru Legături Directe (necesită restart)"
+
+#. fConfig..InterceptJunctionCopying....Height
+#: configutil/uConfig.dfm:111
+msgid "Whenever you try to copy a junction point in Explorer, NTFS Link will ask whether you want to copy the junction only, or all the contents of the target folder"
+msgstr ""
+"De fiecare dată când încercaţi să copiaţi un Punct de Joncţiune din Explorer,\r\n"
+"NTFS Link vă va întreba dacă doriţi să copiaţi doar joncţiunea (scurtătura)\r\n"
+"sau întreg conţinutul directorului vizat."
+
+#. fConfig..InterceptJunctionCopying..Caption
+#: configutil/uConfig.dfm:113
+msgid "Intercept Copying of Junction Points"
+msgstr "Interceptează Copierea Punctelor de Joncţiune"
+
+#. fConfig..bOK..Caption
+#: configutil/uConfig.dfm:122
+msgid "OK"
+msgstr "Acceptă"
+
+#. fConfig..bCancel..Caption
+#: configutil/uConfig.dfm:134
+msgid "Cancel"
+msgstr "Revocă"
+
+#. fConfig..JunctionTrackingMode....Height
+#: configutil/uConfig.dfm:146
+msgid "NTFS Link can save information about the junctions you created, and warn you, if you attempt to delete a folder with junctions pointing to"
+msgstr ""
+"NTFS Link poate salva înformaţii referitoare la\r\n"
+"Punctele de Joncţiune create de dvs. şi vă poate avertiza\r\n"
+"atunci când încercaţi să ştergeţi un director\r\n"
+"pentru care au fost create Puncte de Joncţiune."
+
+#. fConfig..JunctionTrackingMode..Text
+#. fConfig..JunctionTrackingMode....Items.Strings
+#: configutil/uConfig.dfm:152
+#: configutil/uConfig.dfm:154
+msgid "Prefer Streams, if not available Registry"
+msgstr "În Partiţie, dacă Registrul este indisponibil"
+
+#. fConfig..JunctionTrackingMode....Items.Strings
+#: configutil/uConfig.dfm:155
+msgid "Always in Registry"
+msgstr "Mereu în Registru"
+
+#. fConfig..JunctionTrackingMode....Items.Strings
+#: configutil/uConfig.dfm:156
+msgid "Always in Streams (does not work on FAT)"
+msgstr "Mereu în Partiţie (nu merge pt. FAT)"
+
+#. fConfig..JunctionTrackingMode....Items.Strings
+#: configutil/uConfig.dfm:157
+msgid "Deactivate"
+msgstr "Dezactivează"
+
+#. fConfig..IntegrateIntoContextMenu....Height
+#: configutil/uConfig.dfm:188
+msgid "Adds a menu item into the context menu of junction points und empty directories"
+msgstr "Adaugă în meniul contextual al Punctelor de Joncţiune şi directoarelor goale."
+
+#. fConfig..IntegrateIntoContextMenu..Caption
+#: configutil/uConfig.dfm:190
+msgid "Integrate into Explorer Right-Click menu"
+msgstr "Integrează în meniul contextual al Windows Explorer."
+
+#. fConfig..CreateLinksSuppressPrefix....Height
+#: configutil/uConfig.dfm:200
+msgid "By default, a \"Link to\" prefix will be added to every link, like the Explorer does with copies"
+msgstr ""
+"Implicit, prefixul \"Legătură către\" va fi adăugat la fiecare legătură,\r\n"
+"aşa cum face Windows Explorer pentru copii."
+
+#. fConfig..CreateLinksSuppressPrefix..Caption
+#: configutil/uConfig.dfm:202
+msgid "Do not add \"Link to\" prefix when creating links"
+msgstr "Fără prefixul \"Legătură către\" pentru legăturile nou create"
+
+#. Template used to name the created links; can be overridden by lang file
+#. Programmer's name for it: LINK_PREFIX_TEMPLATE_DEFAULT
+#: common/Constants.pas:44
+msgid "Link%s to %s"
+msgstr "Leagă %s de %s"
+
+#. Programmer's name for it: COPY_PREFIX_TEMPLATE_DEFAULT
+#: common/Constants.pas:45
+msgid "Copy%s of %s"
+msgstr "Copiază %s al %s"
+
+#: ntfslink/ContextMenuHook.pas:82
+msgid "Link selected folder to another directory or drive"
+msgstr "Leagă directorul selectat de un alt director sau partiţie"
+
+#: ntfslink/ContextMenuHook.pas:84
+msgid "Remove this folder's junction point"
+msgstr "Elimină Punctul de Joncţiune al acestui director"
+
+#: ntfslink/ContextMenuHook.pas:86
+msgid "Open the target of this junction in Windows Explorer"
+msgstr "Deschide ţinta acestei joncţiuni în Windows Explorer"
+
+#. Add items to the submenu, depending on mode
+#: ntfslink/ContextMenuHook.pas:213
+msgid "Link Folder..."
+msgstr "Leagă Directorul..."
+
+#: ntfslink/ContextMenuHook.pas:215
+msgid "Unlink From \"%s\""
+msgstr "Dezleagă de \"%s\""
+
+#: ntfslink/ContextMenuHook.pas:217
+msgid "Open \"%s\""
+msgstr "Deschide \"%s\""
+
+#. If the thing went not smoothly, then show a message
+#: ntfslink/CopyHook.pas:228
+msgid "\"%s\" could not be moved, because there is already a directory \"%s\"."
+msgstr "\"%s\" nu a putut fi mutat deoarece există deja un director denumit \"%s\"."
+
+#: ntfslink/CopyHook.pas:233
+msgid "\"%s\" could not be moved to \"%s\" because of unkown reasons."
+msgstr "\"%s\" nu a putut fi mutat în \"%s\" din motive necunoscute."
+
+#. Moving the junction point is not possible
+#: ntfslink/CopyHook.pas:240
+msgid "\"%s\" is a junction point, but the target file system does not support junctions."
+msgstr "\"%s\" este un Punct de Joncţiune, dar sistemul de fişiere al destinaţiei nu permite joncţiuni."
+
+#. Ask user what he wants to do
+#: ntfslink/CopyHook.pas:266
+msgid "\"%s\" is a junction point. If you want to copy the junction only, click \"Yes\", if you want to copy the target directory including all it's content, click \"No\". If you choose \"Cancel\", nothing will happen."
+msgstr ""
+"\"%s\" este un Punct de Joncţiune.\r\n"
+"\r\n"
+"Dacă doriţi să copiaţi doar joncţiunea, apăsaţi \"Da\",\r\n"
+"dacă doriţi să copiaţi întreg directorul şi conţinutul lui, apăsaţi \"Nu\".\r\n"
+"\r\n"
+"Dacă apăsaţi \"Revocă\", se va întâmpla nimic."
+
+#. text of the third option button
+#: ntfslink/DialogLinksExisting.pas:85
+msgid "Yes, and delete links"
+msgstr "Da, şi şterge legăturile"
+
+#: ntfslink/DialogLinksExisting.pas:88
+msgid "Yes, and correct links"
+msgstr "Da, şi corectează legăturile"
+
+#. Tell the user if an error occurred
+#. If positive result, then try to create hardlink
+#: ntfslink/DragDropHook.pas:154
+#: ntfslink/ShellNewExports.pas:88
+msgid "Failed to create link. Most likely the target file system does not support this feature, or you tried to create a hard link across different partitions."
+msgstr "Legătura nu a putut fi creată. Cel mai probabil sistemul de fişiere nu suportă acest lucru, sau aţi încercat să creaţi o Legătură Directă între partiţii diferite."
+
+#. an appropriate menu caption
+#: ntfslink/DragDropHook.pas:182
+msgid "Create Hardlink Here"
+msgstr "Crează Legătură Directă Aici"
+
+#: ntfslink/DragDropHook.pas:183
+msgid "Create Hardlinks Here"
+msgstr "Crează Legături Directe Aici"
+
+#: ntfslink/DragDropHook.pas:186
+msgid "Create Junction Here"
+msgstr "Crează Joncţiune Aici"
+
+#: ntfslink/DragDropHook.pas:187
+msgid "Create Junctions Here"
+msgstr "Crează Joncţiuni Aici"
+
+#: ntfslink/DragDropHook.pas:190
+msgid "Create Links Here"
+msgstr "Crează Legături Aici"
+
+#. Init other struct members
+#: ntfslink/ShellNewExports.pas:71
+msgid "Choose the file you want to create a hard link to"
+msgstr "Alegeţi fişierul la care doriţi să creaţi o Legătură Directă"
+
+#: ntfslink/ShellNewExports.pas:72
+msgid "All Files"
+msgstr "Toate Fişierele"
+
+#. Init BrowseInfo struct
+#: ntfslink/ShellNewExports.pas:111
+msgid "Choose the target folder or drive to which you want to create a junction point."
+msgstr "Alegeţi directorul sau partiţia la care doriţi să creaţi un Punct de Joncţiune."
+
+#. If junction creation failed, show message box
+#: ntfslink/ShellNewExports.pas:134
+msgid "Failed to create junction. Most likely the target file system does not support this feature."
+msgstr "Joncţiunea nu a putut fi creată. Cel mai probabil sistemul de fişiere nu suportă acest lucru."
+
+#. Programmer's name: CAPTION
+#: ntfslink/DialogLinksExisting.rc:12
+msgid "NTFS Link"
+msgstr "NTFS Link"
+
+#. Programmer's name: CONTROL
+#: ntfslink/DialogLinksExisting.rc:15
+msgid "There are junctions pointing to this folder or a subfolder (see list below). If you continue the operation, these links will no longer work. Are you sure?"
+msgstr ""
+"Există Joncţiuni către acest director sau către un sub-director (vedeţi lista de mai jos).\r\n"
+"Dacă continuaţi operaţia aceste legături nu vor mai funcţiona.\r\n"
+"Sunteţi sigur?"
+
+#. Programmer's name: CONTROL
+#: ntfslink/DialogLinksExisting.rc:18
+msgid "Yes"
+msgstr "Da"
+
+#. Programmer's name: CONTROL
+#: ntfslink/DialogLinksExisting.rc:19
+msgid "No"
+msgstr "Nu"
+
