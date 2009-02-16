@@ -1,0 +1,14 @@
+- Get rid of GUI config utility, keep things simple. Most people don't
+  need to change the things offered there, and if they really do, they 
+  can always use the registry.
+  Especially the option to chose custom overlays really looks like 
+  overkill in retrospect.
+
+- Add "Yes to all", "No to all" options in our intercepted dialogs 
+  (Mike Ratzlaff, E-Mail).
+
+- Copying a structure that contains links will yield a dialog asking
+  the user whether he wants to copy the links (or the contents). If the
+  former option is chosen, the created links will be named using the
+  "Copy of" prefix, since it's the same piece of code that creates 
+  links under normal circumstances (Mike Ratzlaff, E-Mail).
