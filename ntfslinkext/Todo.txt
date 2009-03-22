@@ -12,3 +12,11 @@
   former option is chosen, the created links will be named using the
   "Copy of" prefix, since it's the same piece of code that creates 
   links under normal circumstances (Mike Ratzlaff, E-Mail).
+  
+- Jeff Harp writes: I just installed NTFS Link on a Windows 2000 SP4 
+  system (w/ post SP4 update roll-up and KB950582 hotfix) and noticed 
+  that icon overlays were enabled by default, but no icon overlays 
+  were selected.  I found the overlays in ntfslink.dll and got 
+  everything working, but thought you might want to know about this 
+  in case it's something that needs to be fixed with the default 
+  configuration or installation process.
