@@ -1,0 +1,18 @@
+From: http://www.osnews.com/permalink.php?news_id=16524&comment_id=184036
+*************************************************************************
+
+bio: I'm a regular osnews reader (though seldom make comments), and for the last little while I've been maintaining NTFS up here in Redmond.
+
+The article describes accurately how symlinks work in Vista, although it should be pointed out that this is completely by design.
+
+A junction is evaluated on the server. A symlink is evaluated on the client. At least as far as directories are concerned, Vista gives you the choice about which evaluation method you prefer. Unfortunately, there is no such thing as a file junction, so linking to files requires symbolic links.
+
+As other comments point out, the reason the user scenario works on Linux is because Samba etc. evaluate the symbolic link on the server so that an NT4 Windows client can "traverse" the link because it never really traverses anything. Samba turns client-evaluation into server-evaluation, which works pretty well, at least most of the time.
+
+Others here have commented that it's unwise to have a link on a remote share that links to a local file. That is correct, and by default, Vista has policies that prevent evaluation of those links. However, it is configurable - you can have these links if you really want to, unwise or not.
+
+The design of symlinks was client-evaluation. Server-evaluation would have been a *lot* easier (and faster!) to do. This behavior will not change in a hotfix/qfe/service pack/fiji/anything else.
+
+Also, to be clear, we've been very consistent about NTFS - the on-disk NTFS format has not changed. The on-disk format is 3.1, which is the same as XP. This is important for compatibility. Symlinks are just reparse points. You could, given enough free time and a Win2k IFS kit, build your own Vista-Symlink-evaluator for Win2k. Similarly, Samba could be made to parse them, although there would be namespace translation issues (what's C:foobar on Linux anyway?)
+
+The real prick with Vista Symlinks is (as others have pointed out) the requirement that, by default, only admins can create them. There are several compatibility/security reasons for this, which belong in a seperate discussion. Hopefully *that* can be fixed in future - but it won't be until a future Windows release, at the earliest. You can change this behavior by giving other groups the right - mmc, local computer policy, computer configuration, windows settings, security settings, local policies, user rights assignment, create symbolic links.
