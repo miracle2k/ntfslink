@@ -45,9 +45,13 @@ procedure CleanRegistryTrackingInformation;
 implementation
 
 uses
-  JclNTFS, JclRegistry, Global, Constants, ShellObjExtended, ComObj;
+  JclNTFS, JclSysInfo, JclRegistry, Global, Constants, ShellObjExtended, ComObj;
 
-{$I JclNTFSUnicode.inc}
+
+function NtfsStreamsSupported(const Volume: string): Boolean;
+begin
+  Result := fsSupportsReparsePoints in GetVolumeFileSystemFlags(Volume);
+end;
 
 function GetFolderLinkCount(Folder: string; var LinksAsString: string): Integer;
 

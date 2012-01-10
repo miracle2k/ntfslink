@@ -1,22 +1,23 @@
-Read Me for NTFS Link Ext
-*************************
+NTFS Link extends the Windows Explorer with functionality for creating and using hard links and junction points.
 
-NTFS Link Ext is a Drag & Drop shell extension for Windows Explorer. It provides
-means for creating so called "Hardlinks" and "Junctions" on NTFS file systems,
-as Windows does not come with such tools by itself.
 
-The code is based on the discontinued "NTFS Link", which is (c)2004 by Michael
-Elsdoerfer and still available on Novell Forge:
+How To Compile
+**************
 
-  http://forge.novell.com/modules/xfmod/project/?ntfslink
+Delphi XE2 (incl. Update 3) is used (which supports 64bit). Older Unicode-enabled versions of Delphi may or may work for the 32bit builds.
 
-Please use the above page only for reference. All future development will take
-place at the new home for NTFS Link Ext at SourceForge:
+In addition, some third party libraries are required:
 
-  http://sourceforge.net/projects/ntfslinkext/
+For building the shell extension:
 
-Have fun!
+- Jedi Code Library (JCL), http://jcl.sf.net/, Version 2.3 Build 4197 is used.
 
---
-Sebastian Schuberth <eyebex@users.sourceforge.net>
-2006.aug.25
+For building the configuration utility:
+
+- Jedi Visual Component Library (JVCL), http://jvcl.sf.net/, Version 3.45 is used.
+
+
+More information
+****************
+
+http://elsdoerfer.name/ntfslink

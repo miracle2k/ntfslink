@@ -22,7 +22,7 @@ located at http://www.elsdoerfer.net/ntfslink/
 
 PLEASE NOTE:
 Contains declarations which are not included in the ShlObj.pas version that
-ships with Delphi 7.
+ships with Delphi 7, and (at least some) still not in XE2.
 -----------------------------------------------------------------------------}
 
 unit ShellObjExtended;

@@ -30,7 +30,7 @@ uses
 
 type
   TExtensionRegistryData = record
-    RootKey: Cardinal;
+    RootKey: NativeUInt;
     BaseKey: string;
     UseGUIDAsKeyName: boolean;
   end;

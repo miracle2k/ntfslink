@@ -30,7 +30,7 @@ unit ActivationContext;
 interface
 
 uses
-  Windows, Forms, Controls;
+  Windows, Vcl.Forms, Vcl.Controls;
 
 //------------------------------------------------------------------------------
 // Activation Context API
@@ -270,7 +270,7 @@ end;
 
 constructor TThemedActContext.Create;
 var
-  Buffer: array[0..MAX_PATH] of Char;
+  Buffer: array[0..MAX_PATH] of AnsiChar;
 begin
   FContextAvailable := False;
   if ActCtxAvailable then
@@ -279,9 +279,9 @@ begin
     FillChar(FActCtx, SizeOf(FActCtx), #0);
     FActCtx.cbSize := SizeOf(FActCtx);
     FActCtx.dwFlags := ACTCTX_FLAG_RESOURCE_NAME_VALID;
-    GetModuleFileName(hInstance, Buffer, SizeOf(Buffer));
+    GetModuleFileNameA(hInstance, Buffer, SizeOf(Buffer));
     FActCtx.lpSource := Buffer;
-    FActCtx.lpResourceName := MAKEINTRESOURCE(2);
+    FActCtx.lpResourceName := MakeIntResourceA(2);
 
     // create context
     FActCtxHandle := CreateActCtxA(FActCtx);

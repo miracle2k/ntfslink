@@ -50,7 +50,7 @@ type
     function QueryContextMenu(Menu: HMENU; indexMenu, idCmdFirst, idCmdLast,
       uFlags: UINT): HResult; stdcall;
     function InvokeCommand(var lpici: TCMInvokeCommandInfo): HResult; stdcall;
-    function GetCommandString(idCmd, uType: UINT; pwReserved: PUINT;
+    function GetCommandString(idCmd: UINT_PTR; uFlags: UINT; pwReserved: PUINT;
       pszName: LPSTR; cchMax: UINT): HResult; stdcall;
   end;
 
@@ -66,17 +66,17 @@ implementation
 
 uses
   JclNTFS, JclRegistry, ShellAPI, ComServ, GNUGetText, Global, ShellNewExports,
-  Constants, ShellObjExtended;
+  Constants, ShellObjextended;
 
 { TContextMenuHook }
 
-function TContextMenuHook.GetCommandString(idCmd, uType: UINT;
-  pwReserved: PUINT; pszName: LPSTR; cchMax: UINT): HResult;
+function TContextMenuHook.GetCommandString(idCmd: UINT_PTR; uFlags: UINT; pwReserved: PUINT;
+      pszName: LPSTR; cchMax: UINT): HResult; stdcall;
 var
   HelpStr: string;
 begin
   HelpStr := '';
-  if (uType = GCS_HELPTEXT) then
+  if (uFlags = GCS_HELPTEXT) then
     case idCmd of
       0:
         HelpStr := _('Link selected folder to another directory or drive');
@@ -87,7 +87,7 @@ begin
     end;
 
   if HelpStr <> '' then begin
-    StrCopy(pszName, PAnsiChar(HelpStr));
+    StrLCopy(PWideChar(pszName), PWideChar(HelpStr), cchMax);
     Result := S_OK
   end
   else
@@ -110,7 +110,7 @@ begin
         // Call the "Create Junction" dialog
         NewJunctionDlgInternal(lpici.hwnd, FDirectory, False);
         // Notify the explorer, so that our icon overlay will be displayed
-        SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PAnsiChar(FDirectory), nil);
+        SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PWideChar(FDirectory), nil);
       end;
 
     1:
@@ -118,7 +118,7 @@ begin
         // Delete the junction point
         NtfsDeleteJunctionPoint(FDirectory);
         // Notify the explorer, so that our icon overlay will be removed
-        SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PAnsiChar(FDirectory), nil);
+        SHChangeNotify(SHCNE_CREATE, SHCNF_PATH, PWideChar(FDirectory), nil);
       end;
 
     2:
@@ -143,13 +143,13 @@ begin
 //          FindVolumeClose(FindRec);
 
           for i := Ord('c') to Ord('z') do begin
-            GetVolumeNameForVolumeMountPoint(PAnsiChar(Chr(i) + ':\'), VolumeName, MAX_PATH);
+            GetVolumeNameForVolumeMountPointW(PWideChar(Chr(i) + ':\'), VolumeName, MAX_PATH);
             if VolumeName = ('\\?\' + FJunctionTarget) then
                FJunctionTarget := Chr(i) + ':\';
           end;
         end;
         // Execute explorer
-        ShellExecute(0, 'explore', PAnsiChar(FJunctionTarget), nil, nil, SW_NORMAL);
+        ShellExecute(0, 'explore', PWideChar(FJunctionTarget), nil, nil, SW_NORMAL);
       end;
 
     else
@@ -180,7 +180,7 @@ var
       fMask := MIIM_STRING or MIIM_ID;
       // Initialize this standard members
       wID := ItemID;
-      dwTypeData := PAnsiChar(Caption);
+      dwTypeData := PWideChar(Caption);
       // If a submenu handle is specified, use it + include SUBMENU flag
       if SubMenu <> 0 then begin
         fMask := fMask or MIIM_SUBMENU;

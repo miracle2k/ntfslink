@@ -32,11 +32,11 @@ uses
   Windows, SysUtils, ComObj, ShlObj, BaseExtensionFactory;
 
 type
-  TCopyHook = class(TComObject, ICopyHook)
+  TCopyHook = class(TComObject, ICopyHookW)
   public
     { ICopyHook }
-    function CopyCallback(Wnd: HWND; wFunc, wFlags: UINT; pszSrcFile: PAnsiChar;
-      dwSrcAttribs: DWORD; pszDestFile: PAnsiChar; dwDestAttribs: DWORD): UINT; stdcall;
+    function CopyCallback(Wnd: HWND; wFunc, wFlags: UINT; pszSrcFile: PWideChar;
+      dwSrcAttribs: DWORD; pszDestFile: PWideChar; dwDestAttribs: DWORD): UINT; stdcall;
   end;
 
   TCopyHookFactory = class(TBaseExtensionFactory)
@@ -57,7 +57,7 @@ uses
 { TCopyHook }
 
 function TCopyHook.CopyCallback(Wnd: HWND; wFunc, wFlags: UINT;
-  pszSrcFile: PAnsiChar; dwSrcAttribs: DWORD; pszDestFile: PAnsiChar;
+  pszSrcFile: PWideChar; dwSrcAttribs: DWORD; pszDestFile: PWideChar;
   dwDestAttribs: DWORD): UINT;
 
   function DeleteJunctionsInDirectory(ADir: string): boolean;
@@ -135,7 +135,7 @@ begin
             if NtfsDeleteJunctionPoint(tempList[i]) then
               RemoveDir(tempList[i]);
             // Notify Explorer that the directory was deleted
-            SHChangeNotify(SHCNE_RMDIR, SHCNF_PATH, PAnsiChar(tempList[i]), nil);
+            SHChangeNotify(SHCNE_RMDIR, SHCNF_PATH, PWideChar(tempList[i]), nil);
           end else
           begin
             // Uuuurg, what a very, very, very dirty hack. We have to create
@@ -224,22 +224,22 @@ begin
         // If the thing went not smoothly, then show a message
         if not Success then
           if DirectoryExists(pszDestFile) then
-            MessageBoxWithContext(Wnd, PAnsiChar(string(Format(_('' + (* dxgettext hack *)
+            MessageBoxWithContext(Wnd, PWideChar(string(Format(_('' + (* dxgettext hack *)
                '"%s" could not be moved, because there ' +
                'is already a directory "%s".'), [ExtractFileName(pszSrcFile), pszDestFile]))),
-               PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR)
+               PWideChar('NTFS Link'), MB_OK + MB_ICONERROR)
           else
-            MessageBoxWithContext(Wnd, PAnsiChar(string(Format(_('' + (* dxgettext hack *)
+            MessageBoxWithContext(Wnd, PWideChar(string(Format(_('' + (* dxgettext hack *)
                '"%s" could not be moved to "%s" because of ' +
                'unkown reasons.'), [ExtractFileName(pszSrcFile), pszDestFile]))),
-             PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR);
+             PWideChar('NTFS Link'), MB_OK + MB_ICONERROR);
       end
       else
         // Moving the junction point is not possible
-        MessageBoxWithContext(Wnd, PAnsiChar(string(Format(_('' + (* dxgettext hack *)
+        MessageBoxWithContext(Wnd, PWideChar(string(Format(_('' + (* dxgettext hack *)
            '"%s" is a junction point, but the target file system does not ' +
            'support junctions.'), [pszSrcFile]))),
-           PAnsiChar('NTFS Link'), MB_OK + MB_ICONERROR);
+           PWideChar('NTFS Link'), MB_OK + MB_ICONERROR);
     end
 
     // If a junction is renamed, make sure the tracking information is updated
@@ -260,12 +260,12 @@ begin
         if NtfsReparsePointsSupported(ExtractFileDrive(pszDestFile) + '\') then
         begin
           // Ask user what he wants to do
-          tempResult := MessageBox(Wnd, PAnsiChar(string((Format(_('' + (* dxgettext hack *)
+          tempResult := MessageBox(Wnd, PWideChar(string((Format(_('' + (* dxgettext hack *)
                '"%s" is a junction point. If you want to copy the junction ' +
                'only, click "Yes", if you want to copy the target directory ' +
                'including all it''s content, click "No". If you choose ' +
                '"Cancel", nothing will happen.'), [pszSrcFile])))),
-               PAnsiChar('NTFS Link'), MB_YESNOCANCEL + MB_ICONINFORMATION);
+               PWideChar('NTFS Link'), MB_YESNOCANCEL + MB_ICONINFORMATION);
 
           case tempResult of
             // User wants to copy the contents of the linked directory; this can

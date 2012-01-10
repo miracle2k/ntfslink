@@ -61,7 +61,7 @@ function DialogCallback(hDlg: HWND; uMsg: dword; wParam: wParam;
     ItemText: array[0..180] of Char;
   begin
     GetDlgItemText(hDlg, DlgItem, ItemText, High(ItemText));
-    SetDlgItemText(hDlg, DlgItem, PAnsiChar(string(_(ItemText))));
+    SetDlgItemText(hDlg, DlgItem, PWideChar(string(_(ItemText))));
   end;
 
 var
@@ -82,13 +82,13 @@ begin
       // text of the third option button
       if Dialog_IsDeleteOperation then
         SetDlgItemText(hDlg, IDC_BYESDELETE,
-                       PAnsiChar(string(_('Yes, and delete links'))))
+                       PWideChar(string(_('Yes, and delete links'))))
       else
         SetDlgItemText(hDlg, IDC_BYESDELETE,
-                       PAnsiChar(string(_('Yes, and correct links'))));
+                       PWideChar(string(_('Yes, and correct links'))));
 
       // Display the list of junctions
-      SetDlgItemText(hDlg, IDC_MLINKS, PAnsiChar(Dialog_JunctionListAsString));
+      SetDlgItemText(hDlg, IDC_MLINKS, PWideChar(Dialog_JunctionListAsString));
 
       // Display a standard windows "question" icon
       IconHandle := LoadIcon(0, MakeIntResource(IDI_QUESTION));

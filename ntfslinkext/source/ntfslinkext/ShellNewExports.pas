@@ -54,7 +54,7 @@ procedure NewHardlinkDlg(hwnd: HWND; hinst: Cardinal;
   lpCmdLine: LPTSTR; nCmdShow: Integer); stdcall;
 var
   OpenFileName: TOpenFileNameW;
-  TempFileName: WideString;
+  TempFileName: string;
   ErrorMsg: string;
 begin
   FillChar(OpenFileName, SizeOf(OpenFileName), 0);
@@ -87,7 +87,7 @@ begin
       ErrorMsg := _('Failed to create link. Most likely the target file ' +
                     'system does not support this feature, or you tried ' +
                     'to create a hard link across different partitions.');
-      MessageBoxWithContext(hwnd, PAnsiChar(ErrorMsg), 'NTFS Link',
+      MessageBoxWithContext(hwnd, PWideChar(ErrorMsg), 'NTFS Link',
                  MB_OK or MB_ICONERROR)
     end;
 end;
@@ -98,7 +98,7 @@ const
   // Some versions of Delphi miss this in ShlObj.pas.
   BIF_NEWDIALOGSTYLE = $0040;
 var
-  bi: TBrowseInfoA;
+  bi: TBrowseInfo;
   a: array[0..MAX_PATH] of Char;
   idl: PItemIDList;
   ErrorMsg: string;
@@ -108,8 +108,8 @@ begin
   FillChar(bi, SizeOf(bi), #0);
   bi.hwndOwner := 0;
   bi.pszDisplayName := @a[0];
-  bi.lpszTitle := PChar(string(_('Choose the target folder or drive to which ' +
-                                 'you want to create a junction point.' )));
+  bi.lpszTitle := PWideChar(_('Choose the target folder or drive to which ' +
+                                 'you want to create a junction point.' ));
   bi.ulFlags := BIF_RETURNONLYFSDIRS or BIF_NEWDIALOGSTYLE or BIF_VALIDATE;
   bi.lParam := 0;
   bi.pidlRoot := nil;
@@ -133,7 +133,7 @@ begin
     if not Success then begin
       ErrorMsg := _('Failed to create junction. Most likely the target file ' +
                     'system does not support this feature.');
-      MessageBoxWithContext(hwnd, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'),
+      MessageBoxWithContext(hwnd, PWideChar(ErrorMsg), PWideChar('NTFS Link'),
                  MB_OK + MB_ICONERROR);
     end;
   end;

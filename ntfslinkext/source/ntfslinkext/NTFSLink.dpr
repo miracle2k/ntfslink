@@ -21,7 +21,7 @@ The original version can still be retrieved from the "NTFS Link" homepage
 located at http://www.elsdoerfer.net/ntfslink/
 -----------------------------------------------------------------------------}
 
-library ntfslink;
+library NTFSLink;
 
 // TODO [v2.1] Implement a logging mechanism
 // TODO [v2.1] Support for target.lnk style links?
@@ -31,33 +31,33 @@ library ntfslink;
 {$R 'DialogLinksExisting.res' 'DialogLinksExisting.rc'}
 {$R 'Icons.res' 'Icons.rc'}
 {$R 'XPManifest.res'}
-{%File 'JclNTFSUnicode.inc'}
 
 uses
   ComServ,
   Windows,
   JclRegistry,
+  ActivationContext in 'ActivationContext.pas',
   Global in 'Global.pas',
+  Constants in '..\common\Constants.pas',
+  GNUGetText in '..\common\GNUGetText.pas',
   BaseExtensionFactory in 'BaseExtensionFactory.pas',
+  ContextMenuHook in 'ContextMenuHook.pas',
+  CopyHook in 'CopyHook.pas',
+  DialogLinksExisting in 'DialogLinksExisting.pas',
   DragDropHook in 'DragDropHook.pas',
   IconOverlayHook in 'IconOverlayHook.pas',
-  CopyHook in 'CopyHook.pas',
-  ContextMenuHook in 'ContextMenuHook.pas',
+  JunctionMonitor in 'JunctionMonitor.pas',
   PropertySheetHook in 'PropertySheetHook.pas',
   ShellNewDummyHook in 'ShellNewDummyHook.pas',
   ShellNewExports in 'ShellNewExports.pas',
-  ShellObjExtended in 'ShellObjExtended.pas',
-  JunctionMonitor in 'JunctionMonitor.pas',
-  DialogLinksExisting in 'DialogLinksExisting.pas',
-  Constants in '..\common\Constants.pas',
-  GNUGetText in '..\common\GNUGetText.pas',
-  ActivationContext in 'ActivationContext.pas';
+  ShellObjExtended in 'ShellObjExtended.pas';
 
 exports
   DllGetClassObject,
   DllCanUnloadNow,
   DllRegisterServer,
   DllUnregisterServer,
+  DllInstall,
 
   // Used to integrate into the Shell New menu: Explorer later will use
   // rundll32.exe to call these function
@@ -66,8 +66,8 @@ exports
 
 begin
   // Try to load the language setting from the registry
-  UseLanguage(RegReadStringDef(
-                 HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION, 'Language', ''));
+  //UseLanguage(RegReadStringDef(
+  //               HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION, 'Language', ''));
 
   // Initialize some handles
   GLYPH_HANDLE_STD := LoadBitmap(HInstance, 'MENU_GLYPH_STD');

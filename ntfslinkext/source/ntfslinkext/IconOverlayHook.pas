@@ -103,8 +103,6 @@ implementation
 uses
   ComServ, JclNTFS, JclRegistry, Constants;
 
-{$I JclNTFSUnicode.inc}
-
 { TJunctionOverlayHook }
 
 class function TJunctionOverlayHook.Config_IconIndex_Default: Integer;
@@ -160,7 +158,7 @@ begin
   try
     // Retrieve file information, and look if there are links existing; if no,
     // than this file is *not* a link, and we skip
-    if NtfsGetHardLinkInfoW(pwszPath, LinkInfo) then
+    if NtfsGetHardLinkInfo(pwszPath, LinkInfo) then
       if LinkInfo.LinkCount > 1 then
         Result := S_OK;
   except
@@ -174,7 +172,7 @@ function TIconOverlayHook.EnableHooksForDrive(Drive: PWideChar): boolean;
 var
   DriveType: Cardinal;
 begin
-  DriveType := GetDriveType(PAnsiChar(ExtractFileDrive(Drive)));
+  DriveType := GetDriveType(PWideChar(ExtractFileDrive(Drive)));
   Result := (DriveType = DRIVE_FIXED) or (DriveType = DRIVE_RAMDISK);
 end;
 

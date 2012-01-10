@@ -52,7 +52,7 @@ type
     function QueryContextMenu(Menu: HMENU; indexMenu, idCmdFirst, idCmdLast,
       uFlags: UINT): HResult; stdcall;
     function InvokeCommand(var lpici: TCMInvokeCommandInfo): HResult; stdcall;
-    function GetCommandString(idCmd, uType: UINT; pwReserved: PUINT;
+    function GetCommandString(idCmd: UINT_PTR; uFlags: UINT; pwReserved: PUINT;
       pszName: LPSTR; cchMax: UINT): HResult; stdcall;
   public
     destructor Destroy; override;
@@ -87,8 +87,8 @@ begin
   FSourceFileList := nil;
 end;
 
-function TDragDropHook.GetCommandString(idCmd, uType: UINT;
-  pwReserved: PUINT; pszName: LPSTR; cchMax: UINT): HResult;
+function TDragDropHook.GetCommandString(idCmd: UINT_PTR; uFlags: UINT; pwReserved: PUINT;
+   pszName: LPSTR; cchMax: UINT): HResult; stdcall;
 begin
   Result := E_NOTIMPL;
 end;
@@ -154,7 +154,7 @@ begin
                       'to create a hard link across different partitions.');
         if (GetLastError <> 0) then
           ErrorMsg := ErrorMsg + ': ' + SysErrorMessage(GetLastError);
-        MessageBoxWithContext(lpici.hwnd, PAnsiChar(ErrorMsg), PAnsiChar('NTFS Link'),
+        MessageBoxWithContext(lpici.hwnd, PWideChar(ErrorMsg), PWideChar('NTFS Link'),
                    MB_OK + MB_ICONERROR)
       end
     end;
@@ -193,7 +193,7 @@ begin
     // Add our menu item to context menu
     mPos := GetMenuItemCount(Menu) - 2;
     InsertMenu(Menu, mPos, MF_STRING or MF_BYPOSITION,
-               idCmdFirst, PAnsiChar(mString));
+               idCmdFirst, PWideChar(mString));
     // Set an appropriate icon
     if FSourceFileMode = ddmFile then mBitmap := GLYPH_HANDLE_HARDLINK
     else if FSourceFileMode = ddmDirectory then mBitmap := GLYPH_HANDLE_JUNCTION
