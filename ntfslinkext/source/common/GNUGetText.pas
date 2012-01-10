@@ -878,7 +878,7 @@ type
     Str: String;
   end;
 
-function SysUtilsEnumStringModules(Instance: Longint; Data: Pointer): Boolean;
+function SysUtilsEnumStringModules(Instance: NativeInt; Data: Pointer): Boolean;
 {$IFDEF MSWINDOWS}
 var
   Buffer: array [0..1023] of Char; // WideChar in Delphi 2008, AnsiChar before that
