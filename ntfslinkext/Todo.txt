@@ -1,3 +1,8 @@
+- Fix GnuGetText/Localization on 64bit. Right now, the unit does not
+  work (crashes the 64bit DLL). See the X64DISABLE ifdefs in the code.
+  Me might want to have a look at Jvcl's JvGnuGetText version, which
+  currently also does not support 64bit.
+
 - Get rid of GUI config utility, keep things simple. Most people don't
   need to change the things offered there, and if they really do, they 
   can always use the registry.

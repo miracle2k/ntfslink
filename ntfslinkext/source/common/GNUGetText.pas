@@ -7,6 +7,9 @@
   @see http://dybdahl.dk/dxgettext/
 -------------------------------------------------------------------------------}
 unit gnugettext;
+{*ifdef CPU386*}
+  {*define X64DISABLE*}
+{*endif*}
 (**************************************************************)
 (*                                                            *)
 (*  (C) Copyright by Lars B. Dybdahl and others               *)
@@ -192,7 +195,9 @@ type
 // This function will turn resourcestring hooks on or off, eventually with BPL file support.
 // Please do not activate BPL file support when the package is in design mode.
 const AutoCreateHooks=true;
+{$ifdef X64DISABLE}
 procedure HookIntoResourceStrings (enabled:boolean=true; SupportPackages:boolean=false);
+{$endif}
 
 
 
@@ -474,6 +479,7 @@ type
   TStrInfoArr = array[0..10000000] of TRStrinfo;
   PStrInfoArr = ^TStrInfoArr;
   TCharArray5=array[0..4] of ansichar;
+  {$ifdef X64DISABLE}
   THook=  // Replaces a runtime library procedure with a custom procedure
     class
     public
@@ -489,6 +495,7 @@ type
       PatchPosition:PAnsiChar;
       procedure Shutdown; // Same as destroy, except that object is not destroyed
     end;
+    {$endif}
 
 var
   // System information
@@ -500,9 +507,11 @@ var
   // Hooks into runtime library functions
   ResourceStringDomainListCS:TMultiReadExclusiveWriteSynchronizer;
   ResourceStringDomainList:TStringList;
+  {$ifdef X64DISABLE}
   HookLoadResString:THook;
   HookLoadStr:THook;
   HookFmtLoadStr:THook;
+  {$endif}
 
 function GGGetEnvironmentVariable(const Name:widestring):widestring;
 var
@@ -2804,6 +2813,7 @@ begin
   inherited;
 end;
 
+{$ifdef X64DISABLE}
 { THook }
 
 constructor THook.Create(OldProcedure, NewProcedure: pointer; FollowJump:boolean=false);
@@ -2911,6 +2921,8 @@ begin
     HookFmtLoadStr.Enable;
   end;
 end;
+
+{$endif}
 
 { TMoFile }
 
@@ -3139,6 +3151,7 @@ initialization
   Win32PlatformIsUnicode := (Win32Platform = VER_PLATFORM_WIN32_NT);
   {$endif}
 
+{$ifdef X64DISABLE}
   // replace Borlands LoadResString with gettext enabled version:
   {$ifdef UNICODE}
   HookLoadResString:=THook.Create (@system.LoadResString, @LoadResStringW);
@@ -3151,14 +3164,17 @@ initialization
   if (param0<>'delphi32.exe') and (param0<>'kylix') and (param0<>'bds.exe') then
     HookIntoResourceStrings (AutoCreateHooks,false);
   param0:='';
+{$endif}
 
 finalization
   FreeAndNil (DefaultInstance);
   FreeAndNil (ResourceStringDomainListCS);
   FreeAndNil (ResourceStringDomainList);
+  {$ifdef X64DISABLE}
   FreeAndNil (HookFmtLoadStr);
   FreeAndNil (HookLoadStr);
   FreeAndNil (HookLoadResString);
+  {$endif}
   FreeAndNil (FileLocator);
 
 end.
