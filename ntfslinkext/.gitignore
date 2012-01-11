@@ -3,3 +3,5 @@
 *.identcache
 *.res
 __history/
+
+/BranchTodo.txt
