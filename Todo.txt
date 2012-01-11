@@ -1,7 +1,20 @@
+- Vista/Win7 support before new release:
+     * Support new link types (symbolic)
+     * Skip the delete hook, Explorer is now smart enough itself to
+       not delete link contents.
+     * Windows 7 has it's own link icons, update ours to match, and 
+       do not override the builtin icons. The hardlink icon I want
+       to replace with something that indicates a bidirectional link,
+       for example an error that goes from left to right.
+     * The Junction Tracker seems to be writing to HKLM - can we still
+       do that?
+
 - Fix GnuGetText/Localization on 64bit. Right now, the unit does not
   work (crashes the 64bit DLL). See the X64DISABLE ifdefs in the code.
   Me might want to have a look at Jvcl's JvGnuGetText version, which
   currently also does not support 64bit.
+  
+- Simplify: Should we call, for example, the hardlink action "duplicate"?
 
 - Get rid of GUI config utility, keep things simple. Most people don't
   need to change the things offered there, and if they really do, they 
