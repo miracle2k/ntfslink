@@ -28,9 +28,9 @@ library NTFSLink;
 // TODO [v2.1] Create hardlinks automatically for each file in directory and
 //             subdirectories [by Gunthar Müller]
 
+{$R 'Manifest.res' 'Manifest.rc'}
 {$R 'DialogLinksExisting.res' 'DialogLinksExisting.rc'}
 {$R 'Icons.res' 'Icons.rc'}
-{$R 'XPManifest.res'}
 
 uses
   ComServ,

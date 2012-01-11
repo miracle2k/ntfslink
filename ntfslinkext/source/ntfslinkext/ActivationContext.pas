@@ -24,6 +24,10 @@ located at http://www.elsdoerfer.net/ntfslink/
 {
     This unit is heavily based on EasyActivationContext.pas by Jim Kueneman,
     which is part of his EasyNSE package, available at http://mustangpeak.net.
+
+    It is used to enable Theme-support on Windows XP inside a shell
+    extension. From what I can tell, this is no longer required on
+    Windows 7 (Vista untested).
 }
 unit ActivationContext;
                                            

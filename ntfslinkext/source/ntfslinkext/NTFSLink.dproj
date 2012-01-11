@@ -106,6 +106,9 @@
 			<DelphiCompile Include="$(MainSource)">
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
+			<RcCompile Include="Manifest.rc">
+				<Form>Manifest.res</Form>
+			</RcCompile>
 			<RcCompile Include="DialogLinksExisting.rc">
 				<Form>DialogLinksExisting.res</Form>
 			</RcCompile>
