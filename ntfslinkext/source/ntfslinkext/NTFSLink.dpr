@@ -35,7 +35,6 @@ library NTFSLink;
 uses
   ComServ,
   Windows,
-  JclRegistry,
   ActivationContext in 'ActivationContext.pas',
   Global in 'Global.pas',
   Constants in '..\common\Constants.pas',
