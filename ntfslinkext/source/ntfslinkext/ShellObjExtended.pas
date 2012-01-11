@@ -8,22 +8,17 @@ Software distributed under the License is distributed on an "AS IS" basis,
 WITHOUT WARRANTY OF ANY KIND, either expressed or implied. See the License for
 the specific language governing rights and limitations under the License.
 
-The Initial Developer of the Original Code is Michael Elsdörfer.
-All Rights Reserved.
+The Initial Developer of the Original Code is Michael Elsdörfer, with
+contributions from Sebastian Schuberth.
 
-Development of the extended version has been moved from Novell Forge to
-SourceForge by Sebastian Schuberth.
+You can find more information at http://elsdoerfer.name/ntfslink
+-----------------------------------------------------------------------------}
 
-You may retrieve the latest extended version at the "NTFS Link Ext" project page
-located at http://sourceforge.net/projects/ntfslinkext/
-
-The original version can still be retrieved from the "NTFS Link" homepage
-located at http://www.elsdoerfer.net/ntfslink/
-
+{*
 PLEASE NOTE:
 Contains declarations which are not included in the ShlObj.pas version that
 ships with Delphi 7, and (at least some) still not in XE2.
------------------------------------------------------------------------------}
+*}
 
 unit ShellObjExtended;
 
