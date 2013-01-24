@@ -1788,8 +1788,8 @@ begin
       TodoList.Delete(0);
       if (AnObject<>nil) and (AnObject is TPersistent) then begin
         // Make sure each object is only translated once
-        Assert (sizeof(integer)=sizeof(TObject));
-        objid:=IntToHex(integer(AnObject),8);
+        //Assert (sizeof(integer)=sizeof(TObject));
+        objid:=IntToHex(Int64(AnObject),16);
         if DoneList.Find(objid,i) then begin
           continue;
         end else begin

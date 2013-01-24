@@ -37,6 +37,7 @@ const
   // Some default values, can (mostly) be overridden by configuration values
   OVERLAY_HARDLINK_ICONINDEX = 0;
   OVERLAY_JUNCTION_ICONINDEX = 1;
+  OVERLAY_BROKEN_HARDLINK_ICONINDEX = 2;
   OVERLAY_PRIORITY_DEFAULT = 0;
 
   // Template used to name the created links; can be overridden by lang file
@@ -45,6 +46,9 @@ const
   COPY_PREFIX_TEMPLATE_DEFAULT =  'Copy%s of %s';
   {gnugettext:reset}
   LINK_NO_PREFIX_TEMPLATE      =  '%1:s%0:s';
+
+  RECREATE_HARDLINKS_FILENAME = '.setupHardLinks.cmd';
+  MKLINK_COMMAND = 'mklink /H ';
 
 implementation
 

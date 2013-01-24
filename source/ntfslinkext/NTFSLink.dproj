@@ -5,7 +5,7 @@
 			<FrameworkType>VCL</FrameworkType>
 			<MainSource>NTFSLink.dpr</MainSource>
 			<Base>True</Base>
-			<Config Condition="'$(Config)'==''">Debug</Config>
+			<Config Condition="'$(Config)'==''">Release</Config>
 			<Platform Condition="'$(Platform)'==''">Win64</Platform>
 			<TargetedPlatforms>3</TargetedPlatforms>
 			<AppType>Library</AppType>
@@ -100,6 +100,10 @@
 			<DelphiCompile Include="$(MainSource)">
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
+			<RcCompile Include="Manifest.rc">
+				<ContainerId>RC</ContainerId>
+				<Form>Manifest.res</Form>
+			</RcCompile>
 			<RcCompile Include="DialogLinksExisting.rc">
 				<Form>DialogLinksExisting.res</Form>
 			</RcCompile>
@@ -121,10 +125,6 @@
 			<DCCReference Include="ShellNewDummyHook.pas"/>
 			<DCCReference Include="ShellNewExports.pas"/>
 			<DCCReference Include="ShellObjExtended.pas"/>
-			<RcCompile Include="Manifest.rc">
-				<ContainerId>RC</ContainerId>
-				<Form>Manifest.res</Form>
-			</RcCompile>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>

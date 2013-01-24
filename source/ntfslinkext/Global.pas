@@ -19,7 +19,7 @@ unit Global;
 interface
 
 uses
-  SysUtils, Windows, JclRegistry, Constants;
+  SysUtils, Windows, JclRegistry, Constants, System.Classes;
 
 var
   // Handles to various glyphs used in shell menus; initialized at startup.
@@ -65,6 +65,10 @@ function InternalCreateJunction(LinkTarget, Junction: string;
 // destination as the result, not as a var parameter; in addition, fix some
 // issues with the result value of the JCL function, e.g. remove \\?\ prefix.
 function GetJPDestination(Folder: string): string;
+
+procedure MaintainHardLinkCmdFile(const Source, Destination: string);
+function MatchFileAgainstRecreateHardlinksCmdFile(const AFileName: String;
+    ACmds: TStringList): Integer;
 
 implementation
 
@@ -170,6 +174,9 @@ begin
 
   SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileName), nil);
   SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATHW, PWideChar(Source), nil);
+
+  if RegReadBoolDef(HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION, 'SetupHardlinksCmdFile', False) then
+    MaintainHardLinkCmdFile(Source, NewFileName);
 end;
 
 function InternalCreateHardlinkSafe(Source, Destination: string): boolean;
@@ -265,6 +272,51 @@ begin
     if Pos('\??\', Result) = 1 then
       Delete(Result, 1, 4);
   end;
+end;
+
+procedure MaintainHardLinkCmdFile(const Source, Destination: string);
+var
+  CmdFileName : string;
+  SetupHardLinksScript : TStringList;
+  i : integer;
+  HardLinkIdx : integer;
+  CreateHardLinkCode : string;
+begin
+  CmdFileName := ExtractFilePath(Destination) + RECREATE_HARDLINKS_FILENAME;
+  SetupHardLinksScript := TStringList.Create;
+  try
+    if FileExists(CmdFileName) then
+      SetupHardLinksScript.LoadFromFile(CmdFileName);
+    HardLinkIdx := MatchFileAgainstRecreateHardlinksCmdFile(Destination, SetupHardLinksScript);
+    CreateHardLinkCode := Format('%s%s %s', [MKLINK_COMMAND, Destination, Source]);
+    if HardLinkIdx >= 0 then
+      SetupHardLinksScript[HardLinkIdx] := CreateHardLinkCode
+    else
+    begin
+      SetupHardLinksScript.Add(Format('del %s', [Destination]));
+      SetupHardLinksScript.Add(CreateHardLinkCode);
+    end;
+    SetupHardLinksScript.SaveToFile(CmdFileName);
+  finally
+    SetupHardLinksScript.Free;
+  end;
+end;
+
+function MatchFileAgainstRecreateHardlinksCmdFile(const AFileName: String;
+    ACmds: TStringList): Integer;
+var
+  i : integer;
+  log : TextFile;
+begin
+  Result := -1;
+  for i := 0 to ACmds.Count - 1 do
+    begin
+      if CompareText (Trim(system.Copy(ACmds[i], length(MKLINK_COMMAND) + 1, length(AFileName))), AFileName) = 0 then
+        begin
+          Result := i;
+          break;
+        end;
+    end;
 end;
 
 end.
