@@ -28,8 +28,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Mask, JvExMask, JvToolEdit, ExtCtrls, JvComponent,
-  JvBaseDlg, JvWinDialogs, Data.Bind.EngExt, Vcl.Bind.DBEngExt,
-  Data.Bind.Components;
+  JvBaseDlg, JvWinDialogs;
 
 type
   TfConfig = class(TForm)
@@ -56,7 +55,6 @@ type
     Label4: TLabel;
     EnableBrokenHardlinkIconOverlays: TCheckBox;
     BrokenHardlinkOverlay: TJvComboEdit;
-    BindingsList1: TBindingsList;
     procedure bCancelClick(Sender: TObject);
     procedure bOKClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);

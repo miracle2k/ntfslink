@@ -140,7 +140,6 @@ object fConfig: TfConfig
     Default = True
     TabOrder = 8
     OnClick = bOKClick
-    ExplicitTop = 301
   end
   object bCancel: TButton
     Left = 357
@@ -152,7 +151,6 @@ object fConfig: TfConfig
     Caption = 'Cancel'
     TabOrder = 9
     OnClick = bCancelClick
-    ExplicitTop = 301
   end
   object JunctionTrackingMode: TComboBox
     Left = 182
@@ -259,12 +257,5 @@ object fConfig: TfConfig
     IconIndex = 0
     Left = 376
     Top = 104
-  end
-  object BindingsList1: TBindingsList
-    Methods = <>
-    OutputConverters = <>
-    UseAppManager = True
-    Left = 20
-    Top = 5
   end
 end
