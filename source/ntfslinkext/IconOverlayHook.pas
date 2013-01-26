@@ -100,7 +100,7 @@ type
 const
   Class_JunctionOverlayHook       : TGUID = '{61702EF5-1B33-487F-995F-6FA23F1D6652}';
   Class_HardlinkOverlayHook       : TGUID = '{0314E3A0-45DB-4D75-BB86-27B8EF28907B}';
-  Class_BrokenHardlinkOverlayHook : TGUID =  '{A11BFC65-EBEE-4C48-8B87-65F206D4F6F6}';
+  Class_BrokenHardlinkOverlayHook : TGUID = '{A11BFC65-EBEE-4C48-8B87-65F206D4F6F6}';
 
 implementation
 
@@ -278,7 +278,7 @@ begin
             begin
               Links := TStringList.Create;
               try
-                FindHardLinks(pwszPath, Links);
+                GetHardLinks(pwszPath, Links);
                 if Links.IndexOf(SourceLink) < 0 then
                   Result := S_OK;
               finally

@@ -233,6 +233,9 @@ procedure TfConfig.UpdateEnabledStates;
 begin
   HardlinkOverlay.Enabled := EnableHardlinkIconOverlays.Checked;
   JunctionOverlay.Enabled := EnableJunctionIconOverlays.Checked;
+  SetupHardlinksCmdFile.Enabled := not EnableBrokenHardlinkIconOverlays.Checked;
+  if EnableBrokenHardlinkIconOverlays.Checked then
+    SetupHardlinksCmdFile.Checked := True;
 end;
 
 procedure TfConfig.EnabledStateChange(Sender: TObject);

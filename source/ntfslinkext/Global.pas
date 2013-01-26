@@ -69,7 +69,7 @@ function GetJPDestination(Folder: string): string;
 procedure MaintainHardLinkCmdFile(const Source, Destination: string);
 function MatchFileAgainstRecreateHardlinksCmdFile(const AFileName: String;
     ACmds: TStringList; var ASourceLink: String): Integer;
-procedure FindHardLinks(AFileName: String; AHardLinks: TStrings);
+procedure GetHardLinks(AFileName: String; AHardLinks: TStrings);
 
 implementation
 
@@ -180,7 +180,7 @@ begin
   SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATHW, PWideChar(Source), nil);
 
   if RegReadBoolDef(HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION, 'SetupHardlinksCmdFile', False) then
-    MaintainHardLinkCmdFile(Source, NewFileName);
+    MaintainHardLinkCmdFile(Source, NewFileName); 
 end;
 
 function InternalCreateHardlinkSafe(Source, Destination: string): boolean;
@@ -292,12 +292,12 @@ begin
     if FileExists(CmdFileName) then
       SetupHardLinksScript.LoadFromFile(CmdFileName);
     HardLinkIdx := MatchFileAgainstRecreateHardlinksCmdFile(Destination, SetupHardLinksScript, SourceLink);
-    CreateHardLinkCode := Format('%s%s %s', [MKLINK_COMMAND, Destination, Source]);
+    CreateHardLinkCode := Format('%s"%s" "%s"', [MKLINK_COMMAND, Destination, Source]);
     if HardLinkIdx >= 0 then
       SetupHardLinksScript[HardLinkIdx] := CreateHardLinkCode
     else
     begin
-      SetupHardLinksScript.Add(Format('del %s', [Destination]));
+      SetupHardLinksScript.Add(Format('%s"%s"', [DEL_COMMAND, Destination]));
       SetupHardLinksScript.Add(CreateHardLinkCode);
     end;
     SetupHardLinksScript.SaveToFile(CmdFileName);
@@ -310,21 +310,23 @@ function MatchFileAgainstRecreateHardlinksCmdFile(const AFileName: String;
     ACmds: TStringList; var ASourceLink: String): Integer;
 var
   i : integer;
+  AQuotedFileName : String;
 begin
+  AQuotedFileName := AnsiQuotedStr(AFileName, '"');
   Result := -1;
   for i := 0 to ACmds.Count - 1 do
     begin
       if (CompareText(system.copy(ACmds[i], 1, length(MKLINK_COMMAND)), MKLINK_COMMAND) = 0) and
-         (CompareText(Trim(system.Copy(ACmds[i], length(MKLINK_COMMAND) + 1, length(AFileName))), AFileName) = 0) then
+         (CompareText(Trim(system.Copy(ACmds[i], length(MKLINK_COMMAND) + 1, length(AQuotedFileName))), AQuotedFileName) = 0) then
         begin
           Result := i;
-          ASourceLink := system.copy(ACmds[i], length(MKLINK_COMMAND) + length(AFileName) + 2, length(ACmds[i]));
+          ASourceLink := AnsiDequotedStr(system.copy(ACmds[i], length(MKLINK_COMMAND) + length(AQuotedFileName) + 2, length(ACmds[i])), '"');
           break;
         end;
     end;
 end;
 
-procedure FindHardLinks(AFileName: String; AHardLinks: TStrings);
+procedure GetHardLinks(AFileName: String; AHardLinks: TStrings);
 const
   DriveLen = 2;
 var
@@ -334,7 +336,8 @@ var
   PLink : PWideChar;
   procedure AddHardLinkToList;
   begin
-    AHardLinks.Add(system.Copy(Link, 1, Len + DriveLen));
+    if Len > 0 then
+      AHardLinks.Add(system.Copy(Link, 1, Len + DriveLen));
     Len := MAX_PATH + DriveLen;
   end;
 begin
@@ -346,9 +349,9 @@ begin
   PLink := PWideChar(Link);
   inc(PLink, DriveLen); // Let's position the pointer leaving room for drive and colon
   h := FindFirstFileNameW(PWideChar(AFileName), 0, Len, PLink);
-  if (h = 0) or (Len = 0) then
-    exit;
-  try
+  if h = 0 then
+    RaiseLastOSError;     
+  try    
     AddHardLinkToList;
     while FindNextFileNameW(h, Len, PLink) do
       AddHardLinkToList;

@@ -49,6 +49,7 @@ const
 
   RECREATE_HARDLINKS_FILENAME = '.setupHardLinks.cmd';
   MKLINK_COMMAND = 'mklink /H ';
+  DEL_COMMAND = 'del ';
 
 implementation
 
