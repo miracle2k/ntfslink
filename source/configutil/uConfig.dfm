@@ -224,9 +224,8 @@ object fConfig: TfConfig
     Width = 395
     Height = 17
     Hint = 
-      'Whenever you try to copy a junction point in Explorer, NTFS Link' +
-      ' will ask whether you want to copy the junction only, or all the' +
-      ' contents of the target folder'
+      'When creating a hardlink, a .cmd file will be created that allow' +
+      's to re-create hardlinks if they become "broken"'
     Anchors = [akLeft, akTop, akRight]
     Caption = 'Create and maintain .setupHardLinks.cmd files'
     TabOrder = 11
@@ -236,7 +235,7 @@ object fConfig: TfConfig
     Top = 216
     Width = 395
     Height = 17
-    Hint = 'Helps differing hard links between other files'
+    Hint = 'Helps showing broken hard links from their source'
     Anchors = [akLeft, akTop, akRight]
     Caption = 'Enable Icon Overlays for broken Hardlinks (requires restart)'
     TabOrder = 12

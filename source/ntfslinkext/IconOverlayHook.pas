@@ -258,7 +258,8 @@ function TBrokenHardlinkOverlayHook.IsMemberOf(pwszPath: PWideChar; dwAttrib:
 var
   ReCreateHardlinkFileName : string;
   RecreateCmds : TStringList;
-  LinkInfo: TNtfsHardLinkInfo;
+  SourceLink : string;
+  Links : TStrings;
 begin
   Result := S_FALSE;
 
@@ -273,9 +274,17 @@ begin
         RecreateCmds := TStringList.Create;
         try
           RecreateCmds.LoadFromFile(ReCreateHardlinkFileName);
-          if (MatchFileAgainstRecreateHardlinksCmdFile(pwszPath, RecreateCmds) >= 0) and
-             ((not NtfsGetHardLinkInfo(pwszPath, LinkInfo)) or (LinkInfo.LinkCount <= 1)) then
-            Result := S_OK;
+          if MatchFileAgainstRecreateHardlinksCmdFile(pwszPath, RecreateCmds, SourceLink) >= 0 then
+            begin
+              Links := TStringList.Create;
+              try
+                FindHardLinks(pwszPath, Links);
+                if Links.IndexOf(SourceLink) < 0 then
+                  Result := S_OK;
+              finally
+                Links.Free;
+              end;
+            end;
         finally
           RecreateCmds.Free;
         end;

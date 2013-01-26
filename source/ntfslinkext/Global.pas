@@ -68,12 +68,16 @@ function GetJPDestination(Folder: string): string;
 
 procedure MaintainHardLinkCmdFile(const Source, Destination: string);
 function MatchFileAgainstRecreateHardlinksCmdFile(const AFileName: String;
-    ACmds: TStringList): Integer;
+    ACmds: TStringList; var ASourceLink: String): Integer;
+procedure FindHardLinks(AFileName: String; AHardLinks: TStrings);
 
 implementation
 
 uses
   ShlObj, JclNTFS, JclWin32, GNUGetText, JunctionMonitor;
+
+function FindFirstFileNameW(lpFileName : PWideChar; dwFlags : DWORD; var StringLength : DWORD; LinkName : PWideChar) : THandle; stdcall; external 'kernel32.dll';
+function FindNextFileNameW(hFindStream : THandle; var StringLength : DWORD; LinkName : PWideChar) : BOOL; stdcall; external 'kernel32.dll';
 
 // ************************************************************************** //
 
@@ -278,16 +282,16 @@ procedure MaintainHardLinkCmdFile(const Source, Destination: string);
 var
   CmdFileName : string;
   SetupHardLinksScript : TStringList;
-  i : integer;
   HardLinkIdx : integer;
   CreateHardLinkCode : string;
+  SourceLink : string;
 begin
   CmdFileName := ExtractFilePath(Destination) + RECREATE_HARDLINKS_FILENAME;
   SetupHardLinksScript := TStringList.Create;
   try
     if FileExists(CmdFileName) then
       SetupHardLinksScript.LoadFromFile(CmdFileName);
-    HardLinkIdx := MatchFileAgainstRecreateHardlinksCmdFile(Destination, SetupHardLinksScript);
+    HardLinkIdx := MatchFileAgainstRecreateHardlinksCmdFile(Destination, SetupHardLinksScript, SourceLink);
     CreateHardLinkCode := Format('%s%s %s', [MKLINK_COMMAND, Destination, Source]);
     if HardLinkIdx >= 0 then
       SetupHardLinksScript[HardLinkIdx] := CreateHardLinkCode
@@ -303,20 +307,54 @@ begin
 end;
 
 function MatchFileAgainstRecreateHardlinksCmdFile(const AFileName: String;
-    ACmds: TStringList): Integer;
+    ACmds: TStringList; var ASourceLink: String): Integer;
 var
   i : integer;
-  log : TextFile;
 begin
   Result := -1;
   for i := 0 to ACmds.Count - 1 do
     begin
-      if CompareText (Trim(system.Copy(ACmds[i], length(MKLINK_COMMAND) + 1, length(AFileName))), AFileName) = 0 then
+      if (CompareText(system.copy(ACmds[i], 1, length(MKLINK_COMMAND)), MKLINK_COMMAND) = 0) and
+         (CompareText(Trim(system.Copy(ACmds[i], length(MKLINK_COMMAND) + 1, length(AFileName))), AFileName) = 0) then
         begin
           Result := i;
+          ASourceLink := system.copy(ACmds[i], length(MKLINK_COMMAND) + length(AFileName) + 2, length(ACmds[i]));
           break;
         end;
     end;
+end;
+
+procedure FindHardLinks(AFileName: String; AHardLinks: TStrings);
+const
+  DriveLen = 2;
+var
+  h : THandle;
+  ADrive, Link : String;
+  Len : DWORD;
+  PLink : PWideChar;
+  procedure AddHardLinkToList;
+  begin
+    AHardLinks.Add(system.Copy(Link, 1, Len + DriveLen));
+    Len := MAX_PATH + DriveLen;
+  end;
+begin
+  AFileName := ExpandFileName(AFileName);
+  ADrive := ExtractFileDrive(AFileName);
+  Len := MAX_PATH + DriveLen;  
+  Link := ADrive;
+  SetLength(Link, Len);
+  PLink := PWideChar(Link);
+  inc(PLink, DriveLen); // Let's position the pointer leaving room for drive and colon
+  h := FindFirstFileNameW(PWideChar(AFileName), 0, Len, PLink);
+  if (h = 0) or (Len = 0) then
+    exit;
+  try
+    AddHardLinkToList;
+    while FindNextFileNameW(h, Len, PLink) do
+      AddHardLinkToList;
+  finally
+    Windows.FindClose(h);
+  end;
 end;
 
 end.
