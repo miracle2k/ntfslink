@@ -50,6 +50,11 @@ type
     HardlinkOverlay: TJvComboEdit;
     IntegrateIntoContextMenu: TCheckBox;
     CreateLinksSuppressPrefix: TCheckBox;
+    Bevel1: TBevel;
+    SetupHardlinksCmdFile: TCheckBox;
+    Label4: TLabel;
+    EnableBrokenHardlinkIconOverlays: TCheckBox;
+    BrokenHardlinkOverlay: TJvComboEdit;
     procedure bCancelClick(Sender: TObject);
     procedure bOKClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -75,7 +80,7 @@ uses
   JclRegistry, GNUGetText, Constants;
 
 {$R *.dfm}
-{$R WinXP.res}
+{.$R WinXP.res}
 
 procedure TfConfig.bCancelClick(Sender: TObject);
 begin
@@ -99,11 +104,11 @@ end;
 
 procedure TfConfig.LoadCurrentStateFromRegistry;
 
-  procedure LoadCheckBox(ACheckBox: TCheckBox);
+  procedure LoadCheckBox(ACheckBox: TCheckBox; ADefault: Boolean = True);
   begin
     ACheckBox.Checked :=
       RegReadBoolDef(HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION,
-                     ACheckBox.Name, True);
+                     ACheckBox.Name, ADefault);
   end;
 
   procedure LoadIconComboEdit(AComboEdit: TJvComboEdit);
@@ -131,8 +136,11 @@ begin
   LoadIconComboEdit(JunctionOverlay);
   LoadCheckBox(EnableHardlinkIconOverlays);
   LoadIconComboEdit(HardlinkOverlay);
+  LoadCheckBox(EnableBrokenHardlinkIconOverlays);
+  LoadIconComboEdit(BrokenHardlinkOverlay);
   LoadCheckBox(InterceptJunctionCopying);
   LoadComboBox(JunctionTrackingMode);
+  LoadCheckBox(SetupHardlinksCmdFile, False);
 end;
 
 procedure TfConfig.WriteStateToRegistry;
@@ -169,8 +177,11 @@ begin
   WriteIconComboEdit(JunctionOverlay);
   WriteCheckBox(EnableHardlinkIconOverlays);
   WriteIconComboEdit(HardlinkOverlay);
+  WriteCheckBox(EnableBrokenHardlinkIconOverlays);
+  WriteIconComboEdit(BrokenHardlinkOverlay);
   WriteCheckBox(InterceptJunctionCopying);
   WriteComboBox(JunctionTrackingMode);
+  WriteCheckBox(SetupHardlinksCmdFile);
 end;
 
 function TfConfig.MakeIconString(IconPath: string;
@@ -222,6 +233,9 @@ procedure TfConfig.UpdateEnabledStates;
 begin
   HardlinkOverlay.Enabled := EnableHardlinkIconOverlays.Checked;
   JunctionOverlay.Enabled := EnableJunctionIconOverlays.Checked;
+  SetupHardlinksCmdFile.Enabled := not EnableBrokenHardlinkIconOverlays.Checked;
+  if EnableBrokenHardlinkIconOverlays.Checked then
+    SetupHardlinksCmdFile.Checked := True;
 end;
 
 procedure TfConfig.EnabledStateChange(Sender: TObject);

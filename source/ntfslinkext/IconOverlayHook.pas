@@ -81,6 +81,16 @@ type
     function IsMemberOf(pwszPath: PWideChar; dwAttrib: DWORD): HResult; stdcall;
   end;
 
+  // Icon Overlay Hook for Hardlinks
+  TBrokenHardlinkOverlayHook = class(TIconOverlayHook, IShellIconOverlayIdentifier)
+  protected
+    class function Config_Prefix: string; override;
+    class function Config_IconIndex_Default: Integer; override;
+  public
+    { IShellIconOverlayIdentifier }
+    function IsMemberOf(pwszPath: PWideChar; dwAttrib: DWORD): HResult; stdcall;
+  end;
+
   /// ComObjectFactory for our IconOverlay objects
   TIconOverlayHookFactory = class(TBaseExtensionFactory)
   protected
@@ -88,13 +98,14 @@ type
   end;
 
 const
-  Class_JunctionOverlayHook: TGUID = '{61702EF5-1B33-487F-995F-6FA23F1D6652}';
-  Class_HardlinkOverlayHook: TGUID = '{0314E3A0-45DB-4D75-BB86-27B8EF28907B}';
+  Class_JunctionOverlayHook       : TGUID = '{61702EF5-1B33-487F-995F-6FA23F1D6652}';
+  Class_HardlinkOverlayHook       : TGUID = '{0314E3A0-45DB-4D75-BB86-27B8EF28907B}';
+  Class_BrokenHardlinkOverlayHook : TGUID = '{A11BFC65-EBEE-4C48-8B87-65F206D4F6F6}';
 
 implementation
 
 uses
-  ComServ, JclNTFS, JclRegistry, Constants;
+  ComServ, JclNTFS, JclRegistry, Constants, Classes, Global;
 
 { TJunctionOverlayHook }
 
@@ -230,13 +241,66 @@ begin
   FSettingsLoaded := True;
 end;
 
+{ TBrokenHardlinkOverlayHook }
+
+class function TBrokenHardlinkOverlayHook.Config_IconIndex_Default: Integer;
+begin
+  Result := OVERLAY_BROKEN_HARDLINK_ICONINDEX;
+end;
+
+class function TBrokenHardlinkOverlayHook.Config_Prefix: string;
+begin
+  Result := 'BrokenHardlink';
+end;
+
+function TBrokenHardlinkOverlayHook.IsMemberOf(pwszPath: PWideChar; dwAttrib:
+    DWORD): HResult;
+var
+  ReCreateHardlinkFileName : string;
+  RecreateCmds : TStringList;
+  SourceLink : string;
+  Links : TStrings;
+begin
+  Result := S_FALSE;
+
+  // IconOverlays are disabled for some drive types (e.g. remote)
+  if not EnableHooksForDrive(pwszPath) then
+    exit;
+
+  try
+    ReCreateHardlinkFileName := ExtractFilePath(pwszPath) + RECREATE_HARDLINKS_FILENAME;
+    if FileExists(ReCreateHardlinkFileName) then
+      begin
+        RecreateCmds := TStringList.Create;
+        try
+          RecreateCmds.LoadFromFile(ReCreateHardlinkFileName);
+          if MatchFileAgainstRecreateHardlinksCmdFile(pwszPath, RecreateCmds, SourceLink) >= 0 then
+            begin
+              Links := TStringList.Create;
+              try
+                GetHardLinks(pwszPath, Links);
+                if Links.IndexOf(SourceLink) < 0 then
+                  Result := S_OK;
+              finally
+                Links.Free;
+              end;
+            end;
+        finally
+          RecreateCmds.Free;
+        end;
+      end;
+  except
+    Result := E_UNEXPECTED;
+  end;
+end;
+
 { TIconOverlayHookFactory }
 
 function TIconOverlayHookFactory.GetInstallationData: TExtensionRegistryData;
 begin
   Result.RootKey := HKEY_LOCAL_MACHINE;
   Result.BaseKey := 'Software\Microsoft\Windows\CurrentVersion\Explorer\' +
-                    'ShellIconOverlayIdentifiers\NTFSLink_' +
+                    'ShellIconOverlayIdentifiers\0NTFSLink_' +
                     TIconOverlayHookClass(ComClass).Config_Prefix;
   Result.UseGUIDAsKeyName := False;
 end;
@@ -250,6 +314,11 @@ initialization
   TIconOverlayHookFactory.Create(ComServer, TJunctionOverlayHook,
       Class_JunctionOverlayHook, '',
       'NTFSLink OverlayIcon Shell Extension for JunctionPoints',
+      ciMultiInstance, tmApartment);
+
+  TIconOverlayHookFactory.Create(ComServer, TBrokenHardlinkOverlayHook,
+      Class_BrokenHardlinkOverlayHook, '',
+      'NTFSLink OverlayIcon Shell Extension for Broken Hardlinks',
       ciMultiInstance, tmApartment);
 
 end.

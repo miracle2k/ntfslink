@@ -24,6 +24,10 @@ located at http://www.elsdoerfer.net/ntfslink/
 program ConfigUtil;
 
 uses
+ {$IFDEF WIN64}
+  { The following line was added because after opening icon dialog in 64 bits
+    a nasty access violation happens on shutdown. Something with the JVCL components }
+  uHarakiri in 'uHarakiri.pas', {$ENDIF}
   Forms,
   uConfig in 'uConfig.pas' {fConfig},
   Constants in '..\common\Constants.pas',

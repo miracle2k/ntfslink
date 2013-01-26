@@ -19,7 +19,7 @@ unit Global;
 interface
 
 uses
-  SysUtils, Windows, JclRegistry, Constants;
+  SysUtils, Windows, JclRegistry, Constants, System.Classes;
 
 var
   // Handles to various glyphs used in shell menus; initialized at startup.
@@ -66,10 +66,18 @@ function InternalCreateJunction(LinkTarget, Junction: string;
 // issues with the result value of the JCL function, e.g. remove \\?\ prefix.
 function GetJPDestination(Folder: string): string;
 
+procedure MaintainHardLinkCmdFile(const Source, Destination: string);
+function MatchFileAgainstRecreateHardlinksCmdFile(const AFileName: String;
+    ACmds: TStringList; var ASourceLink: String): Integer;
+procedure GetHardLinks(AFileName: String; AHardLinks: TStrings);
+
 implementation
 
 uses
   ShlObj, JclNTFS, JclWin32, GNUGetText, JunctionMonitor;
+
+function FindFirstFileNameW(lpFileName : PWideChar; dwFlags : DWORD; var StringLength : DWORD; LinkName : PWideChar) : THandle; stdcall; external 'kernel32.dll';
+function FindNextFileNameW(hFindStream : THandle; var StringLength : DWORD; LinkName : PWideChar) : BOOL; stdcall; external 'kernel32.dll';
 
 // ************************************************************************** //
 
@@ -170,6 +178,9 @@ begin
 
   SHChangeNotify(SHCNE_CREATE, SHCNF_PATHW, PWideChar(NewFileName), nil);
   SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATHW, PWideChar(Source), nil);
+
+  if RegReadBoolDef(HKEY_LOCAL_MACHINE, NTFSLINK_CONFIGURATION, 'SetupHardlinksCmdFile', False) then
+    MaintainHardLinkCmdFile(Source, NewFileName); 
 end;
 
 function InternalCreateHardlinkSafe(Source, Destination: string): boolean;
@@ -264,6 +275,88 @@ begin
     // Remove the \\?\ if it exists.
     if Pos('\??\', Result) = 1 then
       Delete(Result, 1, 4);
+  end;
+end;
+
+procedure MaintainHardLinkCmdFile(const Source, Destination: string);
+var
+  CmdFileName : string;
+  SetupHardLinksScript : TStringList;
+  HardLinkIdx : integer;
+  CreateHardLinkCode : string;
+  SourceLink : string;
+begin
+  CmdFileName := ExtractFilePath(Destination) + RECREATE_HARDLINKS_FILENAME;
+  SetupHardLinksScript := TStringList.Create;
+  try
+    if FileExists(CmdFileName) then
+      SetupHardLinksScript.LoadFromFile(CmdFileName);
+    HardLinkIdx := MatchFileAgainstRecreateHardlinksCmdFile(Destination, SetupHardLinksScript, SourceLink);
+    CreateHardLinkCode := Format('%s"%s" "%s"', [MKLINK_COMMAND, Destination, Source]);
+    if HardLinkIdx >= 0 then
+      SetupHardLinksScript[HardLinkIdx] := CreateHardLinkCode
+    else
+    begin
+      SetupHardLinksScript.Add(Format('%s"%s"', [DEL_COMMAND, Destination]));
+      SetupHardLinksScript.Add(CreateHardLinkCode);
+    end;
+    SetupHardLinksScript.SaveToFile(CmdFileName);
+  finally
+    SetupHardLinksScript.Free;
+  end;
+end;
+
+function MatchFileAgainstRecreateHardlinksCmdFile(const AFileName: String;
+    ACmds: TStringList; var ASourceLink: String): Integer;
+var
+  i : integer;
+  AQuotedFileName : String;
+begin
+  AQuotedFileName := AnsiQuotedStr(AFileName, '"');
+  Result := -1;
+  for i := 0 to ACmds.Count - 1 do
+    begin
+      if (CompareText(system.copy(ACmds[i], 1, length(MKLINK_COMMAND)), MKLINK_COMMAND) = 0) and
+         (CompareText(Trim(system.Copy(ACmds[i], length(MKLINK_COMMAND) + 1, length(AQuotedFileName))), AQuotedFileName) = 0) then
+        begin
+          Result := i;
+          ASourceLink := AnsiDequotedStr(system.copy(ACmds[i], length(MKLINK_COMMAND) + length(AQuotedFileName) + 2, length(ACmds[i])), '"');
+          break;
+        end;
+    end;
+end;
+
+procedure GetHardLinks(AFileName: String; AHardLinks: TStrings);
+const
+  DriveLen = 2;
+var
+  h : THandle;
+  ADrive, Link : String;
+  Len : DWORD;
+  PLink : PWideChar;
+  procedure AddHardLinkToList;
+  begin
+    if Len > 0 then
+      AHardLinks.Add(system.Copy(Link, 1, Len + DriveLen));
+    Len := MAX_PATH + DriveLen;
+  end;
+begin
+  AFileName := ExpandFileName(AFileName);
+  ADrive := ExtractFileDrive(AFileName);
+  Len := MAX_PATH + DriveLen;  
+  Link := ADrive;
+  SetLength(Link, Len);
+  PLink := PWideChar(Link);
+  inc(PLink, DriveLen); // Let's position the pointer leaving room for drive and colon
+  h := FindFirstFileNameW(PWideChar(AFileName), 0, Len, PLink);
+  if h = 0 then
+    RaiseLastOSError;     
+  try    
+    AddHardLinkToList;
+    while FindNextFileNameW(h, Len, PLink) do
+      AddHardLinkToList;
+  finally
+    Windows.FindClose(h);
   end;
 end;
 

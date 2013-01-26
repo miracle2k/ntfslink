@@ -1,2 +1,6 @@
 Win32/
 Win64/
+/*.rsm
+/*.exe
+/.setupHardLinks.cmd
+/log.txt
